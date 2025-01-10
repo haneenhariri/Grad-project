@@ -2,12 +2,10 @@ import axios from "axios";
 import { useState } from "react";
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
-
 interface logbtn 
 {
   btn: string;
 }
-
 export default function Login({btn} : logbtn ) {
     const {t} = useTranslation()
     const [email , setEmail] = useState('');
@@ -35,7 +33,7 @@ export default function Login({btn} : logbtn ) {
     <form onSubmit={send} className=' flex flex-col mb-6 '>
       <label className='mb-2.5 font-medium text-base block' htmlFor="">{t("Email")}</label>
       <input
-        className="w-full p-5 mb-5 placeholder:text-base bg-White/95 rounded-md"
+        className="w-full lg:p-5 p-2.5 mb-5 placeholder:text-base bg-White/95 rounded-md"
         placeholder={t("EmailPlace")}
         type="email"
         value={email}
@@ -43,9 +41,9 @@ export default function Login({btn} : logbtn ) {
       />
       <label className='mb-2.5 font-medium text-base block' htmlFor="">{t("Password")}</label>
       <input value={password}
-        onChange={(e) => setPassword(e.target.value)} className="mb-5 w-full p-5 placeholder:text-base bg-White/95 rounded-md" placeholder={t("PasswordPlace")} type="password" />
-      <Link className="block text-right text-base font-normal text-gray-700 mb-5" to={'/ResetPassword'}>{t("ForgotPassword")}</Link>
-      <button className="w-full text-white py-4.5 px-5 rounded-lg bg-violet-950">{t(btn)}</button>
+        onChange={(e) => setPassword(e.target.value)} className="mb-5 w-full lg:p-5 p-2.5 placeholder:text-base bg-White/95 rounded-md" placeholder={t("PasswordPlace")} type="password" />
+      <Link className="block text-right md:text-base text-sm font-normal text-gray-700 mb-5" to={'/ResetPassword'}>{t("ForgotPassword")}</Link>
+      <button className="w-full text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950">{t(btn)}</button>
     </form>
   )
 }

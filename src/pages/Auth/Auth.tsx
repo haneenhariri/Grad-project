@@ -8,7 +8,7 @@ export default function Auth() {
  const {t} = useTranslation();
  const location = useLocation();
   return (
-    <section className="px-4 lg:px-20 desktop:px-40 pt-20 pb-40 flex gap-10  items-center">
+    <section className="px-4 lg:px-20 desktop:px-40 pt-10 pb-40 flex lg:flex-row flex-col-reverse gap-y-14 gap-10  items-center">
       <div className="w-1/2">
         <h2>{t("Testimonials")}</h2>
         <StdCard/>
