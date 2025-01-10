@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import menu from "../../assets/nav/icon/toggle.svg";
 import xmark from "../../assets/nav/icon/x-mark.png";
 import logo from "../../assets/logo/logo.svg";
+import Logout from "../Logout/Logout";
 /*  تحديد جهة النص حسب اللغة  */
 const updateHtmlAttributes = (language: string) => {
   const html = document.documentElement;
@@ -43,12 +44,12 @@ export default function NavBar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
+/*   const toggleLanguage = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newLanguage = event.target.value;
     i18n.changeLanguage(newLanguage);
     localStorage.setItem("language", newLanguage);
     updateHtmlAttributes(newLanguage);
-  };
+  }; */
 
   return (
     <nav
@@ -85,22 +86,26 @@ export default function NavBar() {
       </div>
       <div className="flex items-center gap-5">
         {/* لتغغير اللغة  */}
-        <select
+{/*         <select
           onChange={toggleLanguage}
           value={i18n.language}
           className="px-4 py-2  bg-transparent rounded-md text-base"
         >
           <option value="en">EN</option>
           <option value="ar">AR</option>
-        </select>
+        </select> */}
+        
         {/* هنا اذا كان غير مسجل يعرض ازرار تسجيل الدخول بينما اذا كان مسجل يعرض البروفايل  */}
         {isLoggedIn ? (
-          <button
-            onClick={() => navigate("/User/profile")}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg"
-          >
-          {storedUserName.charAt(0)}
-          </button>
+          <>
+            <button
+              onClick={() => navigate("/User/settings")}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg"
+            >
+            {storedUserName.charAt(0)}
+            </button>
+            <Logout/>
+          </>
            ) : (
           /* ازرار تسجيل الدخول في القياسات الوسط و الاصغر تختفي لتظهر في السايد بار  */
           <div className=" lg:flex hidden gap-5 items-center">

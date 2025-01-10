@@ -24,7 +24,7 @@ export default function OneCourse() {
         }));
     };
   return (
-    <div className="px-4 py-20 lg:px-20 desktop:px-40 gap-6 flex">
+    <section className="px-4 py-20 lg:px-20 desktop:px-40 gap-6 flex">
         <div className=" w-10/12">
             <h2 className=' text-4xl font-semibold '>Complete Website Responsive Design: from Figma to Webflow to Website Design</h2>
             <p className=' my-6 text-gray-800'>3 in 1 Course: Learn to design websites with Figma, build with Webflow, and make a living freelancing.</p>
@@ -324,7 +324,7 @@ export default function OneCourse() {
             </div>
         </div>
         </div>
-    </div>
+    </section>
   )
 }
 

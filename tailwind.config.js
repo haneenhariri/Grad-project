@@ -3,6 +3,9 @@ export default {
   content: ['./index.html','./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      backgroundImage: {
+        'custom-bg': "url('/public/BG (11).png')",
+      },
       fontFamily : 
       {
         'Tajawal': "Be Vietnam Pro",

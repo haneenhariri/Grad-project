@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import LogoutBtn from '../../Ui/Button/LogoutBtn'
 
 export default function Logout() {
     const navigate = useNavigate()
@@ -21,11 +21,7 @@ export default function Logout() {
         }
   return (
     <div>
-        <button
-           onClick={(logout)}
-           className='link-log'>
-           logout
-        </button>
+         <LogoutBtn onClick={(logout)}/>
     </div>
   )
 }

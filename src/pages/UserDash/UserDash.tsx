@@ -1,11 +1,13 @@
 import { Outlet } from "react-router-dom";
-import Profile from "../../components/Profile/Profile";
-import './UserDash.css'
+import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
+
+
 export default function UserDash() {
   return (
-    <section className="dash px-4 lg:px-20 desktop:px-40 flex gap-7">
-       <Profile/>
+    <section className="px-4 bg-custom-bg bg-no-repeat bg-top    py-10 lg:px-20 desktop:px-40 ">
+       <ProfileHeader/>
        <Outlet/>
+      
     </section>
   )
 }

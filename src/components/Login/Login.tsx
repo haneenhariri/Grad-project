@@ -15,7 +15,7 @@ export default function Login({btn} : logbtn ) {
     const navigate = useNavigate();
     const send = (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      // إرسال البيانات عبر API باستخدام axios
+      
       axios.post('http://127.0.0.1:8000/api/login', {email: email, password: password})
         .then(response => {
           console.log(response.data);
@@ -44,7 +44,7 @@ export default function Login({btn} : logbtn ) {
       <label className='mb-2.5 font-medium text-base block' htmlFor="">{t("Password")}</label>
       <input value={password}
         onChange={(e) => setPassword(e.target.value)} className="mb-5 w-full p-5 placeholder:text-base bg-White/95 rounded-md" placeholder={t("PasswordPlace")} type="password" />
-      <Link className="block text-right text-base font-normal text-gray-700 mb-5" to={'/'}>{t("ForgotPassword")}</Link>
+      <Link className="block text-right text-base font-normal text-gray-700 mb-5" to={'/ResetPassword'}>{t("ForgotPassword")}</Link>
       <button className="w-full text-white py-4.5 px-5 rounded-lg bg-violet-950">{t(btn)}</button>
     </form>
   )

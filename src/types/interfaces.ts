@@ -8,9 +8,9 @@ export interface form
 
 export interface btn 
 {
-    text : string;
-    Bg : string;
-    textColor : string;
+    text?: string;
+    Bg?: string;
+    textColor?: string;
     onClick?: () => void;
 }
 
