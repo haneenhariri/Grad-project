@@ -1,5 +1,5 @@
-import { NavLink, useNavigate } from "react-router-dom"
-import Button from "../../Ui/Button/Button"
+import { NavLink} from "react-router-dom"
+
 import logo from "../../assets/logo/logo.png";
 import face from "../../assets/social/face.png";
 import inst from "../../assets/social/Instragarm.png";
@@ -7,38 +7,9 @@ import linked from "../../assets/social/Linkedin.png";
 import twitter from "../../assets/social/Twitter (1).svg";
 import youtub from "../../assets/social/Frame 74.svg";
 export default function Footer() {
-  const navigate = useNavigate();
-  const handleJoin = () => {
-    navigate("/auth/login");
-}
-const handleViewAllCourses = () => {
-  navigate("/courses");
-}
+
   return (
     <footer className="bg-gray-900  text-white">
-        <div className="px-4  lg:px-20  desktop:px-40  gap-10 py-20 flex items-center justify-between border-b border-gray-700">
-            <div className=" w-5/12 font-semibold ">
-            <h2 className="text-[35px] leading-[45px] ">Start learning with 67.1k students around the world.</h2>
-            <div className=" flex gap-5 mt-7.5">
-            <Button text="Join the Family" Bg="bg-btn" onClick={handleJoin} textColor=""/>
-            <Button text="Browse all courses" Bg="bg-White/95" onClick={handleViewAllCourses} textColor=" text-gray-900"/>
-            </div>
-            </div>
-            <div className="w-1/2 flex justify-evenly gap-3.5">
-            <div className="">
-                <h2 className="text-[35px] font-bold mb-2.5">6.3k</h2>
-                <p className=" text-base text-gray-500">Online courses</p>
-            </div>
-            <div className="">
-                <h2 className="text-[35px] font-bold mb-2.5">6.3k</h2>
-                <p className=" text-base text-gray-500">Online courses</p>
-            </div>
-            <div className="">
-                <h2 className="text-[35px] font-bold mb-2.5">6.3k</h2>
-                <p className=" text-base text-gray-500">Online courses</p>
-            </div>
-            </div>
-        </div>
       <div  className="px-4 lg:px-20 desktop:px-40 py-20 flex justify-between border-b border-gray-700">
         <div className="w-5/12 ">
         <div className="flex items-center mb-7.5 gap-1">

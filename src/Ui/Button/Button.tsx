@@ -1,11 +1,10 @@
-import { useTranslation } from "react-i18next";
 import { btn } from "../../types/interfaces";
 
 export default function Button({text , Bg , textColor, onClick } : btn ) {
-    const {t} = useTranslation()
+
   return (
-    <button onClick={onClick} className={`py-2.5 px-5 ${Bg}  ${textColor}   rounded-md`}>
-      {t(text)}
+    <button onClick={onClick} className={`py-2.5 md:px-5 p-2.5 text-base sm:text-sm ${Bg}  ${textColor}   rounded-md`}>
+      {text}
     </button>
   )
 }
