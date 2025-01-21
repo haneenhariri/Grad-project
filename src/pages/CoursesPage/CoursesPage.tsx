@@ -16,18 +16,20 @@ export default function CoursesPage() {
 
   const [results, setResults] = useState(courseData);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = isFilterVisible ? 2 : 6;
+
   useEffect(() => {
-    console.log('Query:', query);  
+    console.log('Query:', query);
     let filtered = courseData;
 
-    
     if (query.trim()) {
       filtered = filtered.filter((course) =>
         course.title.toLowerCase().includes(query.toLowerCase())
       );
     }
 
-   
     if (selectedCategories.length > 0) {
       filtered = filtered.filter((course) =>
         selectedCategories.includes(course.Category)
@@ -46,17 +48,26 @@ export default function CoursesPage() {
       );
     }
 
-    
     if (selectedOption === "Trending") {
       filtered = filtered.slice(0, 6);
     } else if (selectedOption === "Most Popular") {
       filtered = [...filtered]
-        .sort((a, b) => b.stdNum - a.stdNum)
+        .sort((a, b) => (b.stdNum ?? 0) - (a.stdNum ?? 0))
         .slice(0, 6);
     }
 
     setResults(filtered);
   }, [query, selectedCategories, selectedRatings, selectedLevels, selectedOption]);
+
+  // Function to handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate the current items based on the page
+  const currentItems = results.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const totalPages = Math.ceil(results.length / itemsPerPage);
 
   const toggleFilter = <T extends string | number>(
     setFilter: React.Dispatch<React.SetStateAction<T[]>>, 
@@ -66,7 +77,6 @@ export default function CoursesPage() {
       prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]
     );
   };
-  
 
   return (
     <section className="pt-7.5 pb-12 px-4 lg:px-20 desktop:px-40">
@@ -119,7 +129,7 @@ export default function CoursesPage() {
                     checked={selectedCategories.includes(category)}
                     onChange={() => toggleFilter(setSelectedCategories, category)}
                   />
-                  <label htmlFor={category}>{category}</label>
+                  <label className=" text-sm mx-1" htmlFor={category}>{category}</label>
                 </div>
               ))}
             </div>
@@ -133,7 +143,7 @@ export default function CoursesPage() {
                     checked={selectedRatings.includes(rating)}
                     onChange={() => toggleFilter(setSelectedRatings, rating)}
                   />
-                  <label htmlFor={`rating-${rating}`}>{rating} Star & up</label>
+                  <label className=" text-sm mx-1"  htmlFor={`rating-${rating}`}>{rating} Star & up</label>
                 </div>
               ))}
             </div>
@@ -147,7 +157,7 @@ export default function CoursesPage() {
                     checked={selectedLevels.includes(level)}
                     onChange={() => toggleFilter(setSelectedLevels, level)}
                   />
-                  <label htmlFor={level}>{level}</label>
+                  <label className=" text-sm mx-1"  htmlFor={level}>{level}</label>
                 </div>
               ))}
             </div>
@@ -155,11 +165,9 @@ export default function CoursesPage() {
         )}
 
         <div
-          className={`grid gap-6 ${
-            isFilterVisible ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 md:grid-cols-3"
-          } w-full`}
+          className={`grid gap-6 ${isFilterVisible ? "grid-cols-2 md:grid-cols-2" : "grid-cols-1 md:grid-cols-3"} w-full`}
         >
-          {results.map((course, index) => (
+          {currentItems.map((course, index) => (
             <CourseCard
               id={course.id}
               key={index}
@@ -172,6 +180,27 @@ export default function CoursesPage() {
             />
           ))}
         </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center gap-4 mt-8">
+        {currentPage > 1 && (
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            className="px-4 py-2 border border-violet-950"
+          >
+            Previous
+          </button>
+        )}
+        <span className="self-center">Page {currentPage} of {totalPages}</span>
+        {currentPage < totalPages && (
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            className="px-4 py-2 border border-violet-950"
+          >
+            Next
+          </button>
+        )}
       </div>
     </section>
   );

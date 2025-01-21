@@ -72,8 +72,10 @@ export default {
       animation: {
         scrollContinuous: 'scrollContinuous 10s linear infinite', // حركة مستمرة
       },
+      
     },
   },
   plugins: [],
+  
 }
 
