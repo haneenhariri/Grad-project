@@ -1,49 +1,62 @@
 import { useState } from "react";
 import Button from "../../Ui/Button/Button";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPassword, resetPassword } from "../../services/forgotPassword";
 
 export default function ResetPasswordPage() {
-  const [step, setStep] = useState(1); 
-  const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [step, setStep] = useState(1);
   const navigate = useNavigate();
-
-
-  const handleEmailSubmit = async () => {
-    try {
-      const response = await axios.post('http://localhost:8000/api/forgot-password', { email });
-      
-      if (response.status === 200) {
-        setStep(2); 
-      } 
-    } catch (error) {
-      console.log(error)
-    }
-  };
-
-  const handlePasswordReset = async () => {
-
-    try {
-      const response = await axios.post('http://localhost:8000/api/reset-password', {
-        email : email,
-        token : verificationCode,  
-        password : newPassword,    
-        password_confirmation: confirmPassword,
-      });
-
-      if (response.status === 200) {
-        alert("Password reset successful!");
-        navigate('/auth/login'); 
-      } else {
-        alert("Failed to reset password. Please try again.");
+  const [email, setEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const mutation = useMutation(
+    {
+      mutationFn : forgotPassword,
+      onSuccess: (data) => 
+      {
+        console.log(data.message);
+        setStep(2);
+      },
+      onError: (error: any) => 
+      {
+        console.error("Login Error:", error.response?.data);
       }
-    } catch (error) {
-      console.log(error)
     }
+  )
+  const handleEmailSubmit = () => {
+    mutation.mutate({email})
   };
+  const mutationResetPassword = useMutation(
+    {
+      mutationFn: resetPassword,
+      onSuccess: (data) => 
+      {
+        alert(data.message);
+        navigate("/auth/login");
+      },
+      onError: (error: any) => {
+        console.error("Reset Password Error:", error.response?.data);
+        alert("Failed to reset password.");
+      },
+    }
+  )
+  const handlePasswordReset = () => {
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+  mutationResetPassword.mutate({
+    email,
+    token: verificationCode,
+    password: newPassword,
+    password_confirmation: confirmPassword,
+  });
+
+  }
+
 
   return (
     <section className=" px-4 desktop:py-28 md:py-20 py-10 lg:px-20 desktop:px-40 gap-6 flex justify-center items-center">

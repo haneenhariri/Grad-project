@@ -8,10 +8,10 @@ export default function ProfileHeader() {
     }
     
   return (
-    <div className=" mt-16 shadow-lg bg-white">
-      <div className="p-10 flex justify-between items-center">
+    <div className=" ">
+      <div className="p-10 flex justify-between items-center border  border-b-0 px-5 border-violet-400">
         <div className="flex gap-5 items-center">
-            <img src={profile} alt="" className=" rounded-full w-24 h-24" />
+            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-violet-950 text-white text-lg" > h </div>
             <div>
                 <h3 className=" mb-2">Haneen Al-Hariri</h3>
                 <p className=" text-base text-gray-600">Web Designer</p>
@@ -22,21 +22,9 @@ export default function ProfileHeader() {
       {/* tabs */}
       <div className="flex items-center gap-6  border px-5 border-violet-400 ">
         <NavLink
-            to="/User/dashboard"
-            className={({ isActive }) =>
-              `text-center w-28 text-base h-full py-2.5 ${
-                isActive
-                  ? "text-violet-400 border-b-2 border-violet-400"
-                  : ""
-              }`
-            }
-          >
-         Dashboard
-        </NavLink>
-        <NavLink
             to="/User/settings"
             className={({ isActive }) =>
-              `text-center w-28 text-base h-full py-2.5 ${
+              `text-center w-1/2 text-base h-full py-2.5 ${
                 isActive
                   ? "text-violet-400 border-b-2 border-violet-400"
                   : ""
@@ -48,14 +36,14 @@ export default function ProfileHeader() {
         <NavLink
             to="/User/usercourse"
             className={({ isActive }) =>
-              `text-center w-28 text-base h-full py-2.5 ${
+              `text-center w-1/2 text-base h-full py-2.5 ${
                 isActive
                   ? "text-violet-400 border-b-2 border-violet-400"
                   : ""
               }`
             }
           >
-         Courses
+         My Courses
         </NavLink>
       </div>
     </div>

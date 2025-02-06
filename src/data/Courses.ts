@@ -3,6 +3,9 @@ import courseImg2 from '../assets/courses/Image (20).png'
 import courseImg3 from '../assets/courses/Image (21).png'
 import courseImg4 from '../assets/courses/Image (22).png'
 import courseImg5 from '../assets/courses/Image (23).png'
+import courseImg6 from '../assets/courses/front-model2.png'
+import courseImg7 from '../assets/courses/front-model3.png'
+import courseImg8 from '../assets/courses/Course Images.png'
 
 export const courseData = 
 
@@ -68,7 +71,7 @@ export const courseData =
     },
     {
         id : 6,
-        img : courseImg ,
+        img : courseImg6 ,
         instructor : 'By Jennifer Wilson',
         weeks: '6 Weeks',
         level: 'Expert',
@@ -80,7 +83,7 @@ export const courseData =
     },
     {
         id : 1,
-        img : courseImg ,
+        img : courseImg7 ,
         instructor : 'By John Smith',
         weeks: '4 Weeks',
         level: 'Beginner',
@@ -92,7 +95,7 @@ export const courseData =
     },
     {
         id : 2,
-        img : courseImg2 ,
+        img : courseImg8 ,
         instructor : 'By Emily Johnson',
         weeks: '6 Weeks',
         level: 'Intermediate',
@@ -150,7 +153,7 @@ export const courseData =
         Category : "Programming languages"
     },
     {
-        id : 1,
+        id : 7,
         img : courseImg ,
         instructor : 'By John Smith',
         weeks: '4 Weeks',
@@ -162,7 +165,7 @@ export const courseData =
         Category : "Web development"
     },
     {
-        id : 2,
+        id : 8,
         img : courseImg2 ,
         instructor : 'By Emily Johnson',
         weeks: '6 Weeks',

@@ -19,7 +19,7 @@ export default function ProfileSettings() {
       <div className=" my-10">
         <h2 className="text-2xl font-semibold mb-6">Account settings</h2>
         <form className=" flex justify-between gap-10">
-          <div className="flex relative w-max p-5 border border-violet-400 flex-col justify-evenly items-center">
+          <div className="flex relative   p-3 border border-violet-400 flex-col justify-evenly items-center">
               <label htmlFor="imageUpload" className="cursor-pointer">
                 <div className="w-40 h-40  overflow-hidden border-2 border-gray-300">
                   {preview ? (
@@ -42,23 +42,18 @@ export default function ProfileSettings() {
                 className="hidden"
                 onChange={handleImageUpload}
               />
-              <p className="text-xs w-10/12 text-center  text-gray-500 mt-2">
+              <p className="text-xs w-3/4 text-center  text-gray-500 mt-2">
               Image size should be under 1MB and image ratio needs to be 1:1
             </p>
           </div>
           <div className=" w-10/12   ">
           <label htmlFor="" className=" mb-1.5">Full name</label>
           <div className="flex justify-between gap-5 mb-5">
-            <input type="text" className="w-1/2 border p-2 border-violet-400 bg-transparent  placeholder:text-sm" placeholder="First name"/>
-            <input type="text" className=" w-1/2 border p-2 border-violet-400 bg-transparent placeholder:text-sm" placeholder="Last name"/>
+            <input type="text" className=" w-full border p-2 border-violet-400 bg-transparent placeholder:text-sm" placeholder="Enter your name"/>
           </div>
-          <label htmlFor="" className=" mb-1.5">Username</label>
-          <div className="flex justify-between gap-5 mb-2.5">
-            <input type="text" className="w-full border p-2 border-violet-400 bg-transparent  placeholder:text-sm" placeholder="Enter your username"/>
-          </div>
-          <label htmlFor="" className=" mb-1.5">Title</label>
-          <div className="flex justify-between gap-5 mb-2.5">
-            <textarea  className="w-full border p-2 border-violet-400 bg-transparent  placeholder:text-sm" placeholder="Your tittle, proffesion or small biography"/>
+          <label htmlFor="" className="">Email</label>
+          <div className="flex justify-between gap-5  mb-8">
+            <input type="text" className="w-full border p-2 border-violet-400 bg-transparent  placeholder:text-sm" placeholder="Enter your email"/>
           </div>
           <Button Bg="bg-btn" textColor="text-white" text="Save changes" />
           </div>

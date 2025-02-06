@@ -13,14 +13,29 @@ import ProtectedRoute from './hooks/ProtectedRoute.tsx';
 import PaymentPage from './pages/PaymentPage/PaymentPage.tsx';
 import WatchCourse from './pages/WatchCourse/WatchCourse.tsx';
 import InstructorPage from './pages/InstructorPage/InstructorPage.tsx';
-import About from './pages/About/About.tsx';
 import ProfileSettings from './components/ProfileSettings/ProfileSettings.tsx';
 import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.tsx';
 import DashboardUser from './components/DashboardUser/DashboardUser.tsx';
 import Courses from './components/UserCourse/Courses.tsx';
 import { Elements } from '@stripe/react-stripe-js';
 import stripePromise from './utils/stripe'; 
-
+import Admin from './Admin/Admin.tsx';
+import TeacherForm from './pages/TeacherForm/TeacherForm.tsx';
+import DashLayout from './layout/DashLayout.tsx';
+import InstractorDash from './Dashboard/InstractorDash.tsx';
+import InstractSettings from './Dashboard/InstractSettings.tsx';
+import CreatCourse from './Dashboard/CreatCourse.tsx';
+import Earning from './Dashboard/Earning.tsx';
+import IstractCourses from './Dashboard/IstractCourses.tsx';
+import CourseDetail from './Dashboard/CourseDetail.tsx';
+import MyCourse from './Dashboard/MyCourse.tsx';
+import AdminCourse from './Admin/AdminCourse.tsx';
+import InstructorList from './Admin/InstructorList.tsx';
+import Students from './Admin/Students.tsx';
+import Payments from './Admin/Payments.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { store } from './redux/store/index.ts';
+import { Provider } from 'react-redux';
 const routes = createBrowserRouter(
   [
     {
@@ -28,12 +43,8 @@ const routes = createBrowserRouter(
       element: <Layout />,
       children: [
         {
-          path: '/',
+          path: '',
           element: <Home />,
-        },
-        {
-          path: '/about',
-          element: <About />,
         },
         {
           path: '/courses',
@@ -94,16 +105,90 @@ const routes = createBrowserRouter(
           element: <InstructorPage />,
         },
         {
+          path: '/InstructorForm',
+          element : <TeacherForm/>
+        },
+        {
           path: '*',
           element: <Home />,
         },
       ],
     },
+    {
+      path : '/Admin',
+      element : <Admin/>,
+      children: [
+        {
+          path : 'dash',
+          element: <InstractorDash/>
+        },
+        {
+          path : 'Settings',
+          element: <InstractSettings/>
+        },
+        {
+          path : 'Create',
+          element: <AdminCourse/>
+        },
+        {
+          path : 'Payments',
+          element: <Payments/>
+        },
+        {
+          path : 'instructorlist',
+          element: <InstructorList/>,
+        },
+        {
+          path : 'Students',
+          element: <Students/>,
+        },
+      ]
+    },
+    {
+      path : '/instruct',
+      element : <DashLayout/>,
+      children: [
+        {
+          path : 'dash',
+          element: <InstractorDash/>
+        },
+        {
+          path : 'Settings',
+          element: <InstractSettings/>
+        },
+        {
+          path : 'Create',
+          element: <CreatCourse/>
+        },
+        {
+          path : 'Earning',
+          element: <Earning/>
+        },
+        {
+          path : 'MyCourses',
+          element: <IstractCourses/>,
+          children :[
+            {
+              path:'',
+              element: <MyCourse/>
+            },
+            {
+              path: 'detail/:id',
+              element : <CourseDetail/>
+            }
+          ] 
+        },
+      ]
+    }
   ]
 );
-
+const queryClient = new QueryClient(); 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={routes} />
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={routes} />
+      </QueryClientProvider>
+    </Provider>
   </StrictMode>
 );

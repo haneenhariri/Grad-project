@@ -33,6 +33,8 @@ export default {
         'Grey/40': '#656567',
         'Grey/60': '#98989A',
         'Grey/70': '#B3B3B3',
+        'gray-h': 'rgb(247 245 250 / var(--tw-bg-opacity, 1))',
+        
       },
       spacing: {
         '4.5' : '18px',

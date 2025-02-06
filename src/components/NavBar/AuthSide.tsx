@@ -1,57 +1,54 @@
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { navAuth } from "../../data/navData";
 import Logout from "../Logout/Logout";
+import { imgProfile } from "../../services/profileStd";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthSide() {
-    const [activeButton, setActiveButton] = useState("login");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [storedUserName, setStoredUserName] = useState<string>("");
-    const navigate = useNavigate();
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("User");
+  const navigate = useNavigate();
 
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-          setIsLoggedIn(true);
-          const storedName = localStorage.getItem("name") || "User";
-          setStoredUserName(storedName);
-        }
-    }, []);
+  
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      imgProfile()
+        .then((data) => {
+          if (data && data.data) {
+            const user = data.data;
+            if (user.profile_image) {
+              setProfileImage(user.profile_image);
+            } else {
+              setProfileImage(null);
+            }
+            if (user.name) {
+              setUserName(user.name);
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching profile data", err);
+          setProfileImage(null);
+        });
+    }
+  }, []);
   return (
     <div className="flex items-center gap-5">
-    {/* لتغغير اللغة  */}
-    {/* هنا اذا كان غير مسجل يعرض ازرار تسجيل الدخول بينما اذا كان مسجل يعرض البروفايل  */}
-    {isLoggedIn ? (
-      <>
-        <button
-          onClick={() => navigate("/User/settings")}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg"
-        >
-        {storedUserName.charAt(0)}
-        </button>
-        <Logout/>
-      </>
-       ) : (
-      /* ازرار تسجيل الدخول في القياسات الوسط و الاصغر تختفي لتظهر في السايد بار  */
-      <div className=" lg:flex hidden gap-5 items-center">
-        {navAuth.map((e, i) => (
-          <NavLink
-            key={i}
-            to={e.path}
-            onClick={() => setActiveButton(e.text.toLowerCase())}
-            className={`${
-              activeButton === e.text.toLowerCase()
-                ? "bg-violet-950 text-white desktop:py-3.5 desktop:px-8.5 tablet:py-3 tablet:px-5 p-2"
-                : ""
-            } desktop:text-lg tablet:text-sm text-xs font-normal transition-all duration-300 rounded-lg`}
+          <button
+            onClick={() => navigate("/User/settings")}
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden"
           >
-            {(e.text)}
-          </NavLink>
-        ))}
-      </div>
-    )}
-
-  </div>
-  )
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span>{userName.charAt(0)}</span> 
+            )}
+          </button>
+          <Logout />
+    </div>
+  );
 }

@@ -10,10 +10,29 @@ import lang from '../../assets/icons/Notebook.png'
 import table from '../../assets/icons/Monitor.png'
 import folder from '../../assets/icons/FolderNotchOpen.png'
 import video from '../../assets/icons/PlayCircle.png'
+import arrowDown from '../../assets/icons/Arrow - Down 2.png'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
  
 export default function OneCourse() {
+    const [isOpen, setIsOpen] = useState(false);
+    const [balance, setBalance] = useState(150); // رصيد المستخدم الافتراضي
+    const coursePrice = 100; // سعر الكورس
+    const [message, setMessage] = useState("");
+  
+    const handlePurchase = () => {
+      setIsOpen(true);
+      setMessage("Do you want to purchase this course?");
+    };
+  
+    const confirmPayment = () => {
+      if (balance >= coursePrice) {
+        setBalance(balance - coursePrice);
+        setMessage("Payment successful! Do you want to view the course or go to the dashboard?");
+      } else {
+        setMessage("Insufficient balance!");
+      }
+    };
     const { courseId } = useParams<{ courseId: string }>();
     const navigate = useNavigate()
     const [accordionStates, setAccordionStates] = useState<Record<string, boolean>>({ 'module-1': true,});
@@ -43,8 +62,6 @@ export default function OneCourse() {
             </div>
             <img src={courseImg} alt="" className='mb-10' />
             <h3 className='font-semibold text-2xl mb-5'>Description</h3>
-            <p className=' text-sm text-gray-700 mb-5'>It gives you a huge self-satisfaction when you look at your work and say, "I made this!". I love that feeling after I'm done working on something. When I lean back in my chair, look at the final result with a smile, and have this little "spark joy" moment. It's especially satisfying when I know I just made $5,000.</p>
-            <p className=' text-sm text-gray-700 mb-5'>  I do! And that's why I got into this field. Not for the love of Web Design, which I do now. But for the LIFESTYLE! There are many ways one can achieve this lifestyle. This is my way. This is how I achieved a lifestyle I've been fantasizing about for five years. And I'm going to teach you the same. Often people think Web Design is complicated. That it needs some creative talent or knack for computers. Sure, a lot of people make it very complicated. People make the simplest things complicated. Like most subjects taught in the universities. But I don't like complicated. I like easy. I like life hacks. I like to take the shortest and simplest route to my destination. I haven't gone to an art school or have a computer science degree. I'm an outsider to this field who hacked himself into it, somehow ending up being a sought-after professional. That's how I'm going to teach you Web Design. So you're not demotivated on your way with needless complexity. So you enjoy the process because it's simple and fun. So you can become a Freelance Web Designer in no time.</p>
             <p className=' text-sm text-gray-700 mb-5'>  For example, this is a Design course but I don't teach you Photoshop. Because Photoshop is needlessly complicated for Web Design. But people still teach it to web designers. I don't. I teach Figma – a simple tool that is taking over the design world. You will be designing a complete website within a week while others are still learning how to create basic layouts in Photoshop.</p>
             <p className=' text-sm text-gray-700 mb-10'>  Second, this is a Development course. But I don't teach you how to code. Because for Web Design coding is needlessly complicated and takes too long to learn. Instead, I teach Webflow – a tool that is taking over the web design world. You will be building complex websites within two weeks while others are still learning the basics of HTML & CSS. Third, this is a Freelancing course. But I don't just teach you how to write great proposals. I give you a winning proposal template. When you're done with the course, you will have a stunning portfolio website with portfolio pieces already in it. Buy this course now and take it whenever the time is right for you</p>
             <div className=' bg-[#E1F7E3] p-10 w-full mb-10'>
@@ -153,7 +170,10 @@ export default function OneCourse() {
             <div className="border  mb-4">
                 <div className=' p-5 border-b'>
                    <div className='flex justify-between items-center cursor-pointer'>
-                      <h2 className={ 'text-purple-600'} onClick={() => toggleAccordion(`module-1`)}>Getting Started</h2>
+                      <div className={' flex items-center gap-2  text-purple-600'} onClick={() => toggleAccordion(`module-1`)}>
+                      <img src={arrowDown} alt="" />
+                         <h2>Getting Started</h2>
+                      </div>
                       <div className='flex justify-between items-center  gap-4'>
                         <div className='flex items-center gap-1.5'>
                             <img src={video} alt="" className=' w-5 h-5' />
@@ -177,15 +197,15 @@ export default function OneCourse() {
                 </div>
                 <div className=' p-5 border-b'>
                 <div className='flex justify-between items-center cursor-pointer'>
-                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Getting Started</h2>
+                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Secret of Good Design</h2>
                       <div className='flex justify-between items-center  gap-4'>
                         <div className='flex items-center gap-1.5'>
                             <img src={video} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>4 lectures</span>
+                            <span className=' text-xs text-gray-600'>52 lectures</span>
                         </div>
                         <div className='flex items-center gap-1.5'>
                             <img src={clock} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>51m</span>
+                            <span className=' text-xs text-gray-600'>5h 49m</span>
                         </div>
                       </div>
                 </div>  
@@ -197,15 +217,15 @@ export default function OneCourse() {
                 </div>
                 <div className=' p-5 border-b'>
                 <div className='flex justify-between items-center cursor-pointer'>
-                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Getting Started</h2>
+                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Practice Design Like an Artist</h2>
                       <div className='flex justify-between items-center  gap-4'>
                         <div className='flex items-center gap-1.5'>
                             <img src={video} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>4 lectures</span>
+                            <span className=' text-xs text-gray-600'>43 lectures</span>
                         </div>
                         <div className='flex items-center gap-1.5'>
                             <img src={clock} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>51m</span>
+                            <span className=' text-xs text-gray-600'>53m</span>
                         </div>
                       </div>
                 </div>  
@@ -217,15 +237,15 @@ export default function OneCourse() {
                 </div>
                 <div className=' p-5 border-b'>
                 <div className='flex justify-between items-center cursor-pointer'>
-                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Getting Started</h2>
+                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Web Development (webflow) </h2>
                       <div className='flex justify-between items-center  gap-4'>
                         <div className='flex items-center gap-1.5'>
                             <img src={video} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>4 lectures</span>
+                            <span className=' text-xs text-gray-600'>137 lectures</span>
                         </div>
                         <div className='flex items-center gap-1.5'>
                             <img src={clock} alt="" className=' w-5 h-5' />
-                            <span className=' text-xs text-gray-600'>51m</span>
+                            <span className=' text-xs text-gray-600'>10h 6m</span>
                         </div>
                       </div>
                 </div>  
@@ -237,7 +257,7 @@ export default function OneCourse() {
                 </div>
                 <div className=' p-5 border-b'>
                 <div className='flex justify-between items-center cursor-pointer'>
-                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Getting Started</h2>
+                      <h2 className="" onClick={() => toggleAccordion(`module-2`)}>Secrets of Making Money Freelancing</h2>
                       <div className='flex justify-between items-center  gap-4'>
                         <div className='flex items-center gap-1.5'>
                             <img src={video} alt="" className=' w-5 h-5' />
@@ -302,7 +322,7 @@ export default function OneCourse() {
             </div>
         </div>
         <div className=' p-6 border-b'>
-        <button onClick={() =>navigate(`/payment/${courseId}`)} className=' w-full p-3 bg-violet-950 text-white'>Buy now</button>
+        <button onClick={handlePurchase}  className=' w-full p-3 bg-violet-950 text-white'>Buy now</button>
         </div>
         <div className=' p-6 border-b'>
             <h3 className=' font-medium text-base mb-4'>This course includes:</h3>
@@ -323,6 +343,49 @@ export default function OneCourse() {
                 <p className='font-medium text-[#AF52DE] text-sm '> downloadable resources </p>
             </div>
         </div>
+        {isOpen && (
+        <div className="fixed inset-0  flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white w-1/2 h-1/2 p-6 flex flex-col justify-evenly rounded-lg shadow-lg ">
+            <p className="text-3xl font-bold text-center mb-10">{message}</p>
+
+            <div className="flex justify-center items-stretch gap-4 mt-4">
+              {message === "Do you want to purchase this course?" ? (
+                <>
+                  <button 
+                    onClick={confirmPayment} 
+                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    YES
+                  </button>
+                  <button 
+                    onClick={() => setIsOpen(false)} 
+                    className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition">
+                    Cancel
+                  </button>
+                </>
+              ) : message === "Payment successful! Do you want to view the course or go to the dashboard?" ? (
+                <>
+                  <button 
+                    onClick={() => alert("Redirecting to Course Page...")} 
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    View Course
+                  </button>
+                  <button 
+                    onClick={() => alert("Redirecting to Dashboard...")} 
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                    Dashboard
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => setIsOpen(false)} 
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                  Close
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
         </div>
     </section>
   )

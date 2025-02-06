@@ -4,10 +4,9 @@ import ProfileHeader from "../../components/ProfileHeader/ProfileHeader";
 
 export default function UserDash() {
   return (
-    <section className="px-4 bg-custom-bg bg-no-repeat bg-top    py-10 lg:px-20 desktop:px-40 ">
+    <section className="  p-5 bg-white rounded-md   my-10 lg:mx-20 desktop:mx-40 ">
        <ProfileHeader/>
        <Outlet/>
-      
     </section>
   )
 }

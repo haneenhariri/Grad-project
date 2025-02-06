@@ -28,19 +28,15 @@ export default function Hero() {
       <div className="tablet:w-1/2 w-full flex flex-col justify-center mb-10 items-center">
         <div className="relative mb-4">
           <img src={icon} alt="icon" className="absolute sm:w-auto w-7 sm:-top-9 -top-7 -left-7" />
-          <div className="bg-white flex items-center gap-5 py-2.5 sm:px-4 px-2.5 lg:w-max w-full rounded-md">
-            <div className="md:w-12 md:h-12 w-7 h-7 flex justify-center items-center bg-violet-400/15 rounded-md">
-              <img src={icon2} alt="icon" />
-            </div>
-            <h2 className="font-semibold text-[#9C4DF4] laptop:text-2xl md:text-lg sm:text-base text-sm sm:mr-5">
-              {t("MainText")}
-            </h2>
-          </div>
         </div>
-        <h2 className="font-bold text-center mb-7.5 laptop:leading-[75px] md:leading-[60px] sm:leading-[50px] w-10/12 text-[#0A033C] laptop:text-[60px] md:text-[60px] sm:text-[45px] text-3xl">
-          {t("titleHero")}
+        <div className=' relative w-10/12 mb-10 text-start text-violet-600'>
+        <img className='-top-8 -left-8 absolute' src={icon} alt="" />
+        <p className=' text-2xl font-semibold'>Learn with</p>
+        <h2 className="font-bold text-center laptop:leading-[75px] md:leading-[60px] sm:leading-[50px]  text-[#0A033C] laptop:text-[130px] my-5 md:text-[60px] sm:text-[45px] text-3xl">
+        Orbah
         </h2>
-
+        <p className=' text-2xl font-semibold text-end'>anytime anywhere</p>
+        </div>
         {/* البحث */}
         <div className="flex bg-white tablet:w-10/12 justify-between rounded-md p-2.5">
           {/* إظهار مربع البحث عند الضغط على زر البحث */}
