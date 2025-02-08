@@ -96,7 +96,11 @@ const routes = createBrowserRouter(
     },
     {
       path : '/Admin',
-      element : <Admin/>,
+      
+      element : 
+      (<RoleProtectedRoute allowedRoles={['admin']}>
+        <Admin/>
+      </RoleProtectedRoute>),
       children: [
         {
           index: true,
@@ -132,7 +136,7 @@ const routes = createBrowserRouter(
       path : '/instruct',
       element :
       (   
-      <RoleProtectedRoute allowedRoles={['teacher']}>
+      <RoleProtectedRoute allowedRoles={['instructor']}>
         <DashLayout/>
       </RoleProtectedRoute>),
       children: [

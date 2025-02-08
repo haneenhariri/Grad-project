@@ -15,7 +15,7 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeButton, setActiveButton] = useState("login");
-
+  const userRole = localStorage.getItem('role'); 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -40,7 +40,11 @@ export default function NavBar() {
         {/* logo */}
         <Logo />
         <ul className="lg:flex hidden">
-          {nav.map((e, i) => (
+          {nav.filter((e) => {
+            if(e.path === '/instruct' && userRole === 'instructor') return false;
+            if(e.path === '/Admin' && userRole === 'admin') return false;
+            return true;
+          }).map((e, i) => (
             <li key={i}>
               <NavLink
                 className={({ isActive }) =>

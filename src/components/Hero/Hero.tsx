@@ -1,6 +1,5 @@
 import hero from '../../assets/hero/Image (15).png';
 import icon from '../../assets/hero/Abstract Line (1).png';
-import icon2 from '../../assets/hero/Icon (3).png';
 import search from '../../assets/hero/Outline.png';
 import './hero.css';
 import { useNavigate } from 'react-router-dom';
