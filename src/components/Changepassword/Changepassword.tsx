@@ -1,44 +1,39 @@
 import { useState } from "react";
 import Button from "../../Ui/Button/Button";
-import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { changePass } from "../../services/changePassword";
 
 export default function Changepassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-
-  const handlePasswordReset = async (e :React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent form submission
+  const mutation = useMutation({
+    mutationFn: changePass,
+    onSuccess: () => 
+    {
+      alert("Password reset successful!");
+    },
+    onError: (error: any) => {
+      setError(error.response?.data?.message || "Failed to reset password. Please try again.");
+    },
+  })
+  const handlePasswordReset = (e: React.FormEvent<HTMLFormElement>) => 
+  {
+    e.preventDefault();
     if (newPassword !== confirmPassword) {
       setError("The passwords do not match.");
       return;
     }
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.post('http://localhost:8000/api/change-password', {
-        current_password: oldPassword,
-        new_password: newPassword,
-        new_password_confirmation: confirmPassword,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, 
-        },
-      });
-      if (response.status === 200) {
-        alert("Password reset successful!");
-      } else {
-        setError("Failed to reset password. Please try again.");
-      }
-    } catch (error) {
-      
-      console.log(error);
-    }
-  };
-
+    mutation.mutate({
+      current_password: oldPassword,
+      new_password: newPassword,
+      new_password_confirmation: confirmPassword,
+    });
+  }
   return (
-    <form className="w-1/2" onSubmit={handlePasswordReset}>
+    <form className=" flex flex-col justify-between " onSubmit={handlePasswordReset}>
+      <div>
       <h2 className="text-2xl font-semibold mb-6">Change password</h2>
       <label htmlFor="currentPassword" className="mb-1.5">Current Password</label>
       <div className="flex justify-between gap-5 mb-5">
@@ -47,7 +42,7 @@ export default function Changepassword() {
           type="password"
           value={oldPassword}
           onChange={(e) => setOldPassword(e.target.value)}
-          className="w-full border p-2 border-violet-400 bg-transparent placeholder:text-sm"
+          className="w-full rounded-md border p-2 border-violet-400 bg-transparent placeholder:text-sm"
           placeholder="Password"
         />
       </div>
@@ -58,7 +53,7 @@ export default function Changepassword() {
           type="password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
-          className="w-full border p-2 border-violet-400 bg-transparent placeholder:text-sm"
+          className="w-full border rounded-md p-2 border-violet-400 bg-transparent placeholder:text-sm"
           placeholder="Password"
         />
       </div>
@@ -69,12 +64,15 @@ export default function Changepassword() {
           type="password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full border p-2 border-violet-400 bg-transparent placeholder:text-sm"
+          className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
           placeholder="Confirm new password"
         />
       </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+      </div>
+      <div className="">
       <Button Bg="bg-btn" textColor="text-white" text="Change Password"  />
+      </div>
     </form>
   );
 }

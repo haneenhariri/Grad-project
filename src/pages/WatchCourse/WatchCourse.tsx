@@ -9,7 +9,6 @@ import { useState } from 'react'
 import file from '../../assets/FileText.png'
 import progress from '../../assets/Course Progress.png'
 import courseContact from '../../assets/Course Contents.png'
-import Comment from '../../components/Comment/Comment'
 export default function WatchCourse() {
   const navigate =  useNavigate()
   const [showPopup, setShowPopup] = useState(false);
@@ -20,7 +19,6 @@ export default function WatchCourse() {
   };
   const handleSubmit = () => {
     console.log("Rating:", rating, "Review:", review);
-    // Add your logic to save the rating and review
     setShowPopup(false);
   };
   return (

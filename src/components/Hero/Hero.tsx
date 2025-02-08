@@ -14,12 +14,9 @@ export default function Hero() {
   const navigate = useNavigate();
 
   const handleSearchClick = () => {
-    // إذا كان هناك نص في خانة البحث
     if (searchTerm.trim() !== "") {
-      // إجراء البحث باستخدام query
       navigate(`/courses?query=${encodeURIComponent(searchTerm)}`);
     }
-    // إغلاق خانة البحث بعد إجراء البحث
     setShowSearch(false);
   };
 
@@ -37,9 +34,7 @@ export default function Hero() {
         </h2>
         <p className=' text-2xl font-semibold text-end'>anytime anywhere</p>
         </div>
-        {/* البحث */}
         <div className="flex bg-white tablet:w-10/12 justify-between rounded-md p-2.5">
-          {/* إظهار مربع البحث عند الضغط على زر البحث */}
           <div className={`flex items-center gap-2 w-full ${showSearch ? 'block' : 'hidden'} sm:flex`}>
             <input
               type="text"
@@ -57,7 +52,6 @@ export default function Hero() {
             </button>
           </div>
 
-          {/* زر البحث على الشاشات الصغيرة */}
           <button
             className="block sm:hidden text-white bg-[#9C4DF4] p-2 rounded-md"
             onClick={() => setShowSearch(!showSearch)} // تبديل إظهار البحث

@@ -53,7 +53,7 @@ export const courseData =
         weeks: '10 Weeks',
         level: 'Beginner',
         title: 'Graphic Design for Beginners',
-        des: 'Discover the fundamentals of graphic design, including typography, color theory, layout design, and image manipulation techniques. Create visually stunning designs for print and digital media.',
+        des: 'Discover the fundamentals of graphic design,  color theory, layout design, and image manipulation techniques. Create visually stunning designs for print and digital media.',
         stdNum : 80,
         Rating : 3,
         Category : "Design"
@@ -65,7 +65,7 @@ export const courseData =
         weeks: '10 Weeks',
         level: 'Intermediate',
         title: 'Front-End Web Development',
-        des: 'Become proficient in front-end web development. Learn HTML, CSS, JavaScript, and popular frameworks like Bootstrap and React. Build interactive and responsive websites.',
+        des: 'Become proficient in front-end web development. Learn HTML, CSS, JavaScript, and popular frameworks like Bootstrap and React.',
         Rating : 5,
         Category : "web"
     },
@@ -76,10 +76,10 @@ export const courseData =
         weeks: '6 Weeks',
         level: 'Expert',
         title: 'Advanced JavaScript',
-        des: 'Take your JavaScript skills to the next level. Explore advanced concepts like closures, prototypes, asynchronous programming, and ES6 features. Build complex applications with confidence.',
+        des: 'Take your JavaScript skills to the next level.  prototypes, asynchronous programming, and ES6 features. Build complex applications with confidence.',
         stdNum : 12,
         Rating : 2,
-        Category : "Programming languages"
+        Category : "Programming"
     },
     {
         id : 1,
@@ -88,7 +88,7 @@ export const courseData =
         weeks: '4 Weeks',
         level: 'Beginner',
         title: 'Web Design Fundamentals',
-        des: 'Learn the fundamentals of web design, including HTML, CSS, and responsive design principles. Develop the skills to create visually appealing and user-friendly websites.',
+        des: 'Learn the fundamentals of web design, including HTML, CSS, and responsive design principles. Develop the skills to create visually appealing ',
         stdNum : 12,
         Rating : 5,
         Category : "Web development"

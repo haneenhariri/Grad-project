@@ -1,50 +1,59 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import Button from "../../Ui/Button/Button";
-import profile from '../../assets/photo_2024-03-09_22-37-44.jpg'
+
+import Tabs from "../Tabs/Tabs";
+import { stdTabs } from "../../data/tabsData";
+import { useEffect, useState } from "react";
+import { imgProfile } from "../../services/profileStd";
 export default function ProfileHeader() {
-    const navigate = useNavigate()
-    const handlebtn = () => {
-        navigate("/Instructor");
+  const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
+  const [userName, setUserName] = useState<string>("User");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      imgProfile()
+        .then((data) => {
+          if (data && data.data) {
+            const user = data.data;
+            console.log(user.profile_picture);
+            if (user.profile_picture) {
+              const imageUrl = `http://127.0.0.1:8000/storage/${user.profile_picture}`;
+              setProfileImage(imageUrl);
+              console.log("Profile Image URL:", imageUrl);
+          }
+           else {
+              setProfileImage(undefined);
+            }
+            if (user.name) {
+              setUserName(user.name);
+            }
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching profile data", err);
+          setProfileImage(undefined);
+        });
     }
-    
+  }, []);
   return (
     <div className=" ">
-      <div className="p-10 flex justify-between items-center border  border-b-0 px-5 border-violet-400">
+      <div className=" flex justify-between items-center border  rounded-t-md   border-b-0 p-5 border-violet-400">
         <div className="flex gap-5 items-center">
-            <div className="flex items-center justify-center w-20 h-20 rounded-full bg-violet-950 text-white text-lg" > h </div>
-            <div>
-                <h3 className=" mb-2">Haneen Al-Hariri</h3>
-                <p className=" text-base text-gray-600">Web Designer</p>
-            </div>
+        <div
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden">
+                        {profileImage ? (
+                            <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                            <span>{userName.charAt(0)}</span>
+                        )}
+          </div>
+        <h3 className="text-base font-semibold">{userName}</h3>
         </div>
-        <Button onClick={handlebtn} text="Become Instructor" Bg="bg-btn" textColor="text-white"/>
       </div>
       {/* tabs */}
-      <div className="flex items-center gap-6  border px-5 border-violet-400 ">
-        <NavLink
-            to="/User/settings"
-            className={({ isActive }) =>
-              `text-center w-1/2 text-base h-full py-2.5 ${
-                isActive
-                  ? "text-violet-400 border-b-2 border-violet-400"
-                  : ""
-              }`
-            }
-          >
-         Settings
-        </NavLink>
-        <NavLink
-            to="/User/usercourse"
-            className={({ isActive }) =>
-              `text-center w-1/2 text-base h-full py-2.5 ${
-                isActive
-                  ? "text-violet-400 border-b-2 border-violet-400"
-                  : ""
-              }`
-            }
-          >
-         My Courses
-        </NavLink>
+      <div className="flex items-center gap-6  border border-t-0 px-5 border-violet-400 ">
+        {stdTabs.map((e,i) => 
+        (
+         <Tabs key={i} path={e.path} text={e.text}/>
+        ))}
       </div>
     </div>
   )

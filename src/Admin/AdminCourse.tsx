@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Button from "../Ui/Button/Button";
 import filter from "../assets/Faders.png";
 

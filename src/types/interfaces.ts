@@ -1,3 +1,4 @@
+
 export interface form 
 {
     title : string;
@@ -13,6 +14,7 @@ export interface btn
     textColor?: string;
     onClick?: () => void;
     disabled?: boolean;
+    type?: "button" | "reset" | "submit" | undefined
 }
 
 export interface title 
@@ -62,3 +64,15 @@ export interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
   }
+  export interface tabsProps 
+{
+    path:string;
+    text:string;
+}
+export interface EditProfileProps
+{
+    _method : string;
+    name: string;
+    email:string;
+    profile_picture?: File;
+}

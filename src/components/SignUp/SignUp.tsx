@@ -18,6 +18,7 @@ export default function SignUp({btn} : logbtn) {
           if(data.data.token)
           {
             localStorage.setItem('token', data.data.token);
+            localStorage.setItem('role', data.data.role);
             navigate('/auth/login');
           }else {
             console.error("Token is missing in the response!");

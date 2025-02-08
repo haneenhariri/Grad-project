@@ -9,16 +9,10 @@ import Auth from './pages/Auth/Auth.tsx';
 import UserDash from './pages/UserDash/UserDash.tsx';
 import CoursesPage from './pages/CoursesPage/CoursesPage.tsx';
 import OneCourse from './pages/OneCourse/OneCourse.tsx';
-import ProtectedRoute from './hooks/ProtectedRoute.tsx';
-import PaymentPage from './pages/PaymentPage/PaymentPage.tsx';
 import WatchCourse from './pages/WatchCourse/WatchCourse.tsx';
 import InstructorPage from './pages/InstructorPage/InstructorPage.tsx';
 import ProfileSettings from './components/ProfileSettings/ProfileSettings.tsx';
-import ResetPasswordPage from './pages/ResetPasswordPage/ResetPasswordPage.tsx';
-import DashboardUser from './components/DashboardUser/DashboardUser.tsx';
 import Courses from './components/UserCourse/Courses.tsx';
-import { Elements } from '@stripe/react-stripe-js';
-import stripePromise from './utils/stripe'; 
 import Admin from './Admin/Admin.tsx';
 import TeacherForm from './pages/TeacherForm/TeacherForm.tsx';
 import DashLayout from './layout/DashLayout.tsx';
@@ -36,6 +30,8 @@ import Payments from './Admin/Payments.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from './redux/store/index.ts';
 import { Provider } from 'react-redux';
+import RoleProtectedRoute from './hooks/RoleProtectedRoute.tsx';
+import AdminSettings from './Admin/AdminSettings.tsx';
 const routes = createBrowserRouter(
   [
     {
@@ -51,16 +47,8 @@ const routes = createBrowserRouter(
           element: <CoursesPage />,
         },
         {
-          path: '/oneCourse/:courseId',
+          path: '/oneCourse/:id',
           element: <OneCourse />,
-        },
-        {
-          path: '/payment/:courseId',
-          element: (
-            <Elements stripe={stripePromise}>
-              <PaymentPage />
-            </Elements>
-          ),
         },
         {
           path: '/watch/:courseId',
@@ -71,15 +59,11 @@ const routes = createBrowserRouter(
           element: <Auth />,
         },
         {
-          path: 'ResetPassword',
-          element: <ResetPasswordPage />,
-        },
-        {
           path: 'User',
           element: (
-            <ProtectedRoute>
+            <RoleProtectedRoute allowedRoles={['student']}>
               <UserDash />
-            </ProtectedRoute>
+            </RoleProtectedRoute>
           ),
           children: [
             {
@@ -89,10 +73,6 @@ const routes = createBrowserRouter(
             {
               path: 'settings',
               element: <ProfileSettings />,
-            },
-            {
-              path: 'dashboard',
-              element: <DashboardUser />,
             },
             {
               path: 'usercourse',
@@ -119,12 +99,16 @@ const routes = createBrowserRouter(
       element : <Admin/>,
       children: [
         {
+          index: true,
+          element: <InstractorDash/>,
+        },
+        {
           path : 'dash',
           element: <InstractorDash/>
         },
         {
           path : 'Settings',
-          element: <InstractSettings/>
+          element: <AdminSettings/>
         },
         {
           path : 'Create',
@@ -146,7 +130,11 @@ const routes = createBrowserRouter(
     },
     {
       path : '/instruct',
-      element : <DashLayout/>,
+      element :
+      (   
+      <RoleProtectedRoute allowedRoles={['teacher']}>
+        <DashLayout/>
+      </RoleProtectedRoute>),
       children: [
         {
           path : 'dash',

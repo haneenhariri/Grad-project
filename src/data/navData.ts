@@ -14,6 +14,14 @@ export const nav =
         path: '/Instructor',
         text: 'Become an Instructor'
     },
+    {
+        path: '/instruct',
+        text: 'DashBoard'
+    },
+    {
+        path: '/Admin',
+        text: 'DashBoard'
+    },
 
 ]
 export const navAuth = 

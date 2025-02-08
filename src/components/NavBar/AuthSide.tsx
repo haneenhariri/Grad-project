@@ -4,7 +4,7 @@ import { imgProfile } from "../../services/profileStd";
 import { useNavigate } from "react-router-dom";
 
 export default function AuthSide() {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [userName, setUserName] = useState<string>("User");
   const navigate = useNavigate();
 
@@ -16,10 +16,14 @@ export default function AuthSide() {
         .then((data) => {
           if (data && data.data) {
             const user = data.data;
-            if (user.profile_image) {
-              setProfileImage(user.profile_image);
-            } else {
-              setProfileImage(null);
+            console.log(user.profile_picture);
+            if (user.profile_picture) {
+              const imageUrl = `http://127.0.0.1:8000/storage/${user.profile_picture}`;
+              setProfileImage(imageUrl);
+              console.log("Profile Image URL:", imageUrl);
+          }
+           else {
+              setProfileImage(undefined);
             }
             if (user.name) {
               setUserName(user.name);
@@ -28,7 +32,7 @@ export default function AuthSide() {
         })
         .catch((err) => {
           console.error("Error fetching profile data", err);
-          setProfileImage(null);
+          setProfileImage(undefined);
         });
     }
   }, []);
