@@ -13,6 +13,7 @@ export default function Logout() {
     mutationFn: logout,
     onSuccess: () => {
       localStorage.removeItem('token');
+      localStorage.removeItem('role');
       dispatch(logoutSuccess());
       navigate('/');
     },
