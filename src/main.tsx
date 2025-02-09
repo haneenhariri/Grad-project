@@ -1,184 +1,110 @@
-import { StrictMode } from 'react';
+import { StrictMode, Suspense, lazy } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
+import { store } from './redux/store/index.ts';
+import RoleProtectedRoute from './hooks/RoleProtectedRoute.tsx';
+import Layout from './layout/Layout.tsx';
+import DashLayout from './layout/DashLayout.tsx';
 import './index.css';
 import './utils/i18n.ts';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Layout from './layout/Layout.tsx';
-import Home from './pages/Home/Home.tsx';
-import Auth from './pages/Auth/Auth.tsx';
-import UserDash from './pages/UserDash/UserDash.tsx';
-import CoursesPage from './pages/CoursesPage/CoursesPage.tsx';
-import OneCourse from './pages/OneCourse/OneCourse.tsx';
-import WatchCourse from './pages/WatchCourse/WatchCourse.tsx';
-import InstructorPage from './pages/InstructorPage/InstructorPage.tsx';
-import ProfileSettings from './components/ProfileSettings/ProfileSettings.tsx';
-import Courses from './components/UserCourse/Courses.tsx';
-import Admin from './Admin/Admin.tsx';
-import TeacherForm from './pages/TeacherForm/TeacherForm.tsx';
-import DashLayout from './layout/DashLayout.tsx';
-import InstractorDash from './Dashboard/InstractorDash.tsx';
-import InstractSettings from './Dashboard/InstractSettings.tsx';
-import CreatCourse from './Dashboard/CreatCourse.tsx';
-import Earning from './Dashboard/Earning.tsx';
-import IstractCourses from './Dashboard/IstractCourses.tsx';
-import CourseDetail from './Dashboard/CourseDetail.tsx';
-import MyCourse from './Dashboard/MyCourse.tsx';
-import AdminCourse from './Admin/AdminCourse.tsx';
-import InstructorList from './Admin/InstructorList.tsx';
-import Students from './Admin/Students.tsx';
-import Payments from './Admin/Payments.tsx';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { store } from './redux/store/index.ts';
-import { Provider } from 'react-redux';
-import RoleProtectedRoute from './hooks/RoleProtectedRoute.tsx';
-import AdminSettings from './Admin/AdminSettings.tsx';
-const routes = createBrowserRouter(
-  [
-    {
-      path: '/',
-      element: <Layout />,
-      children: [
-        {
-          path: '',
-          element: <Home />,
-        },
-        {
-          path: '/courses',
-          element: <CoursesPage />,
-        },
-        {
-          path: '/oneCourse/:id',
-          element: <OneCourse />,
-        },
-        {
-          path: '/watch/:courseId',
-          element: <WatchCourse />,
-        },
-        {
-          path: '/auth/:formType',
-          element: <Auth />,
-        },
-        {
-          path: 'User',
-          element: (
-            <RoleProtectedRoute allowedRoles={['student']}>
-              <UserDash />
-            </RoleProtectedRoute>
-          ),
-          children: [
-            {
-              index: true,
-              element: <ProfileSettings />,
-            },
-            {
-              path: 'settings',
-              element: <ProfileSettings />,
-            },
-            {
-              path: 'usercourse',
-              element: <Courses />,
-            },
-          ],
-        },
-        {
-          path: '/Instructor',
-          element: <InstructorPage />,
-        },
-        {
-          path: '/InstructorForm',
-          element : <TeacherForm/>
-        },
-        {
-          path: '*',
-          element: <Home />,
-        },
-      ],
-    },
-    {
-      path : '/Admin',
-      
-      element : 
-      (<RoleProtectedRoute allowedRoles={['admin']}>
-        <Admin/>
-      </RoleProtectedRoute>),
-      children: [
-        {
-          index: true,
-          element: <InstractorDash/>,
-        },
-        {
-          path : 'dash',
-          element: <InstractorDash/>
-        },
-        {
-          path : 'Settings',
-          element: <AdminSettings/>
-        },
-        {
-          path : 'Create',
-          element: <AdminCourse/>
-        },
-        {
-          path : 'Payments',
-          element: <Payments/>
-        },
-        {
-          path : 'instructorlist',
-          element: <InstructorList/>,
-        },
-        {
-          path : 'Students',
-          element: <Students/>,
-        },
-      ]
-    },
-    {
-      path : '/instruct',
-      element :
-      (   
+const Home = lazy(() => import('./pages/Home/Home.tsx'));
+const Auth = lazy(() => import('./pages/Auth/Auth.tsx'));
+const UserDash = lazy(() => import('./pages/UserDash/UserDash.tsx'));
+const CoursesPage = lazy(() => import('./pages/CoursesPage/CoursesPage.tsx'));
+const OneCourse = lazy(() => import('./pages/OneCourse/OneCourse.tsx'));
+const WatchCourse = lazy(() => import('./pages/WatchCourse/WatchCourse.tsx'));
+const InstructorPage = lazy(() => import('./pages/InstructorPage/InstructorPage.tsx'));
+const ProfileSettings = lazy(() => import('./components/ProfileSettings/ProfileSettings.tsx'));
+const Courses = lazy(() => import('./components/UserCourse/Courses.tsx'));
+const Admin = lazy(() => import('./Admin/Admin.tsx'));
+const TeacherForm = lazy(() => import('./pages/TeacherForm/TeacherForm.tsx'));
+const InstractorDash = lazy(() => import('./Dashboard/InstractorDash.tsx'));
+const InstractSettings = lazy(() => import('./Dashboard/InstractSettings.tsx'));
+const CreatCourse = lazy(() => import('./Dashboard/CreatCourse.tsx'));
+const Earning = lazy(() => import('./Dashboard/Earning.tsx'));
+const IstractCourses = lazy(() => import('./Dashboard/IstractCourses.tsx'));
+const CourseDetail = lazy(() => import('./Dashboard/CourseDetail.tsx'));
+const MyCourse = lazy(() => import('./Dashboard/MyCourse.tsx'));
+const AdminCourse = lazy(() => import('./Admin/AdminCourse.tsx'));
+const InstructorList = lazy(() => import('./Admin/InstructorList.tsx'));
+const Students = lazy(() => import('./Admin/Students.tsx'));
+const Payments = lazy(() => import('./Admin/Payments.tsx'));
+const AdminSettings = lazy(() => import('./Admin/AdminSettings.tsx'));
+
+const routes = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { path: '', element: <Suspense fallback={<p>Loading...</p>}><Home /></Suspense> },
+      { path: '/courses', element: <Suspense fallback={<p>Loading...</p>}><CoursesPage /></Suspense> },
+      { path: '/oneCourse/:id', element: <Suspense fallback={<p>Loading...</p>}><OneCourse /></Suspense> },
+      { path: '/watch/:courseId', element: <Suspense fallback={<p>Loading...</p>}><WatchCourse /></Suspense> },
+      { path: '/auth/:formType', element: <Suspense fallback={<p>Loading...</p>}><Auth /></Suspense> },
+      {
+        path: 'User',
+        element: (
+          <RoleProtectedRoute allowedRoles={['student']}>
+            <Suspense fallback={<p>Loading...</p>}><UserDash /></Suspense>
+          </RoleProtectedRoute>
+        ),
+        children: [
+          { index: true, element: <Suspense fallback={<p>Loading...</p>}><ProfileSettings /></Suspense> },
+          { path: 'settings', element: <Suspense fallback={<p>Loading...</p>}><ProfileSettings /></Suspense> },
+          { path: 'usercourse', element: <Suspense fallback={<p>Loading...</p>}><Courses /></Suspense> },
+        ],
+      },
+      { path: '/Instructor', element: <Suspense fallback={<p>Loading...</p>}><InstructorPage /></Suspense> },
+      { path: '/InstructorForm', element: <Suspense fallback={<p>Loading...</p>}><TeacherForm /></Suspense> },
+      { path: '*', element: <Suspense fallback={<p>Loading...</p>}><Home /></Suspense> },
+    ],
+  },
+  {
+    path: '/Admin',
+    element: (
+      <RoleProtectedRoute allowedRoles={['admin']}>
+        <Suspense fallback={<p>Loading...</p>}><Admin /></Suspense>
+      </RoleProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
+      { path: 'dash', element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
+      { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><AdminSettings /></Suspense> },
+      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><AdminCourse /></Suspense> },
+      { path: 'Payments', element: <Suspense fallback={<p>Loading...</p>}><Payments /></Suspense> },
+      { path: 'instructorlist', element: <Suspense fallback={<p>Loading...</p>}><InstructorList /></Suspense> },
+      { path: 'Students', element: <Suspense fallback={<p>Loading...</p>}><Students /></Suspense> },
+    ],
+  },
+  {
+    path: '/instruct',
+    element: (
       <RoleProtectedRoute allowedRoles={['instructor']}>
-        <DashLayout/>
-      </RoleProtectedRoute>),
-      children: [
-        {
-          index: true,
-          element: <InstractSettings/>,
-        },
-        {
-          path : 'dash',
-          element: <InstractorDash/>
-        },
-        {
-          path : 'Settings',
-          element: <InstractSettings/>
-        },
-        {
-          path : 'Create',
-          element: <CreatCourse/>
-        },
-        {
-          path : 'Earning',
-          element: <Earning/>
-        },
-        {
-          path : 'MyCourses',
-          element: <IstractCourses/>,
-          children :[
-            {
-              path:'',
-              element: <MyCourse/>
-            },
-            {
-              path: 'detail/:id',
-              element : <CourseDetail/>
-            }
-          ] 
-        },
-      ]
-    }
-  ]
-);
-const queryClient = new QueryClient(); 
+        <Suspense fallback={<p>Loading...</p>}><DashLayout /></Suspense>
+      </RoleProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <Suspense fallback={<p>Loading...</p>}><InstractSettings /></Suspense> },
+      { path: 'dash', element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
+      { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><InstractSettings /></Suspense> },
+      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><CreatCourse /></Suspense> },
+      { path: 'Earning', element: <Suspense fallback={<p>Loading...</p>}><Earning /></Suspense> },
+      {
+        path: 'MyCourses',
+        element: <Suspense fallback={<p>Loading...</p>}><IstractCourses /></Suspense>,
+        children: [
+          { path: '', element: <Suspense fallback={<p>Loading...</p>}><MyCourse /></Suspense> },
+          { path: 'detail/:id', element: <Suspense fallback={<p>Loading...</p>}><CourseDetail /></Suspense> },
+        ],
+      },
+    ],
+  },
+]);
+
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
