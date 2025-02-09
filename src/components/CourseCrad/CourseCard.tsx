@@ -1,10 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { CouCard } from "../../types/interfaces";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function CourseCard({instructor ,img , des ,title ,level , weeks ,id} : CouCard) {
-  const navigate = useNavigate()
   const { t } = useTranslation()
   return (
     <div className=" p-5 bg-white rounded-lg">
@@ -18,7 +17,7 @@ export default function CourseCard({instructor ,img , des ,title ,level , weeks 
        </div>
        <h3 className=" font-semibold text-xl mb-2.5">{t(title)}</h3>
        <p className=" text-base mb-5">{t(des)}</p>
-       <button onClick={() =>( navigate(`/oneCourse/${id}`))} className=" bg-White/95 text-sm font-medium p-3.5 rounded-md w-full text-center">{t("GetNow")}</button>
+       <Link to={`/oneCourse/${id}`}  className=" bg-White/95 text-sm font-medium p-3.5 rounded-md block text-center">{t("GetNow")}</Link>
     </div>
   )
 }

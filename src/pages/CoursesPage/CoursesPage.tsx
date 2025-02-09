@@ -25,7 +25,7 @@ export default function CoursesPage() {
       try {
         const data = await allCourses();
         setCourses(data);
-        setResults(data); // تعيين النتائج الأولية على كامل البيانات
+        setResults(data);  
       } catch (err: any) {
         setError("حدث خطأ أثناء تحميل البيانات!");
         console.error("Error fetching courses:", err.message);
@@ -72,7 +72,7 @@ export default function CoursesPage() {
     }
 
     if (selectedOption === "Trending") {
-      filtered = filtered.slice(0, 6);
+      filtered = filtered?.slice(0, 6);
     } else if (selectedOption === "Most Popular") {
       filtered = [...filtered]
         .sort((a, b) => (b.stdNum ?? 0) - (a.stdNum ?? 0))
@@ -215,7 +215,7 @@ export default function CoursesPage() {
                 : "grid-cols-1 md:grid-cols-3"
             } w-full`}
           >
-            {currentItems.map((course, index) => (
+            {currentItems?.map((course, index) => (
               <CourseCard
                 key={index}
                 id={course.id}
@@ -231,7 +231,6 @@ export default function CoursesPage() {
         </div>
       )}
 
-      {/* الترقيم */}
       {!loading && !error && totalPages > 1 && (
         <div className="flex justify-center gap-4 mt-8">
           {currentPage > 1 && (

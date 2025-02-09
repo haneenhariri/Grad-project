@@ -76,3 +76,13 @@ export interface EditProfileProps
     email:string;
     profile_picture?: File;
 }
+export interface EditProfileInstProps
+{
+    _method : string;
+    name: string;
+    email:string;
+    profile_picture?: File;
+    education: string;
+    specialization: string;
+    summery:string;
+}

@@ -23,7 +23,7 @@ export default function ProfileSettings() {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log("Uploaded file:", file); // تأكد من ظهور الملف في الكونسول
+      console.log("Uploaded file:", file); 
       setImage(file);
       setPreview(URL.createObjectURL(file));
     }
@@ -35,7 +35,7 @@ export default function ProfileSettings() {
       _method : "PUT",
       name: name,
       email: email,
-      profile_picture: image, // أو image || undefined
+      profile_picture: image, 
     });
   };
 
@@ -52,7 +52,7 @@ export default function ProfileSettings() {
                   type="text"
                   className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
                   placeholder="Enter your name"
-                  value={name}  // استخدم value بدلاً من defaultValue
+                  value={name}   
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>

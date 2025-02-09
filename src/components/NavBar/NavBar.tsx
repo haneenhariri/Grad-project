@@ -39,40 +39,35 @@ export default function NavBar() {
       <div className="flex justify-between gap-50 items-center">
         {/* logo */}
         <Logo />
-        <ul className="lg:flex hidden">
-  {nav
-    .filter((e) => {
-      // إخفاء جميع مسارات الداشبورد إذا كان المستخدم غير مسجل دخول أو طالب
-      if (!userRole || userRole === "student") {
-        return e.path !== "/instruct" && e.path !== "/Admin";
-      }
-      // السماح للأدمن فقط بمسار الأدمن
-      if (userRole === "admin") {
-        return e.path !== "/instruct";
-      }
-      // السماح للمدرس فقط بمسار المدرس
-      if (userRole === "instructor") {
-        return e.path !== "/Admin";
-      }
-      return true;
-    })
-    .map((e, i) => (
-      <li key={i}>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "py-3.5 px-6 rounded-lg font-normal bg-indigo-400/10 h-full transition-all text-base desktop:text-lg duration-300"
-              : "py-3.5 px-6 rounded-lg font-normal h-full text-base desktop:text-lg"
-          }
-          to={e.path}
-        >
-          {t(e.text)}
-        </NavLink>
-      </li>
-    ))}
-</ul>
-
-
+      <ul className="lg:flex hidden">
+        {nav
+          .filter((e) => {
+            if (!userRole || userRole === "student") {
+              return e.path !== "/instruct" && e.path !== "/Admin";
+            }
+            if (userRole === "admin") {
+              return e.path !== "/instruct";
+            }
+            if (userRole === "instructor") {
+              return e.path !== "/Admin";
+            }
+            return true;
+          })
+          .map((e, i) => (
+            <li key={i}>
+              <NavLink
+                className={({ isActive }) =>
+                  isActive
+                    ? "py-3.5 px-6 rounded-lg font-normal bg-indigo-400/10 h-full transition-all text-base desktop:text-lg duration-300"
+                    : "py-3.5 px-6 rounded-lg font-normal h-full text-base desktop:text-lg"
+                }
+                to={e.path}
+              >
+                {t(e.text)}
+              </NavLink>
+            </li>
+          ))}
+      </ul>
       </div>
       {isAuthenticated ? (
         <AuthSide />
