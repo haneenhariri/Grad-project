@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { imgProfile } from "../services/profileStd";
 
-
 export default function DashHead() {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [userName, setUserName] = useState<string>("User");
