@@ -67,7 +67,7 @@ export default function TeacherForm() {
         Your request has been successfully submitted and will be reviewed soon.
       </div>
       </section>
-    );
+    ); 
   }
 
   return (
