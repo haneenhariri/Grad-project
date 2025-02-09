@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 interface InstDataProps {
   name: string;
@@ -31,3 +32,9 @@ export const submitTeacherForm = async (InstData: InstDataProps) => {
 
   return response.data;
 };
+export const allRequest = async() =>
+{
+  const response = await axiosInstance.get(`${API_URL}/requests`);
+  return response.data
+}
+

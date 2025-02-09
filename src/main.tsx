@@ -141,6 +141,10 @@ const routes = createBrowserRouter(
       </RoleProtectedRoute>),
       children: [
         {
+          index: true,
+          element: <InstractSettings/>,
+        },
+        {
           path : 'dash',
           element: <InstractorDash/>
         },
