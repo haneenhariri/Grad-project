@@ -49,7 +49,7 @@ export default function InstructorList() {
       setInstructors((prev) =>
         prev.map((instructor) => (instructor.id === id ? { ...instructor, status } : instructor))
       );
-      setSelectedInstructor(null); // إغلاق البوب أب بعد التحديث
+      setSelectedInstructor(null); 
     } catch (error) {
       console.error("Failed to update status:", error);
     }
