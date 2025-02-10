@@ -6,10 +6,10 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/authSlice";
 import ResetPasswor from "../Popup/ResetPasswor";
+import { logbtn } from "../../types/interfaces";
+import { setSecureCookie } from "../../utils/cookiesHelper";
+import { AxiosError } from "axios";
 
-interface logbtn {
-  btn: string;
-}
 
 export default function Login({ btn }: logbtn) {
   const { t } = useTranslation();
@@ -21,18 +21,16 @@ export default function Login({ btn }: logbtn) {
     mutationFn: login,
     onSuccess: (data) => {
       console.log("API Response:", data);
-      console.log("API Response:", data.data.token);
       if (data.data.token) {
-        localStorage.setItem("token", data.data.token);
-        localStorage.setItem('role', data.data.role);
+        setSecureCookie("token", data.data.token);
+        setSecureCookie('role', data.data.role);
         dispatch(loginSuccess(data.data.token)); 
-        console.log("Stored Token:", localStorage.getItem("token"));
         navigate("/");
       } else {
         console.error("Token is missing in the response!");
       }
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message?: string }>) => {
       console.error("Login Error:", error.response?.data);
       alert(error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
     },

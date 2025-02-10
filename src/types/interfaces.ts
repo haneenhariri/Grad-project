@@ -1,4 +1,7 @@
 
+export interface logbtn {
+  btn: string;
+}
 export interface form 
 {
     title : string;
@@ -16,6 +19,8 @@ export interface btn
     disabled?: boolean;
     type?: "button" | "reset" | "submit" | undefined
 }
+
+
 
 export interface title 
 {

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getSecureCookie } from '../../utils/cookiesHelper';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -7,9 +8,9 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-  isAuthenticated: !!localStorage.getItem('token'),
-  token: localStorage.getItem('token') || null,
-  role:localStorage.getItem('role') || null,
+  isAuthenticated: !!getSecureCookie('token'),
+  token: getSecureCookie('token') || null,
+  role: getSecureCookie('role') || null,
 };
 
 const authSlice = createSlice({

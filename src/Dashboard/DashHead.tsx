@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { imgProfile } from "../services/profileStd";
+import { getSecureCookie } from "../utils/cookiesHelper";
 
 export default function DashHead() {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [userName, setUserName] = useState<string>("User");
     useEffect(() => {
-      const token = localStorage.getItem("token");
+      const token = getSecureCookie("token");
       if (token) {
         imgProfile()
           .then((data) => {

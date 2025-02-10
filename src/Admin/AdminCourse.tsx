@@ -26,7 +26,7 @@ export default function AdminCourse() {
 
   const updateCourseStatus = async (id: number, status: "accepted" | "rejected") => {
     try {
-      await changeStatusCourse({ id, status }); // إرسال الطلب إلى API
+      await changeStatusCourse({ id, status }); 
       setCourses((prevCourses) =>
         prevCourses.map((course) =>
           course.id === id ? { ...course, status } : course

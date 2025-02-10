@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Logout from "../Logout/Logout";
 import { imgProfile } from "../../services/profileStd";
 import { useNavigate } from "react-router-dom";
+import { getSecureCookie } from "../../utils/cookiesHelper";
 
 export default function AuthSide() {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
@@ -10,7 +11,7 @@ export default function AuthSide() {
 
   
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = getSecureCookie("token");
     if (token) {
       imgProfile()
         .then((data) => {

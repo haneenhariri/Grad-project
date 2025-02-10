@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import LogoutBtn from '../../Ui/Button/LogoutBtn';
 import { logout } from '../../services/authService';
 import { logoutSuccess } from '../../redux/authSlice/index';      
+import { removeSecureCookie } from '../../utils/cookiesHelper';
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ export default function Logout() {
   const { mutate, isError } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
+      removeSecureCookie('token');
+      removeSecureCookie('role');
       dispatch(logoutSuccess());
       navigate('/');
     },

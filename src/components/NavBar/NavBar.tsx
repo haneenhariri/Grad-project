@@ -8,6 +8,7 @@ import SideBar from "../SideBar/SideBar";
 import Logo from "../Logo/Logo";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { getSecureCookie } from "../../utils/cookiesHelper";
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -15,7 +16,7 @@ export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeButton, setActiveButton] = useState("login");
-  const userRole = localStorage.getItem('role'); 
+  const userRole = getSecureCookie('role'); 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);

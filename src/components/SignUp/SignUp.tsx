@@ -3,10 +3,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {useNavigate } from "react-router-dom";
 import { signup } from "../../services/authService";
-interface logbtn 
-{
-  btn: string;
-}
+import { logbtn } from "../../types/interfaces";
+import { setSecureCookie } from "../../utils/cookiesHelper";
+import { AxiosError } from "axios";
+
 export default function SignUp({btn} : logbtn) {
     const [formData, setFormData] = useState({name:"", email: "", password: "" ,password_confirmation: ""});
     const {t} = useTranslation()
@@ -17,14 +17,14 @@ export default function SignUp({btn} : logbtn) {
         onSuccess: (data) => {
           if(data.data.token)
           {
-            localStorage.setItem('token', data.data.token);
-            localStorage.setItem('role', data.data.role);
+            setSecureCookie('token', data.data.token);
+            setSecureCookie('role', data.data.role);
             navigate('/auth/login');
           }else {
             console.error("Token is missing in the response!");
           }
         },
-        onError: (error: any) => {
+        onError: (error: AxiosError<{ message?: string }>) => {
           console.error("Login Error:", error.response?.data);
           alert(error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
         },

@@ -6,3 +6,11 @@ export const allPayment = async() =>
     console.log(response.data);
     return response.data;
 }
+
+export const userPayment = async() =>
+{
+    const response = await  axiosInstance.get('/payments');
+    console.log(response.data);
+    return response.data;
+}
+

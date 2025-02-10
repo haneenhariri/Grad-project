@@ -3,6 +3,7 @@ import Button from "../Ui/Button/Button";
 import img from '../assets/Search (1).png';
 import { allRequest } from "../services/teacherForm";
 import axios from "axios";
+import { getSecureCookie } from "../utils/cookiesHelper";
 
 interface Instructor {
   id: number;
@@ -41,7 +42,7 @@ export default function InstructorList() {
     };
     fetchRequest();
   }, []);
-  const token = localStorage.getItem("token");
+  const token = getSecureCookie("token");
 
   const updateInstructorStatus = async (id: number, status: "accepted" | "rejected") => {
     try {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { getSecureCookie } from '../utils/cookiesHelper';
 
 interface RoleProtectedRouteProps {
   allowedRoles: string[];
@@ -7,8 +8,8 @@ interface RoleProtectedRouteProps {
 }
 
 const RoleProtectedRoute: React.FC<RoleProtectedRouteProps> = ({ allowedRoles, children }) => {
-  const token = localStorage.getItem('token');
-  const userRole = localStorage.getItem('role'); 
+  const token = getSecureCookie('token');
+  const userRole = getSecureCookie('role'); 
 
   if (!token || !userRole) {
     return <Navigate to="/" replace />;
