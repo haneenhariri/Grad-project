@@ -49,3 +49,25 @@ export const deleteCourse = async (id: number) =>
     const respons = await axiosInstance.delete(`/courses/${id}`);
     return respons.data
 }
+
+export const pendingCourse = async() => 
+{
+    const response = await axiosInstance.get('/pending-courses');
+    console.log(response.data) 
+    return response.data.data;
+}
+
+interface changeStatusProps 
+{
+    status : string;
+    id : number
+}
+export const changeStatusCourse = async ({ id, status }: changeStatusProps) => {
+    if (!status) {
+        console.error("Status is missing!");
+        return;
+    }
+
+    const response = await axiosInstance.put(`/courses/${id}/change-status`, { status });
+    return response.status;
+};

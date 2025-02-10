@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Button from "../Ui/Button/Button";
 import filter from "../assets/Faders.png";
-import { allCategories, allCourses, deleteCourse } from "../services/courses"; // استيراد دالة الحذف
+import { allCategories, allCourses, changeStatusCourse, deleteCourse, pendingCourse } from "../services/courses"; // استيراد دالة الحذف
 
 interface Course {
   id: number;
@@ -20,34 +20,41 @@ interface Category {
   name: string;
 }
 export default function AdminCourse() {
-  const [categories, setCategories] = useState<Category[]>([]); // حالة لتخزين التصنيفات
+  const [categories, setCategories] = useState<Category[]>([]); 
   const [courses, setCourses] = useState<Course[]>([]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
-  // تحديث حالة الكورس
-  const updateCourseStatus = (index: number, status: "accepted" | "pending" | "rejected") => {
-    const updatedCourses = courses.map((course, i) =>
-      i === index ? { ...course, status } : course
-    );
-    setCourses(updatedCourses);
+  const updateCourseStatus = async (id: number, status: "accepted" | "rejected") => {
+    try {
+      await changeStatusCourse({ id, status }); // إرسال الطلب إلى API
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course.id === id ? { ...course, status } : course
+        )
+      );
+    } catch (error) {
+      console.error("Error updating course status:", error);
+    }
   };
 
-  // حذف الكورس عند الضغط على "Delete"
   const handleDeleteCourse = async (id: number) => {
     try {
-      await deleteCourse(id); // استدعاء API الحذف
-      setCourses((prevCourses) => prevCourses.filter((course) => course.id !== id)); // تحديث القائمة بعد الحذف
+      await deleteCourse(id); 
+      setCourses((prevCourses) => prevCourses.filter((course) => course.id !== id));  
     } catch (error) {
       console.error("Error deleting course:", error);
     }
   };
 
-  // جلب البيانات من الـ API عند تحميل الصفحة
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await allCourses();
-        const formattedData: Course[] = response.map((item: any) => ({
+        const [allCoursesResponse, pendingCoursesResponse] = await Promise.all([
+          allCourses(),
+          pendingCourse()
+        ]);
+  
+        const formattedData: Course[] = [...allCoursesResponse, ...pendingCoursesResponse].map((item: any) => ({
           id: item.id,
           instructor: item.instructor,
           status: item.status,
@@ -59,11 +66,13 @@ export default function AdminCourse() {
           duration: item.duration.toString(),
           level: item.level,
         }));
+  
         setCourses(formattedData);
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
     };
+  
     const fetchCategories = async () => {
       try {
         const response = await allCategories();
@@ -72,9 +81,11 @@ export default function AdminCourse() {
         console.error("Error fetching categories:", error);
       }
     };
+  
     fetchCourses();
     fetchCategories();
   }, []);
+  
   const getCategoryName = (categoryId: string) => {
     const category = categories.find(cat => cat.id.toString() === categoryId);
     return category ? category.name : "Unknown";
@@ -146,16 +157,17 @@ export default function AdminCourse() {
                         </button>
                         <button
                           className="block w-full text-left px-4 py-2 text-green-600 hover:bg-gray-100"
-                          onClick={() => updateCourseStatus(index, "accepted")}
+                          onClick={() => updateCourseStatus(course.id, "accepted")}
                         >
                           Approve
                         </button>
                         <button
                           className="block w-full text-left px-4 py-2 text-yellow-600 hover:bg-gray-100"
-                          onClick={() => updateCourseStatus(index, "pending")}
+                          onClick={() => updateCourseStatus(course.id, "rejected")}
                         >
                           Reject
                         </button>
+
                       </div>
                     )}
                   </td>
