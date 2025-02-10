@@ -1,68 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "../Ui/Button/Button";
 import img from "../assets/Search (1).png";
+import axiosInstance from "../services/axiosInstance";
 
 interface PaymentHistory {
   accountName: string;
   accountType: "Student" | "Instructor";
   amount: number;
   transactionDate: string;
+  course: string;
 }
 
-const paymentHistoryData: PaymentHistory[] = [
-  { 
-    accountName: "John Doe", 
-    accountType: "Student", 
-    amount: 150, 
-    transactionDate: "2023-12-01" 
-  },
-  { 
-    accountName: "Jane Smith", 
-    accountType: "Instructor", 
-    amount: 200, 
-    transactionDate: "2023-12-05" 
-  },
-  { 
-    accountName: "Mark Johnson", 
-    accountType: "Student", 
-    amount: 120, 
-    transactionDate: "2023-12-10" 
-  },
-  { 
-    accountName: "John Doe", 
-    accountType: "Student", 
-    amount: 150, 
-    transactionDate: "2023-12-01" 
-  },
-  { 
-    accountName: "Jane Smith", 
-    accountType: "Instructor", 
-    amount: 200, 
-    transactionDate: "2023-12-05" 
-  },
-  { 
-    accountName: "John Doe", 
-    accountType: "Student", 
-    amount: 150, 
-    transactionDate: "2023-12-01" 
-  },
-  { 
-    accountName: "Jane Smith", 
-    accountType: "Instructor", 
-    amount: 200, 
-    transactionDate: "2023-12-05" 
-  },
-  { 
-    accountName: "Mark Johnson", 
-    accountType: "Student", 
-    amount: 120, 
-    transactionDate: "2023-12-10" 
-  },
-];
-
-  
 export default function Payments() {
-  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>(paymentHistoryData);
+  const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const response = await axiosInstance.get('/payments/all');
+        if (response.data.status === "success") {
+          const transformedData = response.data.data.map((payment: any) => ({
+            accountName: `User ${payment.intended_account_id}`, 
+            accountType: payment.instructor === "instructor" ? "Instructor" : "Student",
+            amount: payment.amount,
+            transactionDate: new Date(payment.created_at).toLocaleDateString(),
+            course: payment.course,
+          }));
+          setPaymentHistory(transformedData);
+        }
+      } catch (error) {
+        console.error("Error fetching payment data:", error);
+      }
+    };
+
+    fetchPayments();
+  }, []);
 
   return (
     <>
@@ -79,6 +51,7 @@ export default function Payments() {
                 <th className="p-3 text-gray-600 border-b border-gray-200">Account Type</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Amount</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Transaction Date</th>
+                <th className="p-3 text-gray-600 border-b border-gray-200">Course</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Payment Status</th>
               </tr>
             </thead>
@@ -93,6 +66,7 @@ export default function Payments() {
                   </td>
                   <td className="p-3">${payment.amount}</td>
                   <td className="p-3">{payment.transactionDate}</td>
+                  <td className="p-3">{payment.course}</td>
                   <td className="p-3">
                     <span className={`px-2 py-1 text-sm font-semibold rounded-md ${payment.accountType === "Student" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
                       {payment.accountType === "Student" ? "Payment Made" : "Payment Received"}
@@ -105,5 +79,5 @@ export default function Payments() {
         </div>
       </div>
     </>
-  )
+  );
 }
