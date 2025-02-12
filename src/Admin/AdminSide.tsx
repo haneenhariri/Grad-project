@@ -8,7 +8,7 @@ import Logo from "../components/Logo/Logo";
 
 export default function AdminSide() {
   return (
-    <div className=" w-2/12 bg-gray-900 ">
+    <div className=" w-2/12  max-h-full bg-gray-900 ">
         <div className="flex items-center  p-2.5 border-b gap-2.5">
           <Logo textColor="text-white"/>
         </div>
@@ -17,7 +17,7 @@ export default function AdminSide() {
                 <img src={dash} alt="" />
                 Dashboard
             </NavLink>
-            <NavLink className={({ isActive }) => isActive ? 'bg-violet-600 text-white w-full p-2.5 flex gap-2.5' : 'text-gray-400 w-full p-2.5 flex gap-2.5'} to={'/Admin/Create'} >
+            <NavLink className={({ isActive }) => isActive ? 'bg-violet-600 text-white w-full p-2.5 flex gap-2.5' : 'text-gray-400 w-full p-2.5 flex gap-2.5'} to={'/Admin/Courses'} >
             <img src={my} alt="" />
                 Courses
             </NavLink>

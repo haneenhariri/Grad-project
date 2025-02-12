@@ -9,6 +9,7 @@ import ResetPasswor from "../Popup/ResetPasswor";
 import { logbtn } from "../../types/interfaces";
 import { setSecureCookie } from "../../utils/cookiesHelper";
 import { AxiosError } from "axios";
+import { showToast } from "../../utils/toast";
 
 
 export default function Login({ btn }: logbtn) {
@@ -20,11 +21,12 @@ export default function Login({ btn }: logbtn) {
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
+      showToast('User signed up successfully!', 'success'); 
       console.log("API Response:", data);
       if (data.data.token) {
         setSecureCookie("token", data.data.token);
         setSecureCookie('role', data.data.role);
-        dispatch(loginSuccess(data.data.token)); 
+        dispatch(loginSuccess(data.data.token));
         navigate("/");
       } else {
         console.error("Token is missing in the response!");

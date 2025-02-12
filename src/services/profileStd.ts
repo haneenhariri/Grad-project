@@ -4,6 +4,7 @@ import axiosInstance from "./axiosInstance";
 export const imgProfile= async () => 
 {
     const respons = await axiosInstance.get('/profile');
+    console.log(respons.data.data)
     return respons.data;
 }
 export const EditProfile= async (information : EditProfileProps) => 
@@ -36,5 +37,5 @@ export const EditProfileInst= async (information : EditProfileInstProps) =>
 export const fetchMyCourses = async() => 
 {
     const respons = await axiosInstance.get('/profile');
-    return respons.data.courses;
+    return respons.data.data.courses;
 }

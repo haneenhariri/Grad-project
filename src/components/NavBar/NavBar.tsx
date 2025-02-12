@@ -33,8 +33,8 @@ export default function NavBar() {
     <nav
       className={`sticky top-0 z-50 desktop:pt-5 pt-4 pb-5 desktop:pb-6 flex items-center justify-between desktop:px-nav lg:px-60 transition-all duration-300 ${
         isScrolled
-          ? "bg-White/95 tablet:mx-0 mx-0 shadow-lg px-4 desktop:mx-0"
-          : "desktop:mx-7.5 tablet:mx-5 mx-4"
+          ? "bg-White/95 tablet:mx-0 mx-0 shadow-lg lg:px-[80px] desktop:mx-0"
+          : "desktop:mx-7.5 tablet:mx-5 mx-4 "
       }`}
     >
       <div className="flex justify-between gap-50 items-center">

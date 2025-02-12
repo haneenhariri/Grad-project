@@ -9,7 +9,8 @@ import Layout from './layout/Layout.tsx';
 import DashLayout from './layout/DashLayout.tsx';
 import './index.css';
 import './utils/i18n.ts';
-const Home = lazy(() => import('./pages/Home/Home.tsx'));
+import NewCourse from './Admin/NewCourse.tsx';
+import Home from './pages/Home/Home.tsx';
 const Auth = lazy(() => import('./pages/Auth/Auth.tsx'));
 const UserDash = lazy(() => import('./pages/UserDash/UserDash.tsx'));
 const CoursesPage = lazy(() => import('./pages/CoursesPage/CoursesPage.tsx'));
@@ -38,7 +39,7 @@ const routes = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      { path: '', element: <Suspense fallback={<p>Loading...</p>}><Home /></Suspense> },
+      { path: '', element:<Home /> },
       { path: '/courses', element: <Suspense fallback={<p>Loading...</p>}><CoursesPage /></Suspense> },
       { path: '/oneCourse/:id', element: <Suspense fallback={<p>Loading...</p>}><OneCourse /></Suspense> },
       { path: '/watch/:courseId', element: <Suspense fallback={<p>Loading...</p>}><WatchCourse /></Suspense> },
@@ -72,7 +73,8 @@ const routes = createBrowserRouter([
       { index: true, element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
       { path: 'dash', element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
       { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><AdminSettings /></Suspense> },
-      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><AdminCourse /></Suspense> },
+      { path: 'Courses', element: <Suspense fallback={<p>Loading...</p>}><AdminCourse /></Suspense> },
+      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><NewCourse/></Suspense> },
       { path: 'Payments', element: <Suspense fallback={<p>Loading...</p>}><Payments /></Suspense> },
       { path: 'instructorlist', element: <Suspense fallback={<p>Loading...</p>}><InstructorList /></Suspense> },
       { path: 'Students', element: <Suspense fallback={<p>Loading...</p>}><Students /></Suspense> },

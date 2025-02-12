@@ -14,3 +14,10 @@ export const userPayment = async() =>
     return response.data;
 }
 
+
+export const buyCourse = async(id : number) => 
+{
+    const response = await axiosInstance.post(`/buy-course/${id}`)
+    console.log(response.data);
+    return response.data;
+}

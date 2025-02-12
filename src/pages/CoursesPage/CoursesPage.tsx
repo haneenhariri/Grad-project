@@ -5,6 +5,7 @@ import CourseCard from "../../components/CourseCrad/CourseCard";
 import nextIcon from '../../assets/slider/ArrowLeft (1).png';
 import prevIcon from '../../assets/slider/ArrowRight (1).png';
 import { allCourses } from "../../services/courses";
+import Spinner from "../../components/Spinner/Spinner";
 
 export default function CoursesPage() {
   const { search } = useLocation();
@@ -149,8 +150,7 @@ export default function CoursesPage() {
       </div>
 
       {loading && (
-        <p className="text-center text-gray-500">جارٍ تحميل البيانات...</p>
-      )}
+        <Spinner/>      )}
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {!loading && !error && (
@@ -219,12 +219,12 @@ export default function CoursesPage() {
               <CourseCard
                 key={index}
                 id={course.id}
-                img={course.cover} 
-                weeks={course.duration}
+                cover={course.cover} 
+                duration={course.duration}
                 level={course.level}
                 instructor={course.instructor}
                 title={course.title}
-                des={course.description}
+                description={course.description}
               />
             ))}
           </div>

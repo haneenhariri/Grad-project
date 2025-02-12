@@ -8,7 +8,19 @@ export default function AuthSide() {
   const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
   const [userName, setUserName] = useState<string>("User");
   const navigate = useNavigate();
-
+  const role = getSecureCookie('role');
+  const navTo = () => 
+  {
+    if(role === 'student') 
+    {
+      navigate("/User/settings");
+    }else if(role === 'instructor')
+    {
+      navigate('/instruct/Settings')
+    }else if( role === 'admin')
+    {
+      navigate('/Admin/Settings')
+    }}
   
   useEffect(() => {
     const token = getSecureCookie("token");
@@ -40,7 +52,7 @@ export default function AuthSide() {
   return (
     <div className="flex items-center gap-5">
           <button
-            onClick={() => navigate("/User/settings")}
+            onClick={navTo}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden"
           >
             {profileImage ? (

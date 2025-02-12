@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../Ui/Button/Button";
 import filter from "../assets/Faders.png";
 import { allCategories, allCourses, changeStatusCourse, deleteCourse, pendingCourse } from "../services/courses"; // استيراد دالة الحذف
+import { useNavigate } from "react-router-dom";
 
 interface Course {
   id: number;
@@ -23,7 +24,7 @@ export default function AdminCourse() {
   const [categories, setCategories] = useState<Category[]>([]); 
   const [courses, setCourses] = useState<Course[]>([]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-
+  const navigate = useNavigate()
   const updateCourseStatus = async (id: number, status: "accepted" | "rejected") => {
     try {
       await changeStatusCourse({ id, status }); 
@@ -97,7 +98,7 @@ export default function AdminCourse() {
           <img src={filter} alt="filter" />
           Filter
         </button>
-        <Button Bg="bg-btn" text="Add Course" textColor="text-white" />
+        <Button Bg="bg-btn" text="Add Course" textColor="text-white" onClick={() => navigate('/Admin/Create')} />
       </div>
 
       <div className="p-6 bg-white rounded-lg shadow-md">

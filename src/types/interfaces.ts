@@ -9,7 +9,15 @@ export interface form
     LogBtn : string;
 
 };
-
+export interface Course {
+    id: number ;
+    cover: string;
+    duration: string;
+    level: string;
+    instructor: string;
+    title: string;
+    description: string;
+  }
 export interface btn 
 {
     text?: string;
@@ -19,7 +27,6 @@ export interface btn
     disabled?: boolean;
     type?: "button" | "reset" | "submit" | undefined
 }
-
 
 
 export interface title 
@@ -37,12 +44,15 @@ export interface BenfCard
 
 export interface CouCard 
 {
+    linkPath?:string
+    btn?:string;
+    Bg?:string
     instructor : string;
-    weeks : string;
+    duration : string;
     level : string;
     title : string;
-    des : string;
-    img : string;
+    description : string;
+    cover : string;
     id : number;
 }
 export interface Credentials {

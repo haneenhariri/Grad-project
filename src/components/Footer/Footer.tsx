@@ -10,8 +10,8 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900  text-white">
-      <div  className="px-4 lg:px-20 desktop:px-40 py-20 flex justify-between border-b border-gray-700">
-        <div className="w-5/12 ">
+      <div  className="px-4 lg:px-20 desktop:px-40 py-20 flex gap-y-10 lg:flex-row flex-col justify-between border-b border-gray-700">
+        <div className="lg:w-5/12 flex-wrap w-full">
         <div className="flex items-center mb-7.5 gap-1">
           <img src={logo} alt="logo" className="md:w-10 md:h-10 w-7.5 h-7.5" />
           <h1 className="font-semibold md:text-[30px] text-2xl">Orbah</h1>
@@ -26,7 +26,7 @@ export default function Footer() {
 
          </div>
         </div>
-        <div className="w-1/2 flex justify-evenly gap-3.5">
+        <div className="lg:w-1/2 w-full flex-wrap flex lg:justify-evenly justify-between  gap-3.5">
         <div>
             <h3 className=" text-base font-normal mb-5">Top 4 Category</h3>
             <p className="text-sm font-normal text-gray-500 mb-2" >Web Development</p>
@@ -49,7 +49,6 @@ export default function Footer() {
             <NavLink className="text-sm block font-normal text-gray-500 mb-2" to={"/about"}>Privacy Policy</NavLink>
         </div>
         </div>
-
       </div>
     </footer>
   )

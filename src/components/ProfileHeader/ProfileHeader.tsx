@@ -40,8 +40,8 @@ export default function ProfileHeader() {
         <div className="flex gap-5 items-center">
         <div
             className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden">
-                        {profileImage ? (
-                            <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+          {profileImage ? (
+             <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
                             <span>{userName.charAt(0)}</span>
                         )}

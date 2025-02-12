@@ -6,6 +6,7 @@ import { signup } from "../../services/authService";
 import { logbtn } from "../../types/interfaces";
 import { setSecureCookie } from "../../utils/cookiesHelper";
 import { AxiosError } from "axios";
+import { showToast } from "../../utils/toast";
 
 export default function SignUp({btn} : logbtn) {
     const [formData, setFormData] = useState({name:"", email: "", password: "" ,password_confirmation: ""});
@@ -26,7 +27,7 @@ export default function SignUp({btn} : logbtn) {
         },
         onError: (error: AxiosError<{ message?: string }>) => {
           console.error("Login Error:", error.response?.data);
-          alert(error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
+          showToast('Login Error', 'error');
         },
       });
     const send = (e : React.FormEvent) => {
@@ -34,7 +35,7 @@ export default function SignUp({btn} : logbtn) {
         mutation.mutate(formData)
       };
   return (
-    <form className="mb-6" onSubmit={send}>
+    <form className="md:mb-6 " onSubmit={send}>
       <label className='mb-2.5 font-medium text-base block' htmlFor="name">{t("Name")}</label>
       <input
         className="w-full mb-5 lg:p-5 p-2.5 placeholder:text-base bg-White/95 rounded-md"

@@ -1,30 +1,22 @@
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import CourseCard from "../CourseCrad/CourseCard";
 import Title from "../Title/Title";
 import { allCourses } from "../../services/courses"; // استدعاء API
-interface Course {
-  id: number ;
-  cover: string;
-  duration: string;
-  level: string;
-  instructor: string;
-  title: string;
-  description: string;
-}
+import Spinner from "../Spinner/Spinner";
+import { Course } from "../../types/interfaces";
 
 export default function Courses() {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
-  const location = useLocation();
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const data = await allCourses();  
         setCourses(data); 
-      } catch (err: any) {
+      } catch (err : any) {
         setError("حدث خطأ أثناء تحميل البيانات!");  
         console.error("Error fetching courses:", err.message);     
       } finally {
@@ -34,14 +26,13 @@ export default function Courses() {
 
     fetchCourses();
   }, []);
-
   const handleViewAllCourses = () => {
     navigate("/courses");
   };
   return (
-    <section className="mb-20">
+    <section className="sm:mb-20 mb-10">
       <Title title="CourseTitle" p="CourseP" btn="VisitCourses" onClick={handleViewAllCourses} />
-      {loading && <p className="text-center text-gray-500">جارٍ تحميل البيانات...</p>}
+      {loading && <Spinner/>}
       {error && <p className="text-center text-red-500">{error}</p>}
       {!loading && !error && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -49,12 +40,12 @@ export default function Courses() {
             <CourseCard
               key={i}
               id={course.id}
-              img={course.cover}
-              weeks={course.duration}
+              cover={course.cover}
+              duration={course.duration}
               level={course.level}
               instructor={course.instructor}
               title={course.title}
-              des={course.description}
+              description={course.description}
             />
           ))}
         </div>
