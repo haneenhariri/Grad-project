@@ -71,7 +71,7 @@ export default function OneCourse() {
       try {
         const data = await singleCourse(Number(id));
         setCourse(data);
-      } catch (error) {
+      } catch (error ) {
         setError("Error loading course");
       } finally {
         setLoading(false);
@@ -97,12 +97,12 @@ export default function OneCourse() {
 
   return (
     <>
-      <section className="pt-7.5 pb-12 flex gap-4 px-4 lg:px-20 desktop:px-40">
-        <div className=" w-3/4">
-          <h2 className=" text-4xl font-semibold mb-3.5">{course?.title}</h2>
+      <section className="pt-7.5 pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-20 desktop:px-40">
+        <div className=" md:w-3/4 w-full">
+          <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-3.5">{course?.title}</h2>
           <div className="mb-5 w-full flex justify-between items-center">
-            <p className=" text-gray-600 text-base font-semibold">
-              Created by: <span className=" text-black text-lg">{course?.instructor}</span>
+            <p className=" text-gray-600 md:text-base text-sm font-semibold">
+              Created by: <span className=" text-black md:text-lg text-base">{course?.instructor}</span>
             </p>
             <div className=" flex items-center gap-1.5">
               {renderStars(course?.rating)}
@@ -112,40 +112,40 @@ export default function OneCourse() {
           <img
             src={`http://127.0.0.1:8000/storage/${course?.cover}`}
             alt={course?.title}
-            className="w-3/4 mb-5 h-1/2"
+            className="lg:w-10/12 md:w-3/4 w-full mb-5 h-1/2"
           />
-          <h3 className="mb-5 text-2xl font-semibold">Description</h3>
-          <p className=" text-gray-800 text-base">{course.description}</p>
+          <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">Description</h3>
+          <p className=" text-gray-800 lg:text-base text-sm">{course.description}</p>
         </div>
         {/* buy */}
-        <div className=" shadow-sm bg-white  h-max rounded-sm w-1/3">
-          <div className="border-b p-5">
+        <div className=" shadow-sm bg-white  h-max rounded-sm w-full md:w-1/3">
+          <div className="border-b  md:p-5 p-2.5">
             <div className="flex mb-2.5 justify-between items-center">
               <span className=" text-lg font-semibold">{course?.price}$</span>
               <span className=" text-sm text-violet-950 p-1 bg-violet-600/15">56% off</span>
             </div>
             <div className=" flex gap-1 items-center">
-              <img src={clock1} alt="" />
+              <img src={clock1} alt="" className=" md:w-5 w-4.5 "/>
               <span className="text-sm text-purple-600">2 days left at this price!</span>
             </div>
           </div>
-          <div className="border-b p-5">
+          <div className="border-b  md:p-5 p-2.5">
             <div className="flex mb-2.5 justify-between items-center">
               <div className=" flex gap-1 items-center">
-                <img src={clock} alt="clock" />
+                <img src={clock} alt="clock" className=" md:w-5 w-4.5 " />
                 <span className=" text-sm">Course Duration</span>
               </div>
               <span className=" text-sm text-gray-600">{course?.duration}weeks</span>
             </div>
             <div className="flex mb-2.5 justify-between items-center">
               <div className=" flex gap-1 items-center">
-                <img src={level} alt="clock" />
+                <img src={level} alt="clock" className=" md:w-5 w-4.5 "/>
                 <span className=" text-sm">Course Level</span>
               </div>
               <span className=" text-sm text-gray-600  ">{course?.level}</span>
             </div>
           </div>
-          <div className="border-b p-5 ">
+          <div className="border-b  md:p-5 p-2.5 ">
             <Button
               text="Buy now"
               textColor="text-white w-full !text-lg !rounded-none"
@@ -153,29 +153,29 @@ export default function OneCourse() {
               onClick={handlePayment}
             />
           </div>
-          <div className="border-b p-5 ">
+          <div className="border-b md: md:p-5  p-2.5 ">
             <p className=" text-base mb-2.5 font-semibold">This course includes:</p>
             <div className="mb-2 flex gap-1 items-center text-sm text-violet-500">
-              <img src={clock} alt="" />
+              <img src={clock} alt="" className=" md:w-5 w-4.5 " />
               <span>Lifetime access</span>
             </div>
             <div className="mb-2 flex gap-1 items-center text-sm text-violet-500">
-              <img src={file} alt="" />
+              <img src={file} alt="" className=" md:w-5 w-4.5 " />
               <span>Free downloadable resources</span>
             </div>
             <div className="mb-2 flex gap-1 items-center text-sm ">
-              <img src={divec} alt="" />
+              <img src={divec} alt="" className=" md:w-5 w-4.5 "/>
               <span>Access on mobile , tablet and TV</span>
             </div>
             <div className="mb-2 flex gap-1 items-center text-sm text-violet-500">
-              <img src={online} alt="" />
+              <img src={online} alt="" className=" md:w-5 w-4.5 "/>
               <span>100% online course</span>
             </div>
           </div>
         </div>
       </section>
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 md:text-lg text-sm flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <p className="text-lg mb-4">{paymentMessage}</p>
             {isSuccessfulPayment ? (
