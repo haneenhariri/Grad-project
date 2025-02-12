@@ -22,7 +22,7 @@ export default function MyCourses() {
   return (
     <div className="py-10 p-5 border border-violet-400 rounded-b">  
       {courses?.length === 0 ?
-       ( <Spinner/>
+       ( <p>no courses </p>
       ) : (
         <div className="grid grid-cols-3 gap-5">
           {courses?.map((course, index) => (

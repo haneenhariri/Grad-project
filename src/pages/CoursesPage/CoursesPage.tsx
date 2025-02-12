@@ -6,30 +6,37 @@ import nextIcon from '../../assets/slider/ArrowLeft (1).png';
 import prevIcon from '../../assets/slider/ArrowRight (1).png';
 import { allCourses } from "../../services/courses";
 import Spinner from "../../components/Spinner/Spinner";
+import { showToast } from "../../utils/toast";
+
 
 export default function CoursesPage() {
   const { search } = useLocation();
   const query = new URLSearchParams(search).get("query") || "";
   const [selectedOption, setSelectedOption] = useState("All Courses");
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024); 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = isFilterVisible ? 2 : 6;
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const data = await allCourses();
         setCourses(data);
         setResults(data);  
-      } catch (err: any) {
-        setError("حدث خطأ أثناء تحميل البيانات!");
-        console.error("Error fetching courses:", err.message);
+      } catch (error: any) {
+        console.error("Error fetching courses:", error.message);
+        showToast(` Error fetching courses:", ${error.message}`, 'error')
       } finally {
         setLoading(false);
       }
@@ -40,48 +47,45 @@ export default function CoursesPage() {
 
   useEffect(() => {
     let filtered = [...courses];
-
     if (query.trim()) {
       filtered = filtered.filter((course) =>
         course.title.toLowerCase().includes(query.toLowerCase())
       );
     }
+if (selectedCategories.length > 0) {
+  filtered = filtered.filter((course) => {
+    const courseCategoryId = course.category_id; 
+    return selectedCategories.includes(String(courseCategoryId)); 
+  });
+}
 
-    if (selectedCategories.length > 0) {
+    if (selectedRatings.length > 0) {
       filtered = filtered.filter((course) => {
-        const courseCategory = course.category || course.Category;
-        if (!courseCategory) {
-          console.warn("Course has no category:", course);
-          return false;
-        }
-        return selectedCategories
-          .map((val) => val.toLowerCase())
-          .includes(courseCategory.toLowerCase());
+        const courseRating = parseFloat(course.rating ?? course.Rating ?? "0");     
+        return selectedRatings.some((rating) => courseRating >= rating);
       });
     }
     
-    if (selectedRatings.length > 0) {
-      filtered = filtered.filter((course) =>
-        selectedRatings.some((rating) => course.Rating >= rating)
-      );
-    }
-
+    
     if (selectedLevels.length > 0) {
       filtered = filtered.filter((course) =>
-        selectedLevels.includes(course.level)
+        selectedLevels.some(level => course.level?.toLowerCase() === level.toLowerCase())
       );
     }
 
+
     if (selectedOption === "Trending") {
-      filtered = filtered?.slice(0, 6);
+      filtered = [...filtered]
+        .sort((a, b) => (b.id ?? 0) - (a.id ?? 0)) 
+        .slice(0, 6);
     } else if (selectedOption === "Most Popular") {
       filtered = [...filtered]
-        .sort((a, b) => (b.stdNum ?? 0) - (a.stdNum ?? 0))
+        .sort((a, b) => (b.rating ?? b.Rating ?? 0) - (a.rating ?? a.Rating ?? 0))
         .slice(0, 6);
     }
-
+    
     setResults(filtered);
-    setCurrentPage(1); // إعادة تعيين رقم الصفحة عند تغيير الفلترة
+    setCurrentPage(1); 
   }, [
     query,
     selectedCategories,
@@ -115,9 +119,9 @@ export default function CoursesPage() {
 
   return (
     <section className="pt-7.5 pb-12 px-4 lg:px-20 desktop:px-40">
-      <div className="flex justify-between items-center">
-        <button
-          className="flex gap-2.5 items-center py-2.5 px-5 border border-violet-950"
+      <div className="flex sm:justify-between sm:flex-row flex-col gap-y-3 sm:items-center">
+      <button
+          className="flex w-max gap-2.5 items-center py-2.5 px-5 border border-violet-950"
           onClick={() => setIsFilterVisible((prev) => !prev)}
         >
           <img src={filterIcon} alt="filter" />
@@ -139,8 +143,68 @@ export default function CoursesPage() {
           </select>
         </div>
       </div>
+      {isFilterVisible && isMobile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 w-10/12 max-w-md rounded-md">
 
-      <div className="flex items-center gap-2.5 pt-6 pb-4 border-b border-violet-950">
+            <div className="p-2">
+            <button
+              className=" w-full text-right text-lg font-bold"
+              onClick={() => setIsFilterVisible(false)}
+            >
+              &times;
+            </button>
+                <h3 className="font-bold">Category</h3>
+                {["Web development", "Mobile Development", "AI", "Design", "Programming languages"].map((category) => (
+                  <div key={category}>
+                    <input
+                      type="checkbox"
+                      id={category}
+                      checked={selectedCategories.includes(category)}
+                      onChange={() => toggleFilter(setSelectedCategories, category)}
+                    />
+                    <label className=" text-sm mx-1" htmlFor={category}>
+                      {category}
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div className="p-2">
+                <h3 className="font-bold">Rating</h3>
+                {[5.000, 4, 3, 2, 1].map((rating) => (
+                  <div key={rating}>
+                    <input
+                      type="checkbox"
+                      id={`rating-${rating}`}
+                      checked={selectedRatings.includes(rating)}
+                      onChange={() => toggleFilter(setSelectedRatings, rating)}
+                    />
+                    <label className=" text-sm mx-1" htmlFor={`rating-${rating}`}>
+                      {rating} Star & up
+                    </label>
+                  </div>
+                ))}
+              </div>
+              <div className="p-2">
+                <h3 className="font-bold">Course Level</h3>
+                {["Beginner", "Intermediate", "Expert"].map((level) => (
+                  <div key={level}>
+                    <input
+                      type="checkbox"
+                      id={level}
+                      checked={selectedLevels.includes(level)}
+                      onChange={() => toggleFilter(setSelectedLevels, level)}
+                    />
+                    <label className=" text-sm mx-1" htmlFor={level}>
+                      {level}
+                    </label>
+                  </div>
+                ))}
+              </div>
+          </div>
+        </div>
+      )}
+      <div className="lg:flex hidden flex-wrap items-center gap-2.5 pt-6 pb-4 border-b border-violet-950">
         <h3>Suggestion:</h3>
         <button className="text-violet-800">user interface</button>
         <button className="text-violet-800">user experience</button>
@@ -148,15 +212,12 @@ export default function CoursesPage() {
         <button className="text-violet-800">interface</button>
         <button className="text-violet-800">app</button>
       </div>
-
       {loading && (
         <Spinner/>      )}
-      {error && <p className="text-center text-red-500">{error}</p>}
-
-      {!loading && !error && (
+      {!loading  && (
         <div className="flex gap-6 mt-10">
-          {isFilterVisible && (
-            <div className="h-max bg-white w-3/12 border border-violet-950">
+         {!isMobile && isFilterVisible && (
+            <div className="h-max bg-white md:w-4/12 w-1/2 border border-violet-950">
               <div className="p-2">
                 <h3 className="font-bold">Category</h3>
                 {["Web development", "Mobile Development", "AI", "Design", "Programming languages"].map((category) => (
@@ -175,7 +236,7 @@ export default function CoursesPage() {
               </div>
               <div className="p-2">
                 <h3 className="font-bold">Rating</h3>
-                {[5, 4, 3, 2, 1].map((rating) => (
+                {[5.000, 4, 3, 2, 1].map((rating) => (
                   <div key={rating}>
                     <input
                       type="checkbox"
@@ -207,12 +268,11 @@ export default function CoursesPage() {
               </div>
             </div>
           )}
-
           <div
             className={`grid gap-6 ${
               isFilterVisible
-                ? "grid-cols-2 md:grid-cols-2"
-                : "grid-cols-1 md:grid-cols-3"
+                ? "lg:grid-cols-2 md:grid-cols-1"
+                : "grid-cols-1 lg:grid-cols-3 sm:grid-cols-2"
             } w-full`}
           >
             {currentItems?.map((course, index) => (
@@ -231,7 +291,7 @@ export default function CoursesPage() {
         </div>
       )}
 
-      {!loading && !error && totalPages > 1 && (
+      {!loading && totalPages > 1 && (
         <div className="flex justify-center gap-4 mt-8">
           {currentPage > 1 && (
             <button

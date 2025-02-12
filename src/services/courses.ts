@@ -21,6 +21,7 @@ export  interface courseDataProps {
     category_id: string;
     cover: File | null;
     lessons: Lesson[];
+    rating: string;
   }
 export const allCourses = async () =>
 {
