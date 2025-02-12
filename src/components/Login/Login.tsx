@@ -21,7 +21,7 @@ export default function Login({ btn }: logbtn) {
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      showToast('User signed up successfully!', 'success'); 
+      showToast('User Login successfully!', 'success'); 
       console.log("API Response:", data);
       if (data.data.token) {
         setSecureCookie("token", data.data.token);
@@ -34,7 +34,7 @@ export default function Login({ btn }: logbtn) {
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       console.error("Login Error:", error.response?.data);
-      alert(error.response?.data?.message || "حدث خطأ أثناء تسجيل الدخول");
+      showToast(`'Login Error'`, 'error');
     },
   });
 
@@ -69,7 +69,7 @@ export default function Login({ btn }: logbtn) {
       <button  type="button" className="block text-right md:text-base text-sm font-normal text-gray-700 mb-5" onClick={() => setShowPopup(true)}>
         {t("ForgotPassword")}
       </button>
-      <button type="submit" className="w-full text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950">
+      <button type="submit" className="w-full md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950">
         {t(btn)}
       </button>
     </form>
