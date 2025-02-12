@@ -3,6 +3,7 @@ import Button from "../../Ui/Button/Button";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword, resetPassword } from "../../services/forgotPassword";
 import { showToast } from "../../utils/toast";
+import { AxiosError } from "axios";
 
 
 export default function ResetPasswor() {
@@ -20,7 +21,7 @@ export default function ResetPasswor() {
             console.log(data.message);
             setStep(2);
           },
-          onError: (error: any) => 
+          onError: (error: AxiosError<{ message?: string }>) => 
           {
             console.error("Login Error:", error.response?.data);
             showToast('Login Error', 'error');
@@ -38,7 +39,7 @@ export default function ResetPasswor() {
             showToast(`${data.message}`, 'success'); 
             setShowPopup(false)           
           },
-          onError: (error: any) => {
+          onError: (error: AxiosError<{ message?: string }>) => {
             console.error("Reset Password Error:", error.response?.data);
             showToast('Failed to reset password.', 'error');
           },

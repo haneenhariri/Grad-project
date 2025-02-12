@@ -3,6 +3,8 @@ import Button from "../../Ui/Button/Button";
 import Changepassword from "../Changepassword/Changepassword";
 import { useMutation } from "@tanstack/react-query";
 import { EditProfile } from "../../services/profileStd";
+import { AxiosError } from "axios";
+import { showToast } from "../../utils/toast";
 
 export default function ProfileSettings() {
   const [image, setImage] = useState<File | undefined>(undefined);
@@ -14,8 +16,14 @@ export default function ProfileSettings() {
     mutationFn: EditProfile,
     onSuccess: (data) => {
       console.log("Profile updated successfully", data);
+      showToast('Profile updated successfully', 'success');
+      setName("");
+      setEmail("");
+      setImage(undefined);
+      setPreview(null);
+
     },
-    onError: (error: any) => {
+    onError: (error: AxiosError<{ message?: string }>) => {
       console.error("Error updating profile", error);
     },
   });
@@ -41,12 +49,12 @@ export default function ProfileSettings() {
 
   return (
     <>
-      <div className="py-10 flex border gap-5 rounded-md p-5 border-violet-400">
-        <div className="w-1/2">
-          <h2 className="text-2xl font-semibold mb-6">Account settings</h2>
+      <div className="py-10 flex lg:flex-row flex-col border gap-5 rounded-md p-5 border-violet-400">
+        <div className="lg:w-1/2 w-full">
+          <h2 className="md:text-2xl text-lg font-semibold mb-6">Account settings</h2>
           <form onSubmit={handleSubmit}>
             <div>
-              <label className="mb-1.5">Full name</label>
+              <label className="mb-1.5 lg:text-base text-sm">Full name</label>
               <div className="flex justify-between gap-5 mb-5">
                 <input
                   type="text"
@@ -56,7 +64,7 @@ export default function ProfileSettings() {
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <label>Email</label>
+              <label className=" lg:text-base text-sm">Email</label>
               <div className="flex justify-between gap-5 mb-8">
                 <input
                   type="text"
@@ -67,8 +75,8 @@ export default function ProfileSettings() {
                 />
               </div>
             </div>
-            <div className="flex rounded-md mb-6 relative w-1/2 p-3 border border-violet-400 flex-col justify-evenly items-center">
-              <label htmlFor="imageUpload" className="cursor-pointer">
+            <div className="flex rounded-md mb-6 relative md:w-1/2 w-full p-3 border border-violet-400 flex-col justify-evenly items-center">
+              <label htmlFor="imageUpload" className="cursor-pointer  lg:text-base text-sm">
                 <div className="w-40 h-40 overflow-hidden rounded-md border-2 border-gray-300">
                   {preview ? (
                     <img
@@ -98,7 +106,7 @@ export default function ProfileSettings() {
           </form>
         </div>
         <div className="border"></div>
-        <div className="w-1/2">
+        <div className="lg:w-1/2 w-full">
           <Changepassword />
         </div>
       </div>

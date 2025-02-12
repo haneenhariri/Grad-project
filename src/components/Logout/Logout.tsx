@@ -5,6 +5,7 @@ import LogoutBtn from '../../Ui/Button/LogoutBtn';
 import { logout } from '../../services/authService';
 import { logoutSuccess } from '../../redux/authSlice/index';      
 import { removeSecureCookie } from '../../utils/cookiesHelper';
+import { showToast } from '../../utils/toast';
 
 export default function Logout() {
   const navigate = useNavigate();
@@ -15,11 +16,13 @@ export default function Logout() {
     onSuccess: () => {
       removeSecureCookie('token');
       removeSecureCookie('role');
+      showToast('Logout successfully!', 'success');
       dispatch(logoutSuccess());
       navigate('/');
     },
     onError: (error) => {
       console.error('Error during logout:', error);
+      showToast('Error logout', 'error');
     },
   });
 
