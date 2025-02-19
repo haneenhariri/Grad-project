@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Button from "../Ui/Button/Button";
-import img from "../assets/Search (1).png";
 import axiosInstance from "../services/axiosInstance";
 import axios from "axios";
 
@@ -25,12 +24,14 @@ export default function Students() {
   const [viewCoursesPopup, setViewCoursesPopup] = useState<boolean>(false);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [editPopup, setEditPopup] = useState<boolean>(false);
-  const [newStudent, setNewStudent] = useState({ name: "", email: "", password: "", password_confirmation: "" });
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [newStudent, setNewStudent] = useState({ name: "", email: "", password: "", password_confirmation: "" ,role: 'student'});
   const [editData, setEditData] = useState({ name: "", email: "" });
   const addStudent = async () => {
     try {
-      await axios.post("https://your-api-url.com/students", newStudent);
+      const response = await axiosInstance.post("/users" , newStudent);
       setShowPopup(false);
+      console.log(response.data)
     } catch (error) {
       console.error("Error adding student", error);
     }
@@ -46,12 +47,10 @@ export default function Students() {
     };
     fetchStudents();
   }, []);
- // تحديث القيم عند الكتابة في الحقول
  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setEditData({ ...editData, [e.target.name]: e.target.value });
 };
 
-// تحديث بيانات الطالب عند النقر على Save Changes
 const handleEditSubmit = async () => {
   if (!selectedStudent) return;
   try {
@@ -61,14 +60,12 @@ const handleEditSubmit = async () => {
     );
 
     if (response.data.status === "success") {
-      // تحديث القائمة بدون الحاجة إلى إعادة تحميل البيانات
       setStudents((prev) =>
         prev.map((student) =>
           student.id === selectedStudent.id ? { ...student, ...editData } : student
         )
       );
 
-      // إغلاق النافذة بعد التحديث
       setEditPopup(false);
     }
   } catch (error) {
@@ -83,16 +80,36 @@ const handelDelete = async () =>
     console.error(error)
   }
 }
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  console.log("Form submitted:", newStudent);
+  addStudent();
+  setShowPopup(false);
+
+};
+const filteredStudents = students.filter(student =>
+  student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  student.email.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
   return (
     <>
-      <div className="flex gap-4 justify-end mb-4">
-        <img src={img} alt="" className="border-2 border-violet-950" />
+      <div className="flex gap-4   justify-end mb-4">
+      <div className="border-2 border-violet-950 p-3">
+          <input
+            type="text"
+            placeholder="Search"
+            className="bg-transparent h-full w-full outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <Button onClick={() => setShowPopup(true)} Bg="bg-btn text-white" text="Add Student"/>
       </div>
 
-      <div className="p-6 bg-white rounded-lg shadow-md">
+      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full h-full">
             <thead>
               <tr className="text-left">
                 <th className="p-3 text-gray-600 border-b border-gray-200">Name</th>
@@ -102,7 +119,8 @@ const handelDelete = async () =>
               </tr>
             </thead>
             <tbody>
-              {students.map((student, index) => (
+              
+            {filteredStudents.map((student, index) => (
                 <tr key={student.id} className="border-b border-gray-200 hover:bg-gray-50">
                   <td className="p-3 border-b border-gray-200">{student.name}</td>
                   <td className="p-3 border-b text-sm border-gray-200">{student.email}</td>
@@ -128,7 +146,7 @@ const handelDelete = async () =>
                   </td>
                   <td className="p-3 border-b text-sm border-gray-200 text-center relative">
                     <button
-                      className="text-gray-500 text-sm hover:text-gray-700"
+                      className="text-gray-500 text-sm hover:text-gray-700 z-10"
                       onClick={() => setOpenDropdown(openDropdown === index ? null : index)}
                     >
                       &#8226;&#8226;&#8226;
@@ -170,7 +188,6 @@ const handelDelete = async () =>
         </div>
       </div>
 
-      {/* Popup for Student Details */}
       {viewDetailsPopup && selectedStudent && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-md w-96">
@@ -253,16 +270,18 @@ const handelDelete = async () =>
         </div>)}
         {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-md w-96">
-          <h3>Add Student</h3>
+          <form className="bg-white p-6 rounded-lg shadow-md w-96" onSubmit={handleSubmit}>
+          <h3 className=" font-bold my-3">Add Student</h3>
           <input
             type="text"
             placeholder="Name"
             value={newStudent.name}
+            className=" border-2 border-violet-950 w-full p-2 my-2"
             onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
           />
           <input
             type="email"
+            className=" border-2 border-violet-950 w-full p-2 my-2"
             placeholder="Email"
             value={newStudent.email}
             onChange={(e) => setNewStudent({ ...newStudent, email: e.target.value })}
@@ -270,18 +289,22 @@ const handelDelete = async () =>
           <input
             type="password"
             placeholder="Password"
+            className=" border-2 border-violet-950 w-full p-2 my-2"
             value={newStudent.password}
             onChange={(e) => setNewStudent({ ...newStudent, password: e.target.value })}
           />
           <input
             type="password"
             placeholder="Confirm Password"
+            className=" border-2 border-violet-950 w-full p-2 my-2"
             value={newStudent.password_confirmation}
             onChange={(e) => setNewStudent({ ...newStudent, password_confirmation: e.target.value })}
           />
-          <button onClick={addStudent}>Save</button>
-          <button onClick={() => setShowPopup(false)}>Cancel</button>
+          <div className=" flex justify-between my-2">
+          <button className="bg-green-600 p-2.5 text-white rounded-sm">Save</button>
+          <button className="bg-gray-600 p-2.5 text-white rounded-sm" onClick={() => setShowPopup(false)}>Cancel</button>
           </div>
+          </form>
         </div>
       )}
     </>

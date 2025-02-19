@@ -9,6 +9,7 @@ import Logo from "../Logo/Logo";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { getSecureCookie } from "../../utils/cookiesHelper";
+import TopNav from "../../Ui/TopNav/TopNav";
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -30,45 +31,18 @@ export default function NavBar() {
   }, [isAuthenticated]); 
 
   return (
-    <nav
-      className={`sticky top-0 z-50 desktop:pt-5 pt-4 pb-5 desktop:pb-6 flex items-center justify-between desktop:px-nav lg:px-60 transition-all duration-300 ${
+    <nav className="sticky top-0 z-50">
+      <TopNav/>
+      <nav
+      className={` desktop:pt-5 py-4  desktop:pb-6 flex items-center justify-between desktop:px-nav lg:px-8 transition-all duration-300 ${
         isScrolled
           ? "bg-White/95 tablet:mx-0 mx-0 shadow-lg lg:px-[80px] desktop:mx-0"
-          : "desktop:mx-7.5 tablet:mx-5 mx-4 "
+          : "  "
       }`}
     >
       <div className="flex justify-between gap-50 items-center">
         {/* logo */}
         <Logo />
-      <ul className="lg:flex hidden">
-        {nav
-          .filter((e) => {
-            if (!userRole || userRole === "student") {
-              return e.path !== "/instruct" && e.path !== "/Admin";
-            }
-            if (userRole === "admin") {
-              return e.path !== "/instruct";
-            }
-            if (userRole === "instructor") {
-              return e.path !== "/Admin";
-            }
-            return true;
-          })
-          .map((e, i) => (
-            <li key={i}>
-              <NavLink
-                className={({ isActive }) =>
-                  isActive
-                    ? "py-3.5 px-6 rounded-lg font-normal bg-indigo-400/10 h-full transition-all text-base desktop:text-lg duration-300"
-                    : "py-3.5 px-6 rounded-lg font-normal h-full text-base desktop:text-lg"
-                }
-                to={e.path}
-              >
-                {t(e.text)}
-              </NavLink>
-            </li>
-          ))}
-      </ul>
       </div>
       {isAuthenticated ? (
         <AuthSide />
@@ -106,5 +80,7 @@ export default function NavBar() {
       {/* side bar */}
       <SideBar isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </nav>
+    </nav>
+
   );
 }

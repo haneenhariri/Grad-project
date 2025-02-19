@@ -101,9 +101,9 @@ export default function AdminCourse() {
         <Button Bg="bg-btn" text="Add Course" textColor="text-white" onClick={() => navigate('/Admin/Create')} />
       </div>
 
-      <div className="p-6 bg-white rounded-lg shadow-md">
-        <div className="overflow-x-auto border-b">
-          <table className="w-full">
+      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
+        <div className="overflow-x-auto h-screen border-b">
+          <table className="w-full h-full">
             <thead>
               <tr className="text-left border-b border-gray-200">
                 <th className="p-3 text-gray-600">Course Name</th>

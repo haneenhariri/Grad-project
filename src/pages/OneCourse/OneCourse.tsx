@@ -16,7 +16,7 @@ import { RootState } from "../../redux/store";
 import { imgProfile } from "../../services/profileStd";
 
 export default function OneCourse() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -55,7 +55,6 @@ export default function OneCourse() {
     setShowModal(true);
   };
   
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -181,15 +180,15 @@ export default function OneCourse() {
             {isSuccessfulPayment ? (
               <div className="flex justify-center gap-4">
                 <button onClick={() => navigate("/courses")} className="px-4 py-2 bg-green-600 text-white rounded">
-                  العودة
+                Cancel
                 </button>
                 <button onClick={() => navigate(`/watch/${course?.id}`)} className="px-4 py-2 bg-blue-600 text-white rounded">
-                  مشاهدة الكورس
-                </button>
+                  watch course
+                  </button>
               </div>
             ) : (
               <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-red-600 text-white rounded">
-                إغلاق
+                Close
               </button>
             )}
           </div>

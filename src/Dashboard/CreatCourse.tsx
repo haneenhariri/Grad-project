@@ -6,38 +6,144 @@ import up from '../assets/AddCourse/UploadSimple.png';
 import img from '../assets/Image (28).png';
 import Button from '../Ui/Button/Button';
 import { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { AddCourse, allCategories } from '../services/courses';
+import { allCategories } from '../services/courses';
+import axios from 'axios';
+import { getSecureCookie } from '../utils/cookiesHelper';
 import { showToast } from '../utils/toast';
+
+interface LessonFile {
+  path: File | null;
+  type: "video" | "file";
+}
+
+interface Lesson {
+  title: string;
+  description: string;
+  files: File[];
+}
 
 export default function CreatCourse() {
   const [step, setStep] = useState(1);
-  const [lessons, setLessons] = useState([{ title: '', description: '', files: [] }]);
-  const [categories, setCategries] = useState([]);
-  const [courseId, setCourseId] = useState<number | null>(null);
-  const [submitted, setSubmitted] = useState(false);
-
+  const [categories, setCategories] = useState([]);
   const handleNext = () => setStep((prev) => (prev < 4 ? prev + 1 : prev));
   const handlePrev = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
+  const [title, setTitle] = useState('');
+  const [category_id, setCategory_id] = useState("");
+  const [level, setLevel] = useState('');
+  const [duration, setDuration] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [cover, setCover] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const token = getSecureCookie("token");
+  const [lessons, setLessons] = useState<Lesson[]>([
+    {
+      title: "Lesson 1",
+      description: "Description",
+      files: [
+        {
+          path: "",
+          type: "video",
+        },
+      ],
+    },
+  ]);
 
-  const handleLessonChange = (index, e) => {
-    const { name, value } = e.target;
-    const newLessons = [...lessons];
-    newLessons[index][name] = value;
-    setLessons(newLessons);
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log("Uploaded file:", file);
+      setCover(file);
+      setPreview(URL.createObjectURL(file));
+    }
   };
 
-  const handleLessonFileChange = (lessonIndex, fileIndex, e) => {
-    const newLessons = [...lessons];
-    newLessons[lessonIndex].files[fileIndex] = e.target.files[0];
-    setLessons(newLessons);
+  const handleLessonChange = (index: number, field: string, value: string) => {
+    const updatedLessons = [...lessons];
+    updatedLessons[index] = {
+      ...updatedLessons[index],
+      [field]: value,
+    };
+    setLessons(updatedLessons);
   };
+
+  const handleFileChange = (lessonIndex: number, fileIndex: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const updatedLessons = [...lessons];
+      updatedLessons[lessonIndex].files[fileIndex] = {
+        path: file,  // تخزين الملف بدلاً من اسمه فقط
+        type: file.type.startsWith("video") ? "video" : "file",
+      };
+      setLessons(updatedLessons);
+    }
+  };
+
+  const addLesson = () => {
+    setLessons([
+      ...lessons,
+      {
+        title: `Lesson ${lessons.length + 1}`,
+        description: "Description",
+        files: [
+          {
+            path: "",
+            type: "video",
+          },
+        ],
+      },
+    ]);
+  };
+
+  const addFile = (lessonIndex: number) => {
+    const updatedLessons = [...lessons];
+    updatedLessons[lessonIndex].files.push({
+      path: file, // تخزين الملف بدلاً من اسمه فقط
+      type: file.type.startsWith("video") ? "video" : "file",
+    });
+    setLessons(updatedLessons);
+  };
+
+  async function send(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("duration", duration);
+      formData.append("level", level);
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("category_id", category_id);
+      formData.append("price", price);
+      if (cover) {
+        formData.append("cover", cover);
+      }
+
+      lessons.forEach((lesson, lessonIndex) => {
+        formData.append(`lessons[${lessonIndex}][title]`, lesson.title);
+        formData.append(`lessons[${lessonIndex}][description]`, lesson.description);
+        lesson.files.forEach((file, fileIndex) => {
+          formData.append(`lessons[${lessonIndex}][files][${fileIndex}][path]`, file.path);
+          formData.append(`lessons[${lessonIndex}][files][${fileIndex}][type]`, file.type);
+        });
+      });
+      await axios.post("http://127.0.0.1:8000/api/courses", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+     showToast("Course successfully created with lessons" ,'success');
+    } catch (error) {
+      showToast('Error creating course' ,'error')
+      console.error("Error creating course:", error);
+    }
+  }
 
   useEffect(() => {
     const fetchCategory = async () => {
       try {
         const data = await allCategories();
-        setCategries(data);
+        setCategories(data);
       } catch (error) {
         console.log(error);
       }
@@ -45,93 +151,8 @@ export default function CreatCourse() {
     fetchCategory();
   }, []);
 
-  const [formData, setFormData] = useState({
-    _method: "PUT",
-    duration: "",
-    level: "",
-    title: "",
-    description: "",
-    price: "",
-    category_id: "",
-    cover: null as File | null,
-  });
-
-  const mutation = useMutation({
-    mutationFn: AddCourse,
-    onSuccess: (data) => {
-      setCourseId(data?.id);
-      setSubmitted(true);
-    },
-    onError: () => {
-      showToast('Error', 'error');
-    },
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files && files.length > 0) {
-      setFormData((prev) => ({ ...prev, cover: files[0] }));
-    }
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { value } = e.target;
-    setFormData((prev) => ({ ...prev, category_id: value }));
-  };
-
-  const isFormValid = () => {
-    return (
-      formData.duration.trim() &&
-      formData.description.trim() &&
-      formData.level.trim() &&
-      formData.title.trim() &&
-      formData.price.trim() &&
-      formData.category_id.trim() &&
-      formData.cover !== null
-    );
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("duration", formData.duration);
-    data.append("level", formData.level);
-    data.append("title", formData.title);
-    data.append("description", formData.description);
-    data.append("price", formData.price);
-    data.append("category_id", formData.category_id);
-    if (formData.cover) {
-      data.append("cover", formData.cover);
-    }
-    lessons.forEach((lesson, lessonIndex) => {
-      data.append(`lessons[${lessonIndex}][title]`, lesson.title);
-      data.append(`lessons[${lessonIndex}][description]`, lesson.description);
-      lesson.files.forEach((file, fileIndex) => {
-        if (file) {
-          data.append(`lessons[${lessonIndex}][files][${fileIndex}]`, file);
-        }
-      });
-    });
-    mutation.mutate(data);
-  };
-
-  if (submitted) {
-    return (
-      <section className="h-screen flex justify-center items-center">
-        <div className="text-center text-xl font-bold text-green-600">
-          Your request has been successfully submitted and will be reviewed soon.
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-md">
+    <form onSubmit={send} className="bg-white rounded-md">
       {/* head */}
       <div className="flex items-center border-b">
         <div className={`${step == 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
@@ -171,9 +192,10 @@ export default function CreatCourse() {
             className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
             placeholder={'course title'}
             type="text"
-            name='title'
-            value={formData.title}
-            onChange={handleChange}
+            name="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            required
           />
           <div className='flex gap-2'>
             <div className='w-1/2'>
@@ -184,8 +206,8 @@ export default function CreatCourse() {
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="category_id"
                 name="category_id"
-                value={formData.category_id}
-                onChange={handleCategoryChange}
+                value={category_id}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCategory_id(event.target.value)}
               >
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
@@ -199,14 +221,25 @@ export default function CreatCourse() {
               <label className="mb-2.5 font-medium text-base block" htmlFor="">
                 Course Level
               </label>
-              <input
+              <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder={'course level'}
-                type="text"
+                id="level"
                 name='level'
-                value={formData.level}
-                onChange={handleChange}
-              />
+                value={level}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setLevel(event.target.value)}
+              >
+                <option value="">Select Level</option>
+                  <option  value={'beginner'}>
+                    beginner
+                  </option>
+                  <option  value={'intermediate'}>
+                  intermediate
+                  </option>
+                  <option  value={'advance'}>
+                  advance
+                  </option>
+              </select>
+
             </div>
           </div>
           <div className='flex gap-2'>
@@ -215,8 +248,8 @@ export default function CreatCourse() {
                 Durations
               </label>
               <input
-                onChange={handleChange}
-                value={formData.duration}
+                value={duration}
+                onChange={(event) => setDuration(event.target.value)}
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder={'course duration'}
                 type="text"
@@ -231,9 +264,9 @@ export default function CreatCourse() {
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder={'course price'}
                 type="text"
-                value={formData.price}
-                onChange={handleChange}
                 name='price'
+                value={price}
+                onChange={(event) => setPrice(event.target.value)}
               />
             </div>
           </div>
@@ -255,14 +288,14 @@ export default function CreatCourse() {
                   className="border-2 flex border-gray-300 bg-gray-200 w-48 h-48 p-4 rounded-sm text-center cursor-pointer hover:bg-gray-100"
                   onClick={() => document.getElementById("cover")?.click()}
                 >
-                  <img src={formData.cover ? URL.createObjectURL(formData.cover) : img} alt="cover" />
+                  <img src={cover ? URL.createObjectURL(cover) : img} alt="cover" />
                 </div>
                 <input
                   type="file"
                   name="cover"
                   id="cover"
                   accept="image/*,application/pdf"
-                  onChange={handleFileChange}
+                  onChange={handleImageUpload}
                   className="hidden"
                 />
               </div>
@@ -282,8 +315,8 @@ export default function CreatCourse() {
             <textarea
               name="description"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              value={formData.description}
-              onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
             />
             <div className='mt-5 flex justify-between'>
               <Button text='Cancel' textColor='border-gray border text-violet-950' />
@@ -294,63 +327,59 @@ export default function CreatCourse() {
       )}
       {step === 3 && (
         <div className='p-5'>
-        <div className='flex flex-col gap-5'>
-          {lessons.map((lesson, lessonIndex) => (
-            <div key={lessonIndex} className='bg-gray-100 p-4 rounded-md'>
-              <input
-                type="text"
-                name="title"
-                value={lesson.title}
-                onChange={(e) => handleLessonChange(lessonIndex, e)}
-                placeholder="Lesson Title"
-                className="mb-2 w-full p-2 rounded-md"
-              />
-              <textarea
-                name="description"
-                value={lesson.description}
-                onChange={(e) => handleLessonChange(lessonIndex, e)}
-                placeholder="Lesson Description"
-                className="mb-2 w-full p-2 rounded-md"
-              />
-              {lesson.files.map((file, fileIndex) => (
-                <div key={fileIndex} className='mb-2'>
-                  <input
-                    type="file"
-                    onChange={(e) => handleLessonFileChange(lessonIndex, fileIndex, e)}
-                    className="mb-2"
-                  />
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => {
-                  const newLessons = [...lessons];
-                  newLessons[lessonIndex].files.push(null);
-                  setLessons(newLessons);
-                }}
-                className="bg-violet-500 text-white p-2 rounded-md"
-              >
-                Add File
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => setLessons([...lessons, { title: '', description: '', files: [] }])}
-            className="bg-violet-500 text-white p-2 rounded-md"
-          >
-            Add Lesson
-          </button>
-        </div>
-        <div className='mt-5 flex justify-between'>
-              <Button text='Cancel' type='button' textColor='border-gray border text-violet-950' />
-              <Button text='Save Course' type='button' textColor='text-white' onClick={handleNext} Bg='bg-violet-950' />
-        </div>
+          <div className='flex flex-col gap-5'>
+            {lessons.map((lesson, lessonIndex) => (
+              <div key={lessonIndex} className='bg-gray-100 p-4 rounded-md'>
+                <input
+                  type="text"
+                  name="title"
+                  value={lesson.title}
+                  onChange={(e) => handleLessonChange(lessonIndex, "title", e.target.value)}
+                  placeholder="Lesson Title"
+                  className="mb-2 w-full p-2 rounded-md"
+                />
+                <textarea
+                  name="description"
+                  value={lesson.description}
+                  onChange={(e) => handleLessonChange(lessonIndex, "description", e.target.value)}
+                  placeholder="Lesson Description"
+                  className="mb-2 w-full p-2 rounded-md"
+                />
+                {lesson.files.map((file, fileIndex) => (
+                  <div key={fileIndex} className='mb-2'>
+                    <input
+                      type="file"
+                      onChange={(e) => handleFileChange(lessonIndex, fileIndex, e)}
+                      className="mb-2"
+                    />
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addFile(lessonIndex)}
+                  className="bg-violet-500 text-white p-2 rounded-md"
+                >
+                  Add File
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addLesson}
+              className="bg-violet-500 text-white p-2 rounded-md"
+            >
+              Add Lesson
+            </button>
+          </div>
+          <div className='mt-5 flex justify-between'>
+            <Button text='Cancel' type='button' textColor='border-gray border text-violet-950' />
+            <Button text='Save Course' type='button' textColor='text-white' onClick={handleNext} Bg='bg-violet-950' />
+          </div>
         </div>
       )}
       {step === 4 && (
-        <div className='p-5 '>
-          <Button type='submit' text='Submit for review' onClick={() => handleSubmit} textColor='text-white font-bold bg-violet-950 ' />
+        <div className='p-5 h-screen '>
+          <Button type='submit' text='Submit for review' textColor='text-white font-bold bg-violet-950 ' />
         </div>
       )}
     </form>

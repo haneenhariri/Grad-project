@@ -1,8 +1,14 @@
 {
-    "Home":"الرئيسية",
+    "navigation": {
+        "Home": "الرئيسية",
+        "Courses": "الدورات",
+        "About": "من نحن",
+        "Contact": "اتصل بنا",
+        "Become an Instructor": "كن مدربًا",
+        "DashBoard": "لوحة التحكم"
+    },
     "SignUp": "انشاء حساب",
     "Login": "تسجيل دخول",
-    "Courses" : "الدورات",
     "MainText" : "أطلق العنان لإبداعك",
     "titleHero" : "تعلم مع الخبراء في أي وقت وفي أي مكان",
     "search" : "بحث",

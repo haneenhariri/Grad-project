@@ -4,11 +4,12 @@ import img from "../assets/Search (1).png";
 import axiosInstance from "../services/axiosInstance";
 
 interface PaymentHistory {
-  accountName: string;
+  student: string;
   accountType: "Student" | "Instructor";
   amount: number;
   transactionDate: string;
   course: string;
+  account_id:string;
 }
 
 export default function Payments() {
@@ -20,9 +21,10 @@ export default function Payments() {
         const response = await axiosInstance.get('/payments/all');
         if (response.data.status === "success") {
           const transformedData = response.data.data.map((payment: any) => ({
-            accountName: `User ${payment.intended_account_id}`, 
+            student: `${payment.student}`, 
             accountType: payment.instructor === "instructor" ? "Instructor" : "Student",
             amount: payment.amount,
+            account_id: payment.account_id,
             transactionDate: new Date(payment.created_at).toLocaleDateString(),
             course: payment.course,
           }));
@@ -42,12 +44,13 @@ export default function Payments() {
         <img src={img} alt="" className="border-2 border-violet-950" />
         <Button Bg="bg-btn" text="Add Payment" textColor="text-white" />
       </div>
-      <div className="p-6 bg-white rounded-lg shadow-md">
+      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
         <div className="overflow-x-auto">
-          <table className="w-full table-auto">
+          <table className="w-full h-full table-auto">
             <thead>
               <tr className="text-left">
                 <th className="p-3 text-gray-600 border-b border-gray-200">Account Name</th>
+                <th className="p-3 text-gray-600 border-b border-gray-200">Account Id</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Account Type</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Amount</th>
                 <th className="p-3 text-gray-600 border-b border-gray-200">Transaction Date</th>
@@ -58,7 +61,8 @@ export default function Payments() {
             <tbody>
               {paymentHistory.map((payment, index) => (
                 <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="p-3">{payment.accountName}</td>
+                  <td className="p-3">{payment.student}</td>
+                  <td className="p-3 text-center">{payment.account_id}</td>
                   <td className="p-3">
                     <span className={`px-2 py-1 text-sm font-semibold rounded-md ${payment.accountType === "Student" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"}`}>
                       {payment.accountType}

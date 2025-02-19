@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "../Ui/Button/Button";
-import img from '../assets/Search (1).png';
-import { allRequest } from "../services/teacherForm";
+import { allRequest, allTeacher } from "../services/teacherForm";
 import axios from "axios";
 import { getSecureCookie } from "../utils/cookiesHelper";
 
@@ -20,51 +19,86 @@ export default function InstructorList() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [selectedInstructor, setSelectedInstructor] = useState<Instructor | null>(null);
-
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const addTeach = async () => {
+    try {
+      await axios.post("https://your-api-url.com/students", newStudent);
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Error adding student", error);
+    }
+  };
   useEffect(() => {
-    const fetchRequest = async () => {
+    const fetchInstructors = async () => {
       try {
-        const response = await allRequest();
-        const formattedData: Instructor[] = response.data.map((item: any) => ({
-          id: item.id,
-          name: item.name,
-          email: item.email,
-          education: item.education,
-          specialization: item.specialization,
-          summery: item.summery,
-          cv: item.cv,
-          status: item.status === "pending" ? "pending" : item.status === "rejected" ? "rejected" : "accepted",
-        }));
-        setInstructors(formattedData);
+        const [requestRes, teacherRes] = await Promise.all([allRequest(), allTeacher()]);
+
+        const formatData = (data: any[]): Instructor[] =>
+          data.map((item) => ({
+            id: item.id,
+            name: item.name,
+            email: item.email,
+            education: item.education,
+            specialization: item.specialization,
+            summery: item.summery,
+            cv: item.cv,
+            status: item.status === "pending" ? "pending" : item.status === "rejected" ? "rejected" : "accepted",
+          }));
+
+        const mergedData = [...formatData(requestRes.data), ...formatData(teacherRes.data)];
+
+        setInstructors(mergedData);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching instructors:", error);
       }
     };
-    fetchRequest();
+
+    fetchInstructors();
   }, []);
+
   const token = getSecureCookie("token");
 
   const updateInstructorStatus = async (id: number, status: "accepted" | "rejected") => {
     try {
-      await axios.post(`http://127.0.0.1:8000/api/requests/${id}/change-status`, { status } ,{ headers:{ "Authorization" : `Bearer ${token}` }});
+      await axios.post(`http://127.0.0.1:8000/api/requests/${id}/change-status`, { status }, { 
+        headers: { "Authorization": `Bearer ${token}` } 
+      });
+
       setInstructors((prev) =>
         prev.map((instructor) => (instructor.id === id ? { ...instructor, status } : instructor))
       );
-      setSelectedInstructor(null); 
+
+      setSelectedInstructor(null);
     } catch (error) {
       console.error("Failed to update status:", error);
     }
-  }; 
+  };
+
+  const filteredInstructors = instructors.filter((instructor) =>
+    instructor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    instructor.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    instructor.education.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    instructor.specialization.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
       <div className="flex gap-4 justify-end mb-4">
-        <img src={img} alt="" className="border-2 border-violet-950" />
+        <div className="border-2 border-violet-950 p-3">
+          <input
+            type="text"
+            placeholder="Search"
+            className="bg-transparent h-full w-full outline-none"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
         <Button Bg="bg-btn" text="Add Instructor" textColor="text-white" />
       </div>
-      <div className="p-6 bg-white rounded-lg shadow-md">
+      
+      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full h-full">
             <thead>
               <tr className="text-left">
                 <th className="p-3 text-gray-600 border-b border-gray-200">Name</th>
@@ -76,27 +110,28 @@ export default function InstructorList() {
               </tr>
             </thead>
             <tbody>
-              {instructors.map((instructor) => (
+              {filteredInstructors.map((instructor) => (
                 <tr key={instructor.id} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="p-3 border-b border-gray-200">{instructor.name}</td>
-                  <td className="p-3 border-b text-sm border-gray-200">{instructor.email}</td>
-                  <td className="p-3 border-b text-sm border-gray-200">
+                  <td className="p-3">{instructor.name}</td>
+                  <td className="p-3 text-sm">{instructor.email}</td>
+                  <td className="p-3 text-sm">
                     <button onClick={() => setSelectedInstructor(instructor)} className="text-blue-600">View</button>
                   </td>
-                  <td className="p-3 border-b text-sm border-gray-200">{instructor.education}</td>
-                  <td className="p-3 border-b text-sm border-gray-200 font-semibold">
+                  <td className="p-3 text-sm">{instructor.education}</td>
+                  <td className="p-3 text-sm font-semibold">
                     <span className={`${instructor.status === "accepted" ? "text-green-600 bg-green-100 px-2 py-1 rounded-md" 
                       : instructor.status === "rejected" ? "text-red-600 bg-red-100 px-2 py-1 rounded-md" 
                       : "text-yellow-600 bg-yellow-100 px-2 py-1 rounded-md"}`}>
                       {instructor.status}
                     </span>
                   </td>
-                  <td className="p-3 border-b text-sm border-gray-200 text-center relative">
-                    <button className="text-gray-500 text-sm hover:text-gray-700" onClick={() => setOpenDropdown(openDropdown === instructor.id ? null : instructor.id)}>
+                  <td className="p-3 text-sm text-center relative">
+                    <button className="text-gray-500 text-sm hover:text-gray-700" 
+                      onClick={() => setOpenDropdown(openDropdown === instructor.id ? null : instructor.id)}>
                       &#8226;&#8226;&#8226;
                     </button>
                     {openDropdown === instructor.id && (
-                      <div className="absolute z-10 right-0 mt-2 w-44 bg-white border-b border-gray-200 shadow-lg rounded-md">
+                      <div className="absolute z-10 right-0 mt-2 w-44 bg-white border border-gray-200 shadow-lg rounded-md">
                         <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Edit</button>
                         <button className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">Delete</button>
                       </div>
@@ -109,7 +144,6 @@ export default function InstructorList() {
         </div>
       </div>
 
-      {/* البوب أب عند الضغط على "View" */}
       {selectedInstructor && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -131,4 +165,3 @@ export default function InstructorList() {
     </>
   );
 }
-

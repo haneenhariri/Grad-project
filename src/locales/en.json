@@ -1,9 +1,15 @@
 {
-    
-    "Home": "Home",
+    "navigation":
+    {
+        "Home": "Home",
+        "Courses" : "Courses",
+        "About" : "About",
+        "Contact" : "Contact",
+        "Become an Instructor": "Become an Instructor",
+        "DashBoard": "DashBoard"
+    },
     "SignUp": "Sign Up",
     "Login": "Login",
-    "Courses" : "Courses",
     "MainText" : "Unlock Your Creative Potential",
     "titleHero" : "Learn with expert anytime anywhere",
     "search" : "search",

@@ -10,7 +10,7 @@ const storedLanguage = localStorage.getItem('language') || 'en';
 
 i18n
 
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next) 
   .init({
     resources:{
         en:{

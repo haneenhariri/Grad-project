@@ -38,3 +38,9 @@ export const allRequest = async() =>
   return response.data
 }
 
+export const allTeacher = async() =>
+{
+  const response = await axiosInstance.get(`${API_URL}/get-instructors`);
+  return response.data
+
+}

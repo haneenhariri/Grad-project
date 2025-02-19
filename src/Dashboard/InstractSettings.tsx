@@ -47,8 +47,8 @@ export default function InstractSettings() {
   return (
     <section className="  p-5 bg-white rounded-md   my-10  ">
      <>
-       <div className="py-10 flex border gap-5 rounded-md p-5 border-violet-400">
-         <div className="w-1/2">
+       <div className="py-10 flex lg:flex-row flex-col border gap-5 rounded-md p-5 border-violet-400">
+         <div className="lg:w-1/2 w-full">
            <h2 className="text-2xl font-semibold mb-6">Account settings</h2>
            <form onSubmit={handleSubmit}>
              <div>
@@ -102,7 +102,7 @@ export default function InstractSettings() {
                  />
                </div>
              </div>
-             <div className="flex rounded-md mb-6 relative w-1/2 p-3 border border-violet-400 flex-col justify-evenly items-center">
+             <div className="flex rounded-md mb-6 relative md:w-1/2 p-3 border border-violet-400 flex-col justify-evenly items-center">
                <label htmlFor="imageUpload" className="cursor-pointer">
                  <div className="w-40 h-40 overflow-hidden rounded-md border-2 border-gray-300">
                    {preview ? (
@@ -133,7 +133,7 @@ export default function InstractSettings() {
            </form>
          </div>
          <div className="border"></div>
-         <div className="w-1/2">
+         <div className="lg:w-1/2 w-full">
            <Changepassword />
          </div>
        </div>

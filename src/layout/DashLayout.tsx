@@ -9,7 +9,7 @@ export default function DashLayout() {
       <DashSide/>
       <div className="w-full">
         <DashHead/>
-        <div className="px-10 py-4">
+        <div className="lg:px-10 px-5 py-4">
         <Outlet/>
         </div>
       </div>

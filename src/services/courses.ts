@@ -35,48 +35,13 @@ export const singleCourse = async (id: number) => {
       return selectedCourse;
 };
 
-export const AddCourse = async (courseData: courseDataProps) => {
-    const formData = new FormData();
-  
-    // إضافة البيانات الأساسية للكورس
-    formData.append("duration", courseData.duration);
-    formData.append("level", courseData.level);
-    formData.append("title", courseData.title);
-    formData.append("description", courseData.description);
-    formData.append("price", courseData.price);
-    formData.append("category_id", courseData.category_id);
-  
-    // إضافة صورة الغلاف إذا كانت موجودة
-    if (courseData.cover) {
-      formData.append("cover", courseData.cover);
-    }
-  
-    // إضافة الدروس وملفاتها
-    courseData.lessons.forEach((lesson, lessonIndex) => {
-      formData.append(`lessons[${lessonIndex}][title]`, lesson.title);
-      formData.append(`lessons[${lessonIndex}][description]`, lesson.description);
-  
-      lesson.files.forEach((fileData, fileIndex) => {
-        if (fileData.file) {
-          formData.append(`lessons[${lessonIndex}][files][${fileIndex}][path]`, fileData.file);
-          formData.append(`lessons[${lessonIndex}][files][${fileIndex}][type]`, fileData.type || "file"); // نوع الملف الافتراضي
-        }
-      });
-    });
-  
-    try {
-      const response = await axiosInstance.post('/courses', formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-  
-      return response.data;
-    } catch (error) {
-      console.error("Error adding course:", error);
-      throw error;
-    }
-  };
+export const  watchSingleCourse = async (id: number) => 
+{
+    const response = await axiosInstance.get(`/courses/${id}`);
+    console.log(response.data)
+    return response.data.data
+}
+
 export const allCategories = async () =>
 {
     const response = await axiosInstance.get('/categories'); 

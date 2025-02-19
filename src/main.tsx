@@ -11,6 +11,7 @@ import './index.css';
 import './utils/i18n.ts';
 import NewCourse from './Admin/NewCourse.tsx';
 import Home from './pages/Home/Home.tsx';
+import EditeCourse from './Dashboard/EditeCourse.tsx';
 const Auth = lazy(() => import('./pages/Auth/Auth.tsx'));
 const UserDash = lazy(() => import('./pages/UserDash/UserDash.tsx'));
 const CoursesPage = lazy(() => import('./pages/CoursesPage/CoursesPage.tsx'));
@@ -42,7 +43,7 @@ const routes = createBrowserRouter([
       { path: '', element:<Home /> },
       { path: '/courses', element: <Suspense fallback={<p>Loading...</p>}><CoursesPage /></Suspense> },
       { path: '/oneCourse/:id', element: <Suspense fallback={<p>Loading...</p>}><OneCourse /></Suspense> },
-      { path: '/watch/:courseId', element: <Suspense fallback={<p>Loading...</p>}><WatchCourse /></Suspense> },
+      { path: '/watch/:id', element: <Suspense fallback={<p>Loading...</p>}><WatchCourse /></Suspense> },
       { path: '/auth/:formType', element: <Suspense fallback={<p>Loading...</p>}><Auth /></Suspense> },
       {
         path: 'User',
@@ -93,6 +94,7 @@ const routes = createBrowserRouter([
       { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><InstractSettings /></Suspense> },
       { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><CreatCourse /></Suspense> },
       { path: 'Earning', element: <Suspense fallback={<p>Loading...</p>}><Earning /></Suspense> },
+      { path: 'edit/:id', element: <Suspense fallback={<p>Loading...</p>}><EditeCourse /></Suspense> },
       {
         path: 'MyCourses',
         element: <Suspense fallback={<p>Loading...</p>}><IstractCourses /></Suspense>,

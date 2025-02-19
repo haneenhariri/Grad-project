@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Credentials, UserData } from "../types/interfaces";
 import axiosInstance from "./axiosInstance";
 
@@ -10,10 +10,16 @@ export const login  = async (credentials: Credentials) =>
     return respons.data; 
 };
 export const signup = async (userData :UserData) => {
-    const response = await axios.post(`${API_URL}/register`, userData);
-    return response.data;
+    try {
+        const response = await axios.post(`${API_URL}/register`, userData);
+        return response.data;
+    } catch (error : unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data || { message: "Signup failed" };
+        }
+        throw { message: "An unexpected error occurred" }; 
+    }
 };
-
 export const logout = async ()=> 
 {
     const respons = await axiosInstance.post('/logout');

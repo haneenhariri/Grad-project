@@ -4,23 +4,31 @@ export const nav =
 [
     {
         path: '/',
-        text: 'Home'
+        text: 'navigation.Home'
     },
     {
         path: '/courses',
-        text: 'Courses'
+        text: 'navigation.Courses'
+    },
+    {
+        path: '/About',
+        text: 'navigation.About'
+    },
+    {
+        path: '/Contact',
+        text: 'navigation.Contact'
     },
     {
         path: '/Instructor',
-        text: 'Become an Instructor'
+        text: 'navigation.Become an Instructor'
     },
     {
         path: '/instruct',
-        text: 'DashBoard'
+        text: 'navigation.DashBoard'
     },
     {
         path: '/Admin',
-        text: 'DashBoard'
+        text: 'navigation.DashBoard'
     },
 
 ]
