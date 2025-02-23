@@ -8,15 +8,25 @@
         "Become an Instructor": "Become an Instructor",
         "DashBoard": "DashBoard"
     },
-    "SignUp": "Sign Up",
-    "Login": "Login",
+    "signUp":
+    {
+        "SignUp": "Sign Up",
+        "formTextSign" : "Create an account to unlock exclusive features."
+    },
+    "logIn":
+    {
+        "Login": "Login",
+        "formTextLogin" : "Welcome back! Please log in to access your account."
+    },
+    "Logo":
+    {
+        "logo" : "Orbah"
+    },
     "MainText" : "Unlock Your Creative Potential",
     "titleHero" : "Learn with expert anytime anywhere",
     "search" : "search",
     "searchText" : "What do you want to learn?",
     "Testimonials": "Students Testimonials",
-    "formTextLogin" : "Welcome back! Please log in to access your account.",
-    "formTextSign" : "Create an account to unlock exclusive features.",
     "CourseTitle" : "Our Courses",
     "CourseP": "Learn from Industry Experts and Enhance Your Skills.",
     "Benefits" : "Benefits",

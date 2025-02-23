@@ -2,18 +2,33 @@ import { NavLink } from "react-router-dom";
 import { SidebarProps } from "../../types/interfaces";
 import xmark from "../../assets/nav/icon/x-mark.png";
 import { nav } from "../../data/navData";
+import { useTranslation } from "react-i18next";
+import { getSecureCookie } from "../../utils/cookiesHelper";
 
 
 export default function SideBar({ isOpen, onClose }: SidebarProps) {
+  const {t} = useTranslation()
+  const userRole = getSecureCookie('role'); 
   return (
     <div
     className={`fixed  flex justify-evenly items-center flex-col top-0 right-0 h-screen w-full max-w-sm bg-White/95 z-50 transform transition-transform duration-300 ${
       isOpen ? "translate-x-0 shadow-lg" : "translate-x-full"
     }`}
-  >
+    >
     <div className="flex flex-col ">
       <div className="flex-grow flex flex-col items-center justify-center gap-5">
-      {nav.map((e, i) => (
+      {nav.filter((e) => {
+            if (!userRole || userRole === "student") {
+              return e.path !== "/instruct" && e.path !== "/Admin";
+            }
+            if (userRole === "admin") {
+              return e.path !== "/instruct";
+            }
+            if (userRole === "instructor") {
+              return e.path !== "/Admin";
+            }
+            return true;
+          }).map((e, i) => (
             <NavLink key={i}  onClick={(onClose)}
               className={({ isActive }) =>
                 isActive
@@ -22,7 +37,7 @@ export default function SideBar({ isOpen, onClose }: SidebarProps) {
               }
               to={e.path}
             >
-              {e.text}
+              {t(e.text)}
             </NavLink>))}
       </div>
     </div>

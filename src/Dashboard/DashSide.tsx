@@ -5,7 +5,7 @@ import add from "../assets/PlusCircle.png";
 import my from "../assets/Stack.png";
 import ern from "../assets/CreditCard (1).png";
 import stng from "../assets/Gear.png";
-import Logo from "../components/Logo/Logo";
+import Logo from "../Ui/Logo/Logo";
 
 export default function DashSide() {
   return (

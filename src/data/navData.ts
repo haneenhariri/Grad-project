@@ -37,11 +37,13 @@ export const navAuth =
 [
     {
         path: '/auth/signup',
-        text: 'SignUp'
+        text: 'signUp.SignUp',
+        state : 1,
     },
     {
         path: '/auth/login',
-        text: 'Login'
+        text: 'logIn.Login',
+        state: 2,
     },
 ]
 
