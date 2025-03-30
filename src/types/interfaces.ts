@@ -101,3 +101,13 @@ export interface EditProfileInstProps
     specialization: string;
     summery:string;
 }
+
+export interface logoProps
+{
+    textColor?: string
+}
+
+export interface TitlePropsType
+{
+    title:string;
+}

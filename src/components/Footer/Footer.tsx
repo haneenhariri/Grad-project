@@ -6,6 +6,7 @@ import inst from "../../assets/social/Instragarm.png";
 import linked from "../../assets/social/Linkedin.png";
 import twitter from "../../assets/social/Twitter (1).svg";
 import youtub from "../../assets/social/Frame 74.svg";
+import Logo from "../../Ui/Logo/Logo";
 export default function Footer() {
 
   return (
@@ -13,8 +14,7 @@ export default function Footer() {
       <div  className="px-4 lg:px-20 desktop:px-40 py-20 flex gap-y-10 lg:flex-row flex-col justify-between border-b border-gray-700">
         <div className="lg:w-5/12 flex-wrap w-full">
         <div className="flex items-center mb-7.5 gap-1">
-          <img src={logo} alt="logo" className="md:w-10 md:h-10 w-7.5 h-7.5" />
-          <h1 className="font-semibold md:text-[30px] text-2xl">Orbah</h1>
+          <Logo textColor="text-white"/>
         </div>
          <p className="text-sm text-gray-500 mb-7.5">Learn from Industry Experts and Enhance Your Skills.</p>
          <div className=" flex gap-2.5">

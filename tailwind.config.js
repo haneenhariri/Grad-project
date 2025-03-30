@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 export default {
   content: ['./index.html','./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
@@ -8,19 +10,12 @@ export default {
       },
       fontFamily : 
       {
-        'Tajawal': "Be Vietnam Pro",
-      
+        tajawal: ['Tajawal', ...defaultTheme.fontFamily.sans], 
+        lemonada: ['"Lemonada"', 'cursive'],
       },
       colors: {
         'btn': '#9C4DF4',
         'primary': '#0A033C',
-        'Orange/75': '#FFCA80',
-        'Orange/80': '#FFD599',
-        'Orange/90': '#FFEACC',
-        'Orange/95': '#FFF4E5',
-        'Orange/97': '#FFF9F0', 
-        'Orange/99': '#FFFDFA',
-        'Orange/95': '#FFF4E5',
         'White/100': '#FFFFFF',
         'White/95': '#F1F1F3',
         'White/97': '#F7F7F8',
@@ -34,7 +29,6 @@ export default {
         'Grey/60': '#98989A',
         'Grey/70': '#B3B3B3',
         'gray-h': 'rgb(247 245 250 / var(--tw-bg-opacity, 1))',
-        
       },
       spacing: {
         '4.5' : '18px',

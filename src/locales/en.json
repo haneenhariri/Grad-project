@@ -10,11 +10,13 @@
     },
     "signUp":
     {
+        "Don’t have an account?":"Don’t have an account?",
         "SignUp": "Sign Up",
         "formTextSign" : "Create an account to unlock exclusive features."
     },
     "logIn":
     {
+        "Already have an account?" : "Already have an account?",
         "Login": "Login",
         "formTextLogin" : "Welcome back! Please log in to access your account."
     },
@@ -22,8 +24,33 @@
     {
         "logo" : "Orbah"
     },
+    "btn":
+    {
+        "VisitCourses" : "VisitCourses",
+        "View All" :"View All"
+    },
+    "hero":
+    {
+        "Studying" : "Studying",
+        "text1" : " Online is now much easier",
+        "text2" : " is an interesting platform that will teach you in more an interactive way",
+        "text3" : "Assisted Student",
+        "text4" : "Congratulations",
+        "text5" : "Your admission completed"
+    },
+    "topCategory":
+    {
+        "title" : "Browse top category",
+        "Development" : "Development",
+        "AI & ML" : "AI & ML",
+        "Data Science" : "Data Science",
+        "Cybersecurity" : "Cybersecurity",
+        "IT & Software" : "IT & Software",
+        "Design" : "Design"
+    },
+    "Courses" : "Course",
     "MainText" : "Unlock Your Creative Potential",
-    "titleHero" : "Learn with expert anytime anywhere",
+    "titleHero" : "Learn with expert",
     "search" : "search",
     "searchText" : "What do you want to learn?",
     "Testimonials": "Students Testimonials",
@@ -31,7 +58,6 @@
     "CourseP": "Learn from Industry Experts and Enhance Your Skills.",
     "Benefits" : "Benefits",
     "BenefitsP" : "Our mision is to help people to find the best course online and learn with expert anytime, anywhere.",
-    "VisitCourses" : "Visit Courses",
     "Email" : "Email",
     "EmailPlace": "Enter your Email",
     "Password" : "Password",
@@ -40,7 +66,6 @@
     "LoginGoogle" : "Login with Google",
     "SignGoogle" : "Sign Up with Google",
     "Name" : "Name",
-    "ViewAll" :"View All",
     "Bh" : "Flexible Learning Schedule",
     "Bp" : "Fit your coursework around your existing commitments and obligations.",
     "Bh2" : "Expert Instruction",

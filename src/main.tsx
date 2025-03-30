@@ -12,95 +12,97 @@ import './utils/i18n.ts';
 import NewCourse from './Admin/NewCourse.tsx';
 import Home from './pages/Home/Home.tsx';
 import EditeCourse from './Dashboard/EditeCourse.tsx';
-const Auth = lazy(() => import('./pages/Auth/Auth.tsx'));
-const UserDash = lazy(() => import('./pages/UserDash/UserDash.tsx'));
-const CoursesPage = lazy(() => import('./pages/CoursesPage/CoursesPage.tsx'));
-const OneCourse = lazy(() => import('./pages/OneCourse/OneCourse.tsx'));
-const WatchCourse = lazy(() => import('./pages/WatchCourse/WatchCourse.tsx'));
-const InstructorPage = lazy(() => import('./pages/InstructorPage/InstructorPage.tsx'));
-const ProfileSettings = lazy(() => import('./components/ProfileSettings/ProfileSettings.tsx'));
-const Courses = lazy(() => import('./components/UserCourse/Courses.tsx'));
-const Admin = lazy(() => import('./Admin/Admin.tsx'));
-const TeacherForm = lazy(() => import('./pages/TeacherForm/TeacherForm.tsx'));
-const InstractorDash = lazy(() => import('./Dashboard/InstractorDash.tsx'));
-const InstractSettings = lazy(() => import('./Dashboard/InstractSettings.tsx'));
-const CreatCourse = lazy(() => import('./Dashboard/CreatCourse.tsx'));
-const Earning = lazy(() => import('./Dashboard/Earning.tsx'));
-const IstractCourses = lazy(() => import('./Dashboard/IstractCourses.tsx'));
-const CourseDetail = lazy(() => import('./Dashboard/CourseDetail.tsx'));
-const MyCourse = lazy(() => import('./Dashboard/MyCourse.tsx'));
-const AdminCourse = lazy(() => import('./Admin/AdminCourse.tsx'));
-const InstructorList = lazy(() => import('./Admin/InstructorList.tsx'));
-const Students = lazy(() => import('./Admin/Students.tsx'));
-const Payments = lazy(() => import('./Admin/Payments.tsx'));
-const AdminSettings = lazy(() => import('./Admin/AdminSettings.tsx'));
+import Spinner from './components/Spinner/Spinner.tsx';
+
+const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
+const UserDash = lazy(() => import(/* webpackChunkName: "user-dash" */ './pages/UserDash/UserDash.tsx'));
+const CoursesPage = lazy(() => import(/* webpackChunkName: "courses" */ './pages/CoursesPage/CoursesPage.tsx'));
+const OneCourse = lazy(() => import(/* webpackChunkName: "one-course" */ './pages/OneCourse/OneCourse.tsx'));
+const WatchCourse = lazy(() => import(/* webpackChunkName: "watch-course" */ './pages/WatchCourse/WatchCourse.tsx'));
+const InstructorPage = lazy(() => import(/* webpackChunkName: "instructor" */ './pages/InstructorPage/InstructorPage.tsx'));
+const ProfileSettings = lazy(() => import(/* webpackChunkName: "profile-settings" */ './components/ProfileSettings/ProfileSettings.tsx'));
+const Courses = lazy(() => import(/* webpackChunkName: "user-courses" */ './components/UserCourse/Courses.tsx'));
+const Admin = lazy(() => import(/* webpackChunkName: "admin" */ './Admin/Admin.tsx'));
+const TeacherForm = lazy(() => import(/* webpackChunkName: "teacher-form" */ './pages/TeacherForm/TeacherForm.tsx'));
+const InstractorDash = lazy(() => import(/* webpackChunkName: "instructor-dash" */ './Dashboard/InstractorDash.tsx'));
+const InstractSettings = lazy(() => import(/* webpackChunkName: "instructor-settings" */ './Dashboard/InstractSettings.tsx'));
+const CreatCourse = lazy(() => import(/* webpackChunkName: "create-course" */ './Dashboard/CreatCourse.tsx'));
+const Earning = lazy(() => import(/* webpackChunkName: "earning" */ './Dashboard/Earning.tsx'));
+const IstractCourses = lazy(() => import(/* webpackChunkName: "instructor-courses" */ './Dashboard/IstractCourses.tsx'));
+const CourseDetail = lazy(() => import(/* webpackChunkName: "course-detail" */ './Dashboard/CourseDetail.tsx'));
+const MyCourse = lazy(() => import(/* webpackChunkName: "my-course" */ './Dashboard/MyCourse.tsx'));
+const AdminCourse = lazy(() => import(/* webpackChunkName: "admin-course" */ './Admin/AdminCourse.tsx'));
+const InstructorList = lazy(() => import(/* webpackChunkName: "instructor-list" */ './Admin/InstructorList.tsx'));
+const Students = lazy(() => import(/* webpackChunkName: "students" */ './Admin/Students.tsx'));
+const Payments = lazy(() => import(/* webpackChunkName: "payments" */ './Admin/Payments.tsx'));
+const AdminSettings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './Admin/AdminSettings.tsx'));
 
 const routes = createBrowserRouter([
   {
     path: '/',
     element: <Layout />,
     children: [
-      { path: '', element:<Home /> },
-      { path: '/courses', element: <Suspense fallback={<p>Loading...</p>}><CoursesPage /></Suspense> },
-      { path: '/oneCourse/:id', element: <Suspense fallback={<p>Loading...</p>}><OneCourse /></Suspense> },
-      { path: '/watch/:id', element: <Suspense fallback={<p>Loading...</p>}><WatchCourse /></Suspense> },
-      { path: '/auth/:formType', element: <Suspense fallback={<p>Loading...</p>}><Auth /></Suspense> },
+      { path: '', element: <Home /> },
+      { path: '/courses', element: <CoursesPage /> },
+      { path: '/oneCourse/:id', element: <OneCourse /> },
+      { path: '/watch/:id', element: <WatchCourse /> },
+      { path: '/auth/:formType', element: <Auth /> },
       {
         path: 'User',
         element: (
           <RoleProtectedRoute allowedRoles={['student']}>
-            <Suspense fallback={<p>Loading...</p>}><UserDash /></Suspense>
+            <UserDash />
           </RoleProtectedRoute>
         ),
         children: [
-          { index: true, element: <Suspense fallback={<p>Loading...</p>}><ProfileSettings /></Suspense> },
-          { path: 'settings', element: <Suspense fallback={<p>Loading...</p>}><ProfileSettings /></Suspense> },
-          { path: 'usercourse', element: <Suspense fallback={<p>Loading...</p>}><Courses /></Suspense> },
+          { index: true, element: <ProfileSettings /> },
+          { path: 'settings', element: <ProfileSettings /> },
+          { path: 'usercourse', element: <Courses /> },
         ],
       },
-      { path: '/Instructor', element: <Suspense fallback={<p>Loading...</p>}><InstructorPage /></Suspense> },
-      { path: '/InstructorForm', element: <Suspense fallback={<p>Loading...</p>}><TeacherForm /></Suspense> },
-      { path: '*', element: <Suspense fallback={<p>Loading...</p>}><Home /></Suspense> },
+      { path: '/Instructor', element: <InstructorPage /> },
+      { path: '/InstructorForm', element: <TeacherForm /> },
+      { path: '*', element: <Home /> },
     ],
   },
   {
     path: '/Admin',
     element: (
       <RoleProtectedRoute allowedRoles={['admin']}>
-        <Suspense fallback={<p>Loading...</p>}><Admin /></Suspense>
+        <Admin />
       </RoleProtectedRoute>
     ),
     children: [
-      { index: true, element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
-      { path: 'dash', element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
-      { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><AdminSettings /></Suspense> },
-      { path: 'Courses', element: <Suspense fallback={<p>Loading...</p>}><AdminCourse /></Suspense> },
-      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><NewCourse/></Suspense> },
-      { path: 'Payments', element: <Suspense fallback={<p>Loading...</p>}><Payments /></Suspense> },
-      { path: 'instructorlist', element: <Suspense fallback={<p>Loading...</p>}><InstructorList /></Suspense> },
-      { path: 'Students', element: <Suspense fallback={<p>Loading...</p>}><Students /></Suspense> },
+      { index: true, element: <InstractorDash /> },
+      { path: 'dash', element: <InstractorDash /> },
+      { path: 'Settings', element: <AdminSettings /> },
+      { path: 'Courses', element: <AdminCourse /> },
+      { path: 'Create', element: <NewCourse /> },
+      { path: 'Payments', element: <Payments /> },
+      { path: 'instructorlist', element: <InstructorList /> },
+      { path: 'Students', element: <Students /> },
     ],
   },
   {
     path: '/instruct',
     element: (
       <RoleProtectedRoute allowedRoles={['instructor']}>
-        <Suspense fallback={<p>Loading...</p>}><DashLayout /></Suspense>
+        <DashLayout />
       </RoleProtectedRoute>
     ),
     children: [
-      { index: true, element: <Suspense fallback={<p>Loading...</p>}><InstractSettings /></Suspense> },
-      { path: 'dash', element: <Suspense fallback={<p>Loading...</p>}><InstractorDash /></Suspense> },
-      { path: 'Settings', element: <Suspense fallback={<p>Loading...</p>}><InstractSettings /></Suspense> },
-      { path: 'Create', element: <Suspense fallback={<p>Loading...</p>}><CreatCourse /></Suspense> },
-      { path: 'Earning', element: <Suspense fallback={<p>Loading...</p>}><Earning /></Suspense> },
-      { path: 'edit/:id', element: <Suspense fallback={<p>Loading...</p>}><EditeCourse /></Suspense> },
+      { index: true, element: <InstractSettings /> },
+      { path: 'dash', element: <InstractorDash /> },
+      { path: 'Settings', element: <InstractSettings /> },
+      { path: 'Create', element: <CreatCourse /> },
+      { path: 'Earning', element: <Earning /> },
+      { path: 'edit/:id', element: <EditeCourse /> },
       {
         path: 'MyCourses',
-        element: <Suspense fallback={<p>Loading...</p>}><IstractCourses /></Suspense>,
+        element: <IstractCourses />,
         children: [
-          { path: '', element: <Suspense fallback={<p>Loading...</p>}><MyCourse /></Suspense> },
-          { path: 'detail/:id', element: <Suspense fallback={<p>Loading...</p>}><CourseDetail /></Suspense> },
+          { path: '', element: <MyCourse /> },
+          { path: 'detail/:id', element: <CourseDetail /> },
         ],
       },
     ],
@@ -113,7 +115,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={routes} />
+        <Suspense fallback={<Spinner />}>
+          <RouterProvider router={routes} />
+        </Suspense>
       </QueryClientProvider>
     </Provider>
   </StrictMode>

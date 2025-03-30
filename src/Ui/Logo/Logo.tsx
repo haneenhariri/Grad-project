@@ -1,11 +1,8 @@
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo/logo.svg";
 import { useTranslation } from "react-i18next";
-interface logoProps
-{
-    textColor?: string
-}
-export default function Logo({textColor} :logoProps ) {
+import { logoProps } from "../../types/interfaces";
+export default function Logo({textColor} :logoProps) {
   const {t} = useTranslation()
   return (
         <NavLink to={'/'} className="flex items-center gap-1">

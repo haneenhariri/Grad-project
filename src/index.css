@@ -8,7 +8,7 @@
 
 @layer base {
     html {
-      @apply  bg-bg-primary-color font-Tajawal;
+      @apply  bg-bg-primary-color font-tajawal ;
     }
   }
 

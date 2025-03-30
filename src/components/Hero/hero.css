@@ -1,6 +1,4 @@
 .hero 
 {
-    height:  calc( 100vh - 80px);
-    background-image: url('../../assets/hero/Group.png')!important;
-    background-position: center;
+    height: 100vh;
 }

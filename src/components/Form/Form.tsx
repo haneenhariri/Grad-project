@@ -17,7 +17,7 @@ export default function Form({title , formText , LogBtn } : form) {
       {location.pathname === '/auth/login' ? 
       (<Login btn={LogBtn}/> ): <SignUp btn={LogBtn}/> }
       {location.pathname === '/auth/login' ? 
-      (<Link className="md:text-base text-sm" to={'/auth/signup'}>Don’t have an account?<span className=" font-bold text-violet-950 underline"> Sign Up</span></Link>) : (<Link className="md:text-base text-sm" to={'/auth/login'}>Already have an account? <span className=" font-bold text-violet-950 underline">Login</span></Link>) }
+      (<Link className="md:text-base text-sm" to={'/auth/signup'}>{t('signUp.Don’t have an account?')}<span className=" font-bold text-violet-950 underline mx-2">{t('signUp.SignUp')}</span></Link>) : (<Link className="md:text-base text-sm" to={'/auth/login'}>{t('logIn.Already have an account?')}<span className=" font-bold text-violet-950 mx-2 underline">{t('logIn.Login')}</span></Link>) }
     </div>
     
   )

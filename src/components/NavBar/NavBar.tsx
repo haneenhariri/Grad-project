@@ -4,11 +4,13 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthSide from "./AuthSide";
 import menu from "../../assets/nav/icon/toggle.svg";
+import shop from "../../assets/nav/icon/ShoppingCartSimple.png";
+import heart from "../../assets/nav/icon/Heart.png";
 import SideBar from "../SideBar/SideBar";
 import Logo from "../../Ui/Logo/Logo";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import TopNav from "../../Ui/TopNav/TopNav";
+import TopNav from "../TopNav/TopNav";
 
 export default function NavBar() {
   const { t } = useTranslation();
@@ -29,12 +31,12 @@ export default function NavBar() {
   }, [isAuthenticated]); 
 
   return (
-    <nav className="sticky top-0 z-50">
+    <nav className=" fixed w-screen top-0 z-50">
       <TopNav/>
       <nav
       className={` desktop:pt-5 py-4  desktop:pb-6 flex items-center justify-between desktop:px-nav lg:px-8 transition-all duration-300 ${
         isScrolled
-          ? "bg-White/95 tablet:mx-0 mx-0 shadow-lg  desktop:mx-0"
+          ? "bg-White/95 tablet:mx-0 mx-0  desktop:mx-0"
           : "  "
       }`}
     >
@@ -43,6 +45,10 @@ export default function NavBar() {
         <Logo />
       </div>
       <div className=" flex items-center gap-2">
+      <div className="mx-4 flex justify-center items-center gap-6">
+        <img src={heart} alt="whish list" className=" w-6 h-6"/>
+        <img src={shop} alt="ShoppingCartSimple" className=" w-6 h-6"/>
+      </div>
       {isAuthenticated ? (
         <AuthSide /> 
       ) : (
@@ -63,6 +69,7 @@ export default function NavBar() {
           ))}
         </div>
       )}
+
       {/* toggle menu */}
       <div className="lg:hidden flex items-center">
         <button className="flex items-center" onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -70,7 +77,6 @@ export default function NavBar() {
         </button>
       </div>
       </div>
-
       {/* black layer side bar */}
       <div
         className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
