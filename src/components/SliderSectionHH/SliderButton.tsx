@@ -1,11 +1,12 @@
-import { SliderButtonProps } from "../../interfaces";
+import { SliderButtonProps } from "../../types/interfaces";
+
 
 export default function SliderButton({onClick , img } : SliderButtonProps) {
   return (
     <button 
      onClick={onClick}
-     className=" desktop:p-3.5 p-3  border rounded-lg  border-White/95 bg-white">
-     <img src={img} alt="arrow" className=" desktop:w-[34px] desktop:h-[34px] w-7.5 h-7.5" />
+     className=" desktop:p-3.5 p-3 flex  border rounded-lg  border-White/95 bg-white">
+     <img src={img} alt="arrow" className="w-8 h-8" />
     </button>
   )
 }

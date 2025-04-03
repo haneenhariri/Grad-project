@@ -75,31 +75,28 @@ export default function SignUp({ btn }: logbtn) {
                 {t("Password")}
             </label>
             <input
-                className="w-full lg:p-5 p-2.5 bg-White/95 rounded-md"
+                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("PasswordPlace")}
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
-
             <label className="mb-2.5 font-medium md:text-base text-sm block">
-                Confirm Password
+                {t("Confirm")}
             </label>
             <input
-                className="w-full lg:p-5 p-2.5 bg-White/95 rounded-md"
-                placeholder="Confirm Password"
+                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
+                placeholder={t("Confirm")}
                 type="password"
                 value={formData.password_confirmation}
                 onChange={(e) =>
                     setFormData({ ...formData, password_confirmation: e.target.value })
-                }
-            />
+                } />
             {mutation.isError && <p className="text-red-500">Signup Failed!</p>}
 
             <p className="text-sm font-normal text-gray-700 mb-5">
-                <input type="checkbox" /> {t("I agree with Terms of Use and Privacy Policy")}
+                <input type="checkbox" /> {t("agree")}
             </p>
-
             <button
                 className="w-full text-white lg:py-4.5 lg:px-5 p-2.5 md:text-base text-sm rounded-lg bg-violet-950"
                 disabled={mutation.isPending}

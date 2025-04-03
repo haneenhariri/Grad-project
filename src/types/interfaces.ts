@@ -107,6 +107,12 @@ export interface logoProps
     textColor?: string
 }
 
+export interface SliderButtonProps
+{
+    onClick: () => void;
+    img : string;
+}
+
 export interface TitlePropsType
 {
     title:string;
