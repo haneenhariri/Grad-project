@@ -1,10 +1,5 @@
-import Button from "../../Ui/Button/Button";
-interface stdProps
-{
-  par:string;
-  name:string;
-  img:string;
-}
+import { stdProps } from "../../types/interfaces";
+
 export default function StdCard({par, name ,img } :stdProps) {
   return (
     <div className=" rounded-xl overflow-hidden 0">

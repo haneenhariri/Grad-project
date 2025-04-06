@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import DashSide from "../Dashboard/DashSide";
-import DashHead from "../Dashboard/DashHead";
+import DashSide from "../instructorDash/DashSide";
+import DashHead from "../instructorDash/DashHead";
 
 
 export default function DashLayout() {

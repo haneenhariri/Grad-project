@@ -48,6 +48,7 @@ export const allCategories = async () =>
     return response.data.data;
 }
 
+
 export const deleteCourse = async (id: number) => 
 {
     const respons = await axiosInstance.delete(`/courses/${id}`);

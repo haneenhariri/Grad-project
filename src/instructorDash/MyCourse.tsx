@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import fliter from '../assets/Filter.png'
 import { CouCard } from '../types/interfaces';
 import { fetchMyCourses } from '../services/profileStd';
 import { deleteCourse } from '../services/courses';

@@ -117,3 +117,10 @@ export interface TitlePropsType
 {
     title:string;
 }
+
+export interface stdProps
+{
+  par:string;
+  name:string;
+  img:string;
+}
