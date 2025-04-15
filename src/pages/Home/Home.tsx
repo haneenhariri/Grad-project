@@ -10,7 +10,7 @@ import TopCategory from "../../components/TopCategory/TopCategory";
 export default function Home() {
   return (
     <>
-    <section className="">
+    <section className="px-4 lg:px-10 desktop:px-40">
       <Hero/>
       <TopCategory/>
       <Courses/>
