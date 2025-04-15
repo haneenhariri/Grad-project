@@ -121,18 +121,21 @@ export default function WatchCourse() {
           {/* عرض الفيديو إذا كان موجودًا */}
           {selectedLesson?.files?.some((file: any) => file.type === 'video') ? (
             <video
+              key={selectedLesson.id} // أضف هذا السطر - المفتاح الفريد يجبر إعادة التحميل
               controls
               className='w-full'
               onEnded={() => markLessonAsCompleted(selectedLesson.id)}
             >
               <source
-                src={`http://127.0.0.1:8000/storage/${selectedLesson.files.find((file) => file.type === 'video').path}`}
+                src={`http://127.0.0.1:8000/storage/${
+                  selectedLesson.files.find((file: any) => file.type === 'video').path
+                }`}
                 type="video/mp4"
               />
               Your browser does not support the video tag.
             </video>
           ) : (
-            <div></div>
+            <div>No video available for this lesson</div>
           )}
 
           <h2 className='my-6 text-2xl font-bold'>{selectedLesson?.title}</h2>

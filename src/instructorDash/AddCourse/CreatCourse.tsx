@@ -11,6 +11,7 @@ import axios from 'axios';
 import { getSecureCookie } from '../../utils/cookiesHelper';
 import { showToast } from '../../utils/toast';
 import { Category, Lesson, SubCategory } from '../../types/interfaces';
+import Spinner from '../../components/Spinner/Spinner';
 
 
 export default function CreateCourse() {
@@ -30,6 +31,7 @@ export default function CreateCourse() {
   const [cover, setCover] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const token = getSecureCookie("token");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [lessons, setLessons] = useState<Lesson[]>([
     {
       titleAr: "الدرس الأول",
@@ -132,7 +134,7 @@ export default function CreateCourse() {
 
   async function send(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    
+    setIsSubmitting(true);
     // Validation
     if (!titleEn || !titleAr || !subCategory_id || !cover) {
       showToast('Please fill all required fields', 'error');
@@ -185,12 +187,6 @@ export default function CreateCourse() {
         });
       });
   
-      // Debug: Log form data before sending
-      console.log("FormData contents:");
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value instanceof File ? `${value.name} (${value.size} bytes)` : value);
-      }
-  
       const response = await axios.post("http://127.0.0.1:8000/api/courses", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -224,6 +220,9 @@ export default function CreateCourse() {
       }
   
       showToast(errorMessage, 'error');
+      
+    } finally {
+      setIsSubmitting(false); // تعطيل حالة التحميل بغض النظر عن النتيجة
     }
   }
 
@@ -238,7 +237,9 @@ export default function CreateCourse() {
     };
     fetchCategory();
   }, []);
-
+  if(isSubmitting){
+    return <Spinner/>
+  }
   return (
     <form onSubmit={send} className="bg-white rounded-md">
       {/* Header */}

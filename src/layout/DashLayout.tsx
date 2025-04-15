@@ -1,3 +1,4 @@
+import { ToastProvider } from "../utils/toast";
 import { Outlet } from "react-router-dom";
 import DashSide from "../instructorDash/DashSide";
 import DashHead from "../instructorDash/DashHead";
@@ -10,6 +11,7 @@ export default function DashLayout() {
       <div className="w-full">
         <DashHead/>
         <div className="lg:px-10 px-5 py-4">
+        <ToastProvider/>
         <Outlet/>
         </div>
       </div>

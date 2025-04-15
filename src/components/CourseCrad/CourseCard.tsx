@@ -2,6 +2,8 @@ import { CouCard } from "../../types/interfaces";
 import star from '../../assets/icons/Star (3).png';
 import clock from '../../assets/icons/Clock (1).png';
 import chart from '../../assets/bar-chart (1).png';
+import Button from "../../Ui/Button/Button";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CourseCard({
   cover,
@@ -14,14 +16,9 @@ export default function CourseCard({
   totalCards,
   instructor,
   level,
+  id
 }: CouCard & { index: number; totalCards: number }) {
-
-  const isFirst = index === 0;
-  const isLast = index === totalCards - 1;
-
-  const popupPosition = isFirst || isLast
-    ? "-right-1/2 rtl:-right-1/2 rtl:-translate-x-full translate-x-0"
-    : "left-1/2 rtl:right-1/2 rtl:-translate-x-0 -translate-x-full";
+  const navigate = useNavigate();
 
   return (
     <div className="relative group min-h-[333px]  rounded-md">
@@ -45,7 +42,7 @@ export default function CourseCard({
       </div>
       </div>
       <div
-        className={`absolute top-0 ${popupPosition} min-w-[270px] bg-white shadow-md lg:p-5 text-sm rounded p-2 opacity-0 group-hover:opacity-100 transition duration-300 z-10`}
+        className={`absolute top-0 -right-1/2 w-[300px] bg-white shadow-md lg:p-5 text-sm rounded p-2 opacity-0 group-hover:opacity-100 transition duration-300 z-10`}
       >
           <div className="py-1 px-1.5 w-max mb-2.5 flex items-center bg-violet-600/10 text-xs rounded">
             {mainCategoryName}
@@ -74,6 +71,22 @@ export default function CourseCard({
           <div className=" flex items-center gap-2">
           <p className=" text-base font-semibold text-gray-600">Price:</p>
           <span className="text-violet-600 text-lg font-semibold">{price}$</span>
+          </div>
+          <div className="my-2.5">
+                        <Button
+                          text="Add to Cart"
+                          textColor="text-white w-full !text-lg !rounded-none"
+                          Bg="bg-violet-950"
+                         
+                        />
+          </div>
+          <div className="my-2.5">
+                        <Button
+                          text="Course Detail"
+                          textColor="text-white w-full !text-lg !rounded-none"
+                          Bg="bg-violet-950"
+                         onClick={() => navigate(`/oneCourse/${id}`)}
+                        />
           </div>
       </div>
     </div>

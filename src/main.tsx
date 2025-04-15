@@ -13,6 +13,7 @@ import NewCourse from './Admin/NewCourse.tsx';
 import Home from './pages/Home/Home.tsx';
 import EditeCourse from './instructorDash/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
+import Teachers from './components/Teachers/Teachers.tsx';
 
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
 const UserDash = lazy(() => import(/* webpackChunkName: "user-dash" */ './pages/UserDash/UserDash.tsx'));
@@ -58,6 +59,8 @@ const routes = createBrowserRouter([
           { index: true, element: <ProfileSettings /> },
           { path: 'settings', element: <ProfileSettings /> },
           { path: 'usercourse', element: <Courses /> },
+          { path: 'Teachers', element: <Teachers /> },
+          { path: 'Message', element: <Teachers /> },
         ],
       },
       { path: '/Instructor', element: <InstructorPage /> },

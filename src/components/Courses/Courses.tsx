@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import {  useNavigate } from "react-router-dom";
+import {  NavLink } from "react-router-dom";
 import CourseCard from "../CourseCrad/CourseCard";
-import { allCourses } from "../../services/courses"; // استدعاء API
+import { allCourses } from "../../services/courses"; 
 import Spinner from "../Spinner/Spinner";
-import { Course, CourseTypeProps } from "../../types/interfaces";
+import { CourseTypeProps } from "../../types/interfaces";
 import SectionsTitle from "../../Ui/SectionsTitle/SectionsTitle";
-
+import arrow from '../../assets/ArrowRight (3).png'
 export default function Courses() {
-  const navigate = useNavigate();
   const [courses, setCourses] = useState<CourseTypeProps[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
@@ -26,9 +25,7 @@ export default function Courses() {
 
     fetchCourses();
   }, []);
-  const handleViewAllCourses = () => {
-    navigate("/courses");
-  };
+
   return (
     <section className="sm:mb-20 mb-10">
       <div className="flex justify-center">
@@ -56,6 +53,14 @@ export default function Courses() {
         ))}
         </div>
       )}
+      <div className=" flex justify-center items-center gap-2">
+        <p>We have more Courses.</p>
+        <NavLink to={'/courses'} className='flex justify-center items-center gap-2'>        
+        <p className=" text-violet-700">Browse All</p>
+        <img src={arrow} alt="arrow right" />
+        </NavLink>
+
+      </div>
     </section>
   );
 }
