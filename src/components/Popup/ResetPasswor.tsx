@@ -4,15 +4,42 @@ import { useMutation } from "@tanstack/react-query";
 import { forgotPassword, resetPassword } from "../../services/forgotPassword";
 import { showToast } from "../../utils/toast";
 import { AxiosError } from "axios";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 
 export default function ResetPasswor() {
+    const {t} = useTranslation();
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState("");
-    const [showPopup,setShowPopup] = useState(true)
     const [verificationCode, setVerificationCode] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
+    const validationSchema = Yup.object().shape({
+        email: Yup.string()
+          .email(t("InvalidEmail"))
+          .matches(
+            /^[^\s@]+@[^\s@]+\.(com|net|org|edu|gov|mil|io|dev|info|me|co|sa|eg)$/i,
+            t("InvalidEmail")
+          )
+          .required(t("RequiredField")),
+        password: Yup.string()
+          .min(8, t("PasswordTooShort"))
+          .required(t("RequiredField")),
+        confirmPassword: Yup.string()
+          .oneOf([Yup.ref("password")],t("PasswordsDoNotMatch") )
+          .required(t("RequiredField"))
+    });
+    const {
+      handleSubmit,
+      formState: { errors }
+    } = useForm({
+      resolver: yupResolver(validationSchema)
+    });
     const mutation = useMutation(
         {
           mutationFn : forgotPassword,
@@ -28,6 +55,7 @@ export default function ResetPasswor() {
           }
         }
       )
+
       const handleEmailSubmit = () => {
         mutation.mutate({email})
       };
@@ -37,7 +65,7 @@ export default function ResetPasswor() {
           onSuccess: (data) => 
           {
             showToast(`${data.message}`, 'success'); 
-            setShowPopup(false)           
+            navigate("/auth/login");
           },
           onError: (error: AxiosError<{ message?: string }>) => {
             console.error("Reset Password Error:", error.response?.data);
@@ -48,7 +76,7 @@ export default function ResetPasswor() {
       const handlePasswordReset = () => {
         if (newPassword !== confirmPassword) {
           showToast('Passwords do not match!', 'error');
-
+          
           return;
         }
     
@@ -62,60 +90,82 @@ export default function ResetPasswor() {
       }
     
   return (
-    <div className={`${showPopup == true ? 'block' : 'hidden' } fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50`}> 
-        <form  onSubmit={(e) => {
-        e.preventDefault();}} className="bg-white w-max  rounded-md shadow-md md:p-10 p-2.5  flex flex-col justify-around  gap-5">
-        <h2 className="md:text-3xl sm:text-lg text-sm font-bold text-violet-950">Reset Password</h2>
-        {step === 1 && (
+    <div className={`desktop:w-[41.25%] lg:w-[50%] w-full desktop:p-12.5 md:p-10 p-5  desktop:rounded-xl md:rounded-[10px] bg-white`}> 
+        <form   onSubmit={handleSubmit(step === 1 ? handleEmailSubmit : handlePasswordReset)} >
+      <div className=" text-center mb-10">
+        <h2 className=" font-semibold lg:text-4xl md:text-2xl text-lg mb-2">
+          {step === 1 ? `${t('ResetPassword')}` : `${t('ResetPasswordT')}`}
+        </h2>
+        <p className=" md:text-base text-sm font-normal">
+          { step === 1 ? `${t('ResetPasswordP')}` : `${t('ResetPassword2')}`}
+         </p>
+      </div>
+      {step === 1 && (
           <>
             <div>
-            <label className="mb-2.5 font-medium md:text-3xl sm:text-lg text-sm   block" htmlFor="">
-              Email
+            <label className="mb-2.5 font-medium text-base block">
+              {t("Email")}
             </label>
             <input
-                className="bg-White/95 p-3  md:w-72 w-[240px] rounded-md border sm:text-base text-sm placeholder:sm:text-base placeholder:text-sm border-violet-950"
+                className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
+                  errors.email ? "border border-red-500" : ""
+                }`}                
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t("EmailPlace")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
+            )}
             </div>
             <div>
-            <Button text="Submit" Bg="bg-btn" textColor="text-white" type='button' onClick={handleEmailSubmit} />
+            <Button text="Next" Bg="bg-btn" textColor="w-full my-4 md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950" type='button' onClick={handleEmailSubmit} />
             </div>
             </>
         )}
         {step === 2 && (
-          <>                  
-          <p className=" text-center md:text-base text-sm">We've sent a verification code to your email address.</p>
+          <>            
+                  <label className="mb-2.5 font-medium text-base block">
+                    {t("RecoveryCode")}
+                  </label>      
                   <input
-                    className="bg-White/95 p-3  w-full rounded-md border sm:text-base text-sm placeholder:sm:text-base placeholder:text-sm border-violet-950"
+                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base `}                      
                     type="text"
-                    placeholder="Enter verification code"
+                    placeholder={t("Enter verification code")}
                     value={verificationCode}
                     onChange={(e) => setVerificationCode(e.target.value)}
                   />
+                  <label className="mb-2.5 font-medium text-base block">
+                     {t("Password")}
+                  </label> 
                   <input
-                    className="bg-White/95 p-3  w-full rounded-md border sm:text-base text-sm placeholder:sm:text-base placeholder:text-sm border-violet-950"
+                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
+                      errors.password ? "border border-red-500" : ""
+                    }`}                      
                     type="password"
-                    placeholder="New Password"
+                    placeholder={t("New Password")}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
+                  <label className="mb-2.5 font-medium text-base block">
+                     {t("Confirm")}
+                  </label> 
                   <input
-                    className="bg-White/95 p-3  w-full rounded-md border sm:text-base text-sm placeholder:sm:text-base placeholder:text-sm border-violet-950"
+                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
+                      errors.password ? "border border-red-500" : ""
+                    }`}  
                     type="password"
-                    placeholder="Confirm New Password"
+                    placeholder={t("Confirm New Password")}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <div>
-                  <Button text="Reset Password" Bg="bg-btn" textColor="text-white" onClick={handlePasswordReset} />
+                  <Button text="ResetPassword" Bg="bg-btn" textColor="w-full my-4 md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950" onClick={handlePasswordReset} />
                   </div>
                   </>
         )}
         </form>
-
     </div>
   )
 }

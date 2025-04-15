@@ -31,10 +31,10 @@ export default function NavBar() {
   }, [isAuthenticated]); 
 
   return (
-    <nav className=" fixed w-screen top-0 z-50">
+    <nav className=" fixed w-full top-0 z-50">
       <TopNav/>
       <nav
-      className={` desktop:pt-5 py-4  desktop:pb-6 flex items-center justify-between desktop:px-nav lg:px-8 transition-all duration-300 ${
+      className={` desktop:pt-5 py-4  desktop:pb-6 flex items-center justify-between px-4 lg:px-10 desktop:px-40 transition-all duration-300 ${
         isScrolled
           ? "bg-White/95 tablet:mx-0 mx-0  desktop:mx-0"
           : "  "

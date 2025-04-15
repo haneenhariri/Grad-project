@@ -59,7 +59,7 @@ export default function AdminCourse() {
           id: item.id,
           instructor: item.instructor,
           status: item.status,
-          category_id: item.category_id.toString(),
+          category_id: item.sub_category_id, // استخدم sub_category_id بدلاً من category_id
           rating: item.rating,
           description: item.description,
           price: item.price.toString(),

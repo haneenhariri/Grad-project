@@ -10,6 +10,8 @@ export default function MyCourse() {
   const { id } = useParams<{ id: string }>();
     const [courses, setCourses] = useState<CouCard[]>([]);
     const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+    const [language, setLanguage] = useState<'en' | 'ar'>('en');  // تحديد اللغة
+
   const handleDeleteCourse = async (id: number) => {
     try {
       await deleteCourse(id); 
@@ -63,9 +65,9 @@ export default function MyCourse() {
                     )}
                  </div>
                 </div>
-                <h3 className=" font-bold text-xl mb-2.5">{course?.title}</h3>
-                <p className=" text-sm text-gray-600 mb-5 line-clamp-2">{course.description}</p>
-             </div>
+                <h3 className="font-bold text-xl mb-2.5">{course.title[language]}</h3> {/* اختيار العنوان بناءً على اللغة */}
+                <p className="text-sm text-gray-600 mb-5 line-clamp-2">{course.description[language]}</p> {/* اختيار الوصف بناءً على اللغة */}
+                </div>
           ))}
         </div>
     </div>

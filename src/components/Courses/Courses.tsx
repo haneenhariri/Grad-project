@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import {  useNavigate } from "react-router-dom";
 import CourseCard from "../CourseCrad/CourseCard";
-import Title from "../Title/Title";
 import { allCourses } from "../../services/courses"; // استدعاء API
 import Spinner from "../Spinner/Spinner";
-import { Course } from "../../types/interfaces";
+import { Course, CourseTypeProps } from "../../types/interfaces";
+import SectionsTitle from "../../Ui/SectionsTitle/SectionsTitle";
 
 export default function Courses() {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Course[]>([]); 
+  const [courses, setCourses] = useState<CourseTypeProps[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
   useEffect(() => {
@@ -31,23 +31,29 @@ export default function Courses() {
   };
   return (
     <section className="sm:mb-20 mb-10">
-      <Title title="CourseTitle" p="CourseP" btn="VisitCourses" onClick={handleViewAllCourses} />
+      <div className="flex justify-center">
+        <SectionsTitle title="CoursesSection.title"/>
+      </div>
       {loading && <Spinner/>}
       {error && <p className="text-center text-red-500">{error}</p>}
       {!loading && !error && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {courses?.slice(0, 6).map((course, i) => (
-            <CourseCard
-              key={i}
-              id={course.id}
-              cover={course.cover}
-              duration={course.duration}
-              level={course.level}
-              instructor={course.instructor}
-              title={course.title}
-              description={course.description}
-            />
-          ))}
+        <div className="grid grid-cols-1  md:grid-cols-4 grid-rows-2 h-full gap-6">
+        {courses?.slice(0, 8).map((course, i) => (
+          <CourseCard
+            key={i}
+            level={course.level}
+            index={i}
+            totalCards={8}
+            mainCategoryName={course.sub_category.main_category.name}
+            id={course.id}
+            cover={course.cover}
+            rating={course.rating}
+            duration={course.duration}
+            instructor={course.instructor}
+            title={course.title}
+            price={course.price}
+          />
+        ))}
         </div>
       )}
     </section>

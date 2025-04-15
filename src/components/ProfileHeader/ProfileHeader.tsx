@@ -41,7 +41,7 @@ export default function ProfileHeader() {
         <div
             className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden">
           {profileImage ? (
-             <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+             <img src={profileImage} alt="Profile" className="w-10 h-10   object-cover" />
                         ) : (
                             <span>{userName.charAt(0)}</span>
                         )}

@@ -37,5 +37,6 @@ export const EditProfileInst= async (information : EditProfileInstProps) =>
 export const fetchMyCourses = async() => 
 {
     const respons = await axiosInstance.get('/profile');
+    console.log(respons.data.data.courses)
     return respons.data.data.courses;
 }

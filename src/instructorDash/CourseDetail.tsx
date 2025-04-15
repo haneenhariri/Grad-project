@@ -118,7 +118,6 @@ export default function EditCourse() {
         setDescription(course.description);
         setPrice(course.price);
   
-        // بناء المسار الكامل للصورة إذا كان المسار نسبيًا
         const fullCoverPath = course.cover
           ? `http://127.0.0.1:8000/storage/${course.cover}`
           : null;

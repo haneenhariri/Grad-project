@@ -10,12 +10,12 @@ import TopCategory from "../../components/TopCategory/TopCategory";
 export default function Home() {
   return (
     <>
-    <section className="px-4 lg:px-10 desktop:px-40">
+    <section className="">
       <Hero/>
       <TopCategory/>
-      <Benefits/>
       <Courses/>
-      <Testimonials/>
+      <Benefits/>
+  {/*   <Testimonials/> */}
       <Instuctor/>
       </section>
       <FooterSup/>

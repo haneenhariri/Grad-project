@@ -27,7 +27,9 @@
     "btn":
     {
         "VisitCourses" : "VisitCourses",
-        "View All" :"View All"
+        "View All" :"View All",
+        "Next" : "Next",
+        "ResetPassword" : "Reset Password"
     },
     "hero":
     {
@@ -48,6 +50,29 @@
         "IT & Software" : "IT & Software",
         "Design" : "Design"
     },
+    "Services":
+    {
+        "title" : "Our Services"
+    },
+    "CoursesSection":
+    {
+        "title":"Recently added courses"
+    },
+    "Enter verification code" : "Enter verification code",
+    "Confirm New Password" : "Confirm New Password",
+    "New Password" : "Enter New password ",
+    "ResetPassword" : "Reset your password",
+    "ResetPasswordT" : "Recovery Code Sent!",
+    "ResetPasswordP" : "Type in your registered email address to reset password",
+    "ResetPassword2" : "Please check your email for next steps to reset your password.",
+    "LogoutSuccess": "Logout successfully!",
+    "RecoveryCode" : "Recovery Code",
+    "LogoutError": "Error logout",
+    "PasswordsMatch": "Passwords must match",
+    "RequiredField": "This field is required",
+    "InvalidEmail": "Please enter a valid email address",
+    "PasswordTooShort": "Password must be at least 8 characters",
+    "Login Error": "Login failed. Please check your credentials.",
     "Courses" : "Course",
     "agree" : "I agree with Terms of Use and Privacy Policy",
     "MainText" : "Unlock Your Creative Potential",

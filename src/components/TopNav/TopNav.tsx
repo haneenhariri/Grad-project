@@ -8,7 +8,7 @@ export default function TopNav() {
     const userRole = getSecureCookie('role'); 
     const { t } = useTranslation();
   return (
-    <nav className=" flex items-center h-11 lg:px-8 justify-between bg-gray-900">
+    <nav className=" flex items-center h-11 px-4 lg:px-10 desktop:px-40 justify-between bg-gray-900">
         <ul className="lg:flex hidden gap-2.5 items-center  text-sm">
         {nav
           .filter((e) => {

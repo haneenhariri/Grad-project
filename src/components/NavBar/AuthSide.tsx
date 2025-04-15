@@ -50,7 +50,7 @@ export default function AuthSide() {
     }
   }, []);
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-5 ">
           <button
             onClick={navTo}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden"

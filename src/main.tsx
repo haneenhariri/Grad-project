@@ -11,7 +11,7 @@ import './index.css';
 import './utils/i18n.ts';
 import NewCourse from './Admin/NewCourse.tsx';
 import Home from './pages/Home/Home.tsx';
-import EditeCourse from './instructorDash/EditeCourse.tsx';
+import EditeCourse from './instructorDash/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
 
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -102,7 +102,7 @@ const routes = createBrowserRouter([
         element: <IstractCourses />,
         children: [
           { path: '', element: <MyCourse /> },
-          { path: 'detail/:id', element: <CourseDetail /> },
+          { path: 'detail/:id', element: <EditeCourse/> },
         ],
       },
     ],

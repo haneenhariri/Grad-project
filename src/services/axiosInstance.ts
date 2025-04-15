@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   }
 });
+
 axiosInstance.interceptors.request.use((config) => {
     const token = getSecureCookie("token");
     if (token && config.headers) {

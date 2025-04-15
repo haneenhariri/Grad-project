@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../../services/authService";
@@ -8,17 +7,36 @@ import { setSecureCookie } from "../../utils/cookiesHelper";
 import { AxiosError } from "axios";
 import { showToast } from "../../utils/toast";
 import Spinner from "../Spinner/Spinner";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
 
 export default function SignUp({ btn }: logbtn) {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-    });
     const { t } = useTranslation();
     const navigate = useNavigate();
-
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required(t("RequiredField")),
+        email: Yup.string()
+        .email(t("InvalidEmail"))
+        .matches(
+            /^[^\s@]+@[^\s@]+\.(com|net|org|edu|gov|mil|io|dev|info|me|co|sa|eg)$/i,
+            t("InvalidEmail")
+        )
+        .required(t("RequiredField")),
+        password: Yup.string()
+        .min(8, t("PasswordTooShort"))
+        .required(t("RequiredField")),
+        password_confirmation: Yup.string()
+        .oneOf([Yup.ref('password')], "PasswordsMatch") 
+        .required(t("RequiredField")),
+    });
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm({
+        resolver: yupResolver(validationSchema),
+      });
     const mutation = useMutation({
         mutationFn: signup,
         onSuccess: (data) => {
@@ -38,17 +56,12 @@ export default function SignUp({ btn }: logbtn) {
     if (mutation.isPending) {
       return <Spinner/>;
     }
-    const send = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!formData.name || !formData.email || !formData.password) {
-            showToast("All fields are required!", "error");
-            return;
-        }
-        mutation.mutate(formData);
-    };
+    const onSubmit = (data: { name: string; email: string; password: string; password_confirmation: string }) => {
+        mutation.mutate(data);
+      };
 
     return (
-        <form className="md:mb-6" onSubmit={send}>
+        <form className="md:mb-6" onSubmit={handleSubmit(onSubmit)}>
             <label className="mb-2.5 font-medium md:text-base text-sm block">
                 {t("Name")}
             </label>
@@ -56,10 +69,9 @@ export default function SignUp({ btn }: logbtn) {
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("NamePlace")}
                 type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                {...register("name")}
             />
-
+            {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name.message}</p>}
             <label className="mb-2.5 font-medium md:text-base text-sm block">
                 {t("Email")}
             </label>
@@ -67,10 +79,10 @@ export default function SignUp({ btn }: logbtn) {
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("EmailPlace")}
                 type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            />
+                {...register("email")}
 
+            />
+            {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>}
             <label className="mb-2.5 font-medium md:text-base text-sm block">
                 {t("Password")}
             </label>
@@ -78,22 +90,20 @@ export default function SignUp({ btn }: logbtn) {
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("PasswordPlace")}
                 type="password"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                {...register("password")}
             />
+            {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password.message}</p>}
             <label className="mb-2.5 font-medium md:text-base text-sm block">
                 {t("Confirm")}
             </label>
             <input
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("Confirm")}
+                {...register("password_confirmation")}
                 type="password"
-                value={formData.password_confirmation}
-                onChange={(e) =>
-                    setFormData({ ...formData, password_confirmation: e.target.value })
-                } />
+                 />
+            {errors.password_confirmation && <p className="text-red-500 text-sm mb-2">{errors.password_confirmation.message}</p>}
             {mutation.isError && <p className="text-red-500">Signup Failed!</p>}
-
             <p className="text-sm font-normal text-gray-700 mb-5">
                 <input type="checkbox" /> {t("agree")}
             </p>

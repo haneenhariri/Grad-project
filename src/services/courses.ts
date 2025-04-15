@@ -23,9 +23,12 @@ export  interface courseDataProps {
     lessons: Lesson[];
     rating: string;
   }
+
+const language = localStorage.getItem('language');
+
 export const allCourses = async () =>
 {
-    const respons = await axiosInstance.get('/courses');
+    const respons = await axiosInstance.get(`/courses?lang=${language}`);
     console.log(respons.data.data)
     return respons.data.data;
 }
@@ -37,11 +40,35 @@ export const singleCourse = async (id: number) => {
 
 export const  watchSingleCourse = async (id: number) => 
 {
-    const response = await axiosInstance.get(`/courses/${id}`);
+    const response = await axiosInstance.get(`/courses/${id}?lang=${language}`);
     console.log(response.data)
     return response.data.data
 }
 
+export const  watchSingleCourseInAR = async (id: number) => 
+{
+    const response = await axiosInstance.get(`/courses/${id}?lang=ar`);
+    console.log(response.data)
+    return response.data.data
+}
+export const  watchSingleLessonInAR = async (id: number) => 
+{
+    const response = await axiosInstance.get(`/lessons/${id}?lang=ar`);
+    console.log(response.data)
+    return response.data.data
+}
+export const  watchSingleCourseInEn = async (id: number) => 
+{
+    const response = await axiosInstance.get(`/courses/${id}?lang=en`);
+    console.log(response.data)
+    return response.data.data
+}
+export const  watchSingleLessonInEn = async (id: number) => 
+    {
+        const response = await axiosInstance.get(`/lessons/${id}?lang=en`);
+        console.log(response.data)
+        return response.data.data
+    }
 export const allCategories = async () =>
 {
     const response = await axiosInstance.get('/categories'); 

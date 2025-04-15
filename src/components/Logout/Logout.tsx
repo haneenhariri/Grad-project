@@ -6,30 +6,30 @@ import { logout } from '../../services/authService';
 import { logoutSuccess } from '../../redux/authSlice/index';      
 import { removeSecureCookie } from '../../utils/cookiesHelper';
 import { showToast } from '../../utils/toast';
+import { useTranslation } from 'react-i18next';
 
 export default function Logout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { mutate, isError } = useMutation({
+  const { t } = useTranslation();
+  const { mutate } = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       removeSecureCookie('token');
       removeSecureCookie('role');
-      showToast('Logout successfully!', 'success');
+      showToast(t('LogoutSuccess'), 'success');
       dispatch(logoutSuccess());
       navigate('/');
     },
     onError: (error) => {
       console.error('Error during logout:', error);
-      showToast('Error logout', 'error');
+      showToast(t('LogoutError'), 'error');
     },
   });
 
   return (
     <div>
       <LogoutBtn onClick={() => mutate()} />
-      {isError && <p className="text-red-500">An error occurred during logout. Please try again.</p>}
     </div>
   );
 }

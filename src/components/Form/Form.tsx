@@ -9,7 +9,7 @@ export default function Form({title , formText , LogBtn } : form) {
   const {t} = useTranslation()
   const location = useLocation();
   return (
-    <div className=" 1600:w-[41.25%] lg:w-[50%] desktop:p-12.5 md:p-10 p-5  desktop:rounded-xl md:rounded-[10px] bg-white">
+    <div className=" desktop:w-[41.25%] lg:w-[50%] w-full desktop:p-12.5 md:p-10 p-5  desktop:rounded-xl md:rounded-[10px] bg-white">
       <div className=" text-center mb-10">
         <h2 className=" font-semibold lg:text-4xl md:text-2xl text-lg mb-2">{t(title)}</h2>
         <p className=" md:text-base text-sm font-normal">{t(formText)}</p>

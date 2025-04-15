@@ -9,15 +9,35 @@ export interface form
     LogBtn : string;
 
 };
-export interface Course {
-    id: number ;
-    cover: string;
-    duration: string;
-    level: string;
-    instructor: string;
-    title: string;
-    description: string;
-  }
+export interface CourseTypeProps {
+  id: number;
+  instructor_id: number;
+  duration: number;
+  level: string;
+  title: string;
+  description: string;
+  price: number;
+  cover: string;
+  rating: number | null;
+  sub_category_id: number;
+  status: string;
+  course_language: string;
+  instructor: string;
+  sub_category: SubCategory;
+};
+export interface MainCategory  {
+  id: number;
+  name: string;
+  category_id: number | null;
+};
+
+export interface SubCategory  {
+  id: number;
+  name: string;
+  category_id: number;
+  main_category: MainCategory;
+};
+
 export interface btn 
 {
     text?: string;
@@ -44,16 +64,18 @@ export interface BenfCard
 
 export interface CouCard 
 {
-    linkPath?:string
+  mainCategoryName: string;
+      linkPath?:string
     btn?:string;
     Bg?:string
-    instructor : string;
-    duration : string;
-    level : string;
-    title : string;
-    description : string;
-    cover : string;
-    id : number;
+    instructor?: string;
+    duration?: number;
+    rating: number | null;
+    title?: string;
+    price?: number;
+    cover?: string;
+    id?: number;
+    level:string;
 }
 export interface Credentials {
     email: string;
@@ -124,3 +146,27 @@ export interface stdProps
   name:string;
   img:string;
 }
+export interface Category {
+  id: number;
+  name: string;
+  sub_category?: SubCategory[];
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+}
+
+export interface LessonFile {
+  path: File | null;
+  type: "video" | "file";
+}
+
+export interface Lesson {
+  titleAr: string;
+  titleEn: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  files: LessonFile[];
+}
+
