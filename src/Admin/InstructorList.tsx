@@ -20,20 +20,13 @@ export default function InstructorList() {
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [selectedInstructor, setSelectedInstructor] = useState<Instructor | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const addTeach = async () => {
-    try {
-      await axios.post("https://your-api-url.com/students", newStudent);
-      setShowPopup(false);
-    } catch (error) {
-      console.error("Error adding student", error);
-    }
-  };
+
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
         const [requestRes, teacherRes] = await Promise.all([allRequest(), allTeacher()]);
 
-        const formatData = (data: any[]): Instructor[] =>
+        const formatData = (data: Instructor[]): Instructor[] =>
           data.map((item) => ({
             id: item.id,
             name: item.name,

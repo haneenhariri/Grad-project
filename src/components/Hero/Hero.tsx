@@ -26,7 +26,7 @@ export default function Hero() {
       <div className="md:w-1/2 w-full my-5 flex flex-col justify-center items-center">
         <div className=' relative w-10/12 md:mb-10 mb-2.5 text-start '>
         <img className='ltr:-top-8 ltr:-left-8 rtl:-right-8 rtl:-top-8 rtl:rotate-90 absolute' src={icon} alt="" />
-        <h2 className='lg:text-5xl text-3xl font-extrabold md:w-10/12 mb-5 '><span className='text-btn'>{t('hero.Studying')}</span>{t('hero.text1')} </h2>
+        <h2 className='lg:text-5xl text-3xl  md:w-10/12 mb-5 '><span className='text-btn'>{t('hero.Studying')}</span>{t('hero.text1')} </h2>
         <p className=' font-light md:text-base text-sm lg:w-3/4 w-full mb-10'><span className='font-bold'>{t('Logo.logo')}</span>{t('hero.text2')} </p>
         <div className="flex bg-white tablet:w-10/12 justify-between rounded-md p-2.5">
           <div className={`flex items-center gap-2 w-full ${showSearch ? 'block' : 'hidden'} sm:flex`}>

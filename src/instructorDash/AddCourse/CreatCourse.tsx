@@ -12,9 +12,12 @@ import { getSecureCookie } from '../../utils/cookiesHelper';
 import { showToast } from '../../utils/toast';
 import { Category, Lesson, SubCategory } from '../../types/interfaces';
 import Spinner from '../../components/Spinner/Spinner';
-
+import Label from '../../Ui/Label/Label';
+import { useTranslation } from 'react-i18next';
+ 
 
 export default function CreateCourse() {
+  const {t} = useTranslation()
   const [step, setStep] = useState(1);
   const [categories, setCategories] = useState<Category[]>([]);
   const [category_id, setCategory_id] = useState("");
@@ -237,6 +240,11 @@ export default function CreateCourse() {
     };
     fetchCategory();
   }, []);
+    useEffect(() => {
+      return () => {
+        if (preview) URL.revokeObjectURL(preview);
+      };
+    }, [preview]);
   if(isSubmitting){
     return <Spinner/>
   }
@@ -245,30 +253,28 @@ export default function CreateCourse() {
       {/* Header */}
       <div className="flex items-center border-b">
         <div className={`${step === 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-          <img src={basic} alt="Basic Information" />
-          <span>Basic Information</span>
+          <img  src={basic} alt="Basic Information" />
+          <span>{t("Basic Information")}</span>
         </div>
         <div className={`${step === 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
           <img src={Adv} alt="Advance Information" />
-          <span>Advance Information</span>
+          <span>{t("Advance Information")}</span>
         </div>
         <div className={`${step === 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
           <img src={Cur} alt="Curriculum" />
-          <span>Curriculum</span>
+          <span>{t("Curriculum")}</span>
         </div>
         <div className={`${step === 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
           <img src={Pub} alt="Publish Course" />
-          <span>Publish Course</span>
+          <span>{t("Publish Course")}</span>
         </div>
       </div>
-
-      <div className='p-5 flex border-b justify-between'>
-        {step === 1 && <h2 className='text-2xl font-semibold'>Basic Information</h2>}
-        {step === 2 && <h2 className='text-2xl font-semibold'>Advance Information</h2>}
-        {step === 3 && <h2 className='text-2xl font-semibold'>Course Curriculum</h2>}
-        {step === 4 && <h2 className='text-2xl font-semibold'>Publish Course</h2>}
+      <div className='p-4 flex border-b items-center justify-between'>
+        {step === 1 && <h2 className='text-2xl font-semibold'>{t("Basic Information")}</h2>}
+        {step === 2 && <h2 className='text-2xl font-semibold'>{t("Advance Information")}</h2>}
+        {step === 3 && <h2 className='text-2xl font-semibold'>{t("Curriculum")}</h2>}
+        {step === 4 && <h2 className='text-2xl font-semibold'>{t("Publish Course")}</h2>}
         <div className='flex gap-5'>
-          <Button text='Save' textColor='text-violet-950' Bg='bg-[#FFEEE8]' />
           <Button type='button' text='Save & Preview' onClick={handlePrev} textColor='text-violet-950' />
         </div>
       </div>
@@ -278,40 +284,31 @@ export default function CreateCourse() {
         <div className='p-5'>
           <div className='flex justify-between gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="titleEn">
-                Title [en]
-              </label>
+              <Label label="Title [en]"/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course title in English'
+                placeholder={t("TitleP[en]")}
                 type="text"
-                id="titleEn"
                 value={titleEn}
                 onChange={(event) => setTitleEn(event.target.value)}
                 required
               />
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="titleAr">
-                Title [ar]
-              </label>
+              <Label label="Title [ar]"/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course title in Arabic'
+                placeholder={t("TitleP[ar]")}
                 type="text"
-                id="titleAr"
                 value={titleAr}
                 onChange={(event) => setTitleAr(event.target.value)}
                 required
               />
             </div>
           </div>
-
           <div className='flex gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="category">
-                Course Category:
-              </label>
+              <Label label='Category'/>
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="category"
@@ -319,7 +316,7 @@ export default function CreateCourse() {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -328,9 +325,7 @@ export default function CreateCourse() {
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="subCategory">
-                Course Sub-category
-              </label>
+              <Label label='SubCategory'/>
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="subCategory"
@@ -338,7 +333,7 @@ export default function CreateCourse() {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option key={sub.id} value={sub.id}>{sub.name}</option>
                 ))}
@@ -348,9 +343,7 @@ export default function CreateCourse() {
 
           <div className='flex gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="level">
-                Course Level
-              </label>
+               <Label label='level' />
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="level"
@@ -358,16 +351,14 @@ export default function CreateCourse() {
                 onChange={(e) => setLevel(e.target.value)}
                 required
               >
-                <option value="">Select Level</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advance">Advance</option>
+                <option value="">{t("SelectLevel")}</option>
+                <option value="beginner">{t("Beginner")}</option>
+                <option value="intermediate">{t("Intermediate")}</option>
+                <option value="advance">{t("Advance")}</option>
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="level">
-                Course Language
-              </label>
+              <Label label='CourseLanguage' />
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="level"
@@ -375,18 +366,16 @@ export default function CreateCourse() {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">english</option>
-                <option value="arabic">arabic</option>
+                <option value="">{t("SelectCourseLanguage")}</option>
+                <option value="english">{t("english")}</option>
+                <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="duration">
-                Duration
-              </label>
+              <Label label='Duration' />
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course duration (e.g., 2 hours)'
+                placeholder={t("CourseDuration")}
                 type="text"
                 id="duration"
                 value={duration}
@@ -395,12 +384,10 @@ export default function CreateCourse() {
               />
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="price">
-                Price
-              </label>
+              <Label label='CoursesSection.Price'/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course price'
+                placeholder={t("CoursePrice")}
                 type="text"
                 id="price"
                 value={price}
@@ -409,7 +396,6 @@ export default function CreateCourse() {
               />
             </div>
           </div>
-
           <div className='mt-5 flex justify-between'>
             <Button type='button' text='Cancel' textColor='border-gray border text-violet-950' />
             <Button type='button' text='Save & Next' textColor='text-white' onClick={handleNext} Bg='bg-violet-950' />

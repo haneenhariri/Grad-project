@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "../Ui/Button/Button";
 import axiosInstance from "../services/axiosInstance";
-import axios from "axios";
 
 interface Course {
   id: number;
@@ -76,6 +75,7 @@ const handelDelete = async () =>
 {
   try{
     const response = await axiosInstance.delete(`http://127.0.0.1:8000/api/users/${selectedStudent?.id}`)
+    console.log(response.data)
   }catch(error){
     console.error(error)
   }

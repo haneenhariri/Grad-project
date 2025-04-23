@@ -1,6 +1,4 @@
 import { NavLink} from "react-router-dom"
-
-import logo from "../../assets/logo/logo.png";
 import face from "../../assets/social/face.png";
 import inst from "../../assets/social/Instragarm.png";
 import linked from "../../assets/social/Linkedin.png";

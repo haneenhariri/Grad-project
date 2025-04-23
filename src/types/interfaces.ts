@@ -2,6 +2,13 @@
 export interface logbtn {
   btn: string;
 }
+
+export interface NavProps
+{
+    pathLink : string;
+    title : string;
+    icon : string ;
+}
 export interface form 
 {
     title : string;
@@ -9,6 +16,10 @@ export interface form
     LogBtn : string;
 
 };
+export interface AddCommentProps {
+    lesson_id: number;
+    onCommentAdded: () => void;
+  }
 export interface CourseTypeProps {
   id: number;
   instructor_id: number;
@@ -65,17 +76,34 @@ export interface BenfCard
 export interface CouCard 
 {
   mainCategoryName: string;
-      linkPath?:string
+  linkPath?:string
     btn?:string;
     Bg?:string
     instructor?: string;
     duration?: number;
     rating: number | null;
-    title?: string;
+    title: string;
     price?: number;
     cover?: string;
-    id?: number;
+    id: number;
     level:string;
+    description?: string
+    
+}
+export interface myCourseProp
+{
+  id: number;
+  title: {
+    ar: string;
+    en: string;
+  };
+  description: {
+    ar: string;
+    en: string;
+  };
+  duration: number;
+  level: string;
+  cover: string;
 }
 export interface Credentials {
     email: string;

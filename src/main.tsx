@@ -9,12 +9,12 @@ import Layout from './layout/Layout.tsx';
 import DashLayout from './layout/DashLayout.tsx';
 import './index.css';
 import './utils/i18n.ts';
-import NewCourse from './Admin/NewCourse.tsx';
-import Home from './pages/Home/Home.tsx';
 import EditeCourse from './instructorDash/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
 import Teachers from './components/Teachers/Teachers.tsx';
+import Message from './components/Message/Message.tsx';
 
+const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
 const UserDash = lazy(() => import(/* webpackChunkName: "user-dash" */ './pages/UserDash/UserDash.tsx'));
 const CoursesPage = lazy(() => import(/* webpackChunkName: "courses" */ './pages/CoursesPage/CoursesPage.tsx'));
@@ -29,8 +29,6 @@ const InstractorDash = lazy(() => import(/* webpackChunkName: "instructor-dash" 
 const InstractSettings = lazy(() => import(/* webpackChunkName: "instructor-settings" */ './instructorDash/InstractSettings.tsx'));
 const CreatCourse = lazy(() => import(/* webpackChunkName: "create-course" */ './instructorDash/AddCourse/CreatCourse.tsx'));
 const Earning = lazy(() => import(/* webpackChunkName: "earning" */ './instructorDash/Earning.tsx'));
-const IstractCourses = lazy(() => import(/* webpackChunkName: "instructor-courses" */ './instructorDash/IstractCourses.tsx'));
-const CourseDetail = lazy(() => import(/* webpackChunkName: "course-detail" */ './instructorDash/CourseDetail.tsx'));
 const MyCourse = lazy(() => import(/* webpackChunkName: "my-course" */ './instructorDash/MyCourse.tsx'));
 const AdminCourse = lazy(() => import(/* webpackChunkName: "admin-course" */ './Admin/AdminCourse.tsx'));
 const InstructorList = lazy(() => import(/* webpackChunkName: "instructor-list" */ './Admin/InstructorList.tsx'));
@@ -60,7 +58,7 @@ const routes = createBrowserRouter([
           { path: 'settings', element: <ProfileSettings /> },
           { path: 'usercourse', element: <Courses /> },
           { path: 'Teachers', element: <Teachers /> },
-          { path: 'Message', element: <Teachers /> },
+          { path: 'Message/:user_id', element: <Message/> },
         ],
       },
       { path: '/Instructor', element: <InstructorPage /> },
@@ -80,7 +78,7 @@ const routes = createBrowserRouter([
       { path: 'dash', element: <InstractorDash /> },
       { path: 'Settings', element: <AdminSettings /> },
       { path: 'Courses', element: <AdminCourse /> },
-      { path: 'Create', element: <NewCourse /> },
+      { path: 'Create', element: <CreatCourse /> },
       { path: 'Payments', element: <Payments /> },
       { path: 'instructorlist', element: <InstructorList /> },
       { path: 'Students', element: <Students /> },
@@ -100,9 +98,10 @@ const routes = createBrowserRouter([
       { path: 'Create', element: <CreatCourse /> },
       { path: 'Earning', element: <Earning /> },
       { path: 'edit/:id', element: <EditeCourse /> },
+      { path: 'Message/:user_id', element: <Message/> },
       {
         path: 'MyCourses',
-        element: <IstractCourses />,
+        element: <MyCourse />,
         children: [
           { path: '', element: <MyCourse /> },
           { path: 'detail/:id', element: <EditeCourse/> },

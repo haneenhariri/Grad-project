@@ -6,7 +6,11 @@
         "About" : "About",
         "Contact" : "Contact",
         "Become an Instructor": "Become an Instructor",
-        "DashBoard": "DashBoard"
+        "DashBoard": "DashBoard",
+        "Create New Course" : "Create New Course",
+        "Earning" : "Earning",
+        "My Courses" : "My Courses",
+        "Settings" : "Settings"
     },
     "signUp":
     {
@@ -29,7 +33,14 @@
         "VisitCourses" : "VisitCourses",
         "View All" :"View All",
         "Next" : "Next",
-        "ResetPassword" : "Reset Password"
+        "ResetPassword" : "Reset Password",
+        "Post Comment" : "Post",
+        "Posting..." : "Posting...",
+        "Add to Fav" : "Add to Fav",
+        "Course Detail" : "Course Detail",
+        "Save & Preview" : "Save & Preview",
+        "Cancel" : "Cancel",
+        "Save & Next" : "Save & Next"
     },
     "hero":
     {
@@ -56,8 +67,25 @@
     },
     "CoursesSection":
     {
-        "title":"Recently added courses"
+        "title":"Recently added courses",
+        "more" : "We have more Courses.",
+        "Browse" : "Browse All",
+        "CourseBy" : "Course by : ",
+        "Rating" : "Rating:",
+        "Price" : "Price"
     },
+    "Basic Information" : "Basic Information",
+    "Advance Information" : "Advance Information",
+    "Curriculum" : "Curriculum",
+    "Title [en]" : "Title [en]",
+    "TitleP[en]" : "Course title in English",
+    "TitleP[ar]" : "Course title in Arabic ",
+    "Title [ar]" : "Title [ar]",
+    "Publish Course" : "Publish Course",
+    "Category" : "Course Category:",
+    "SubCategory" : "Course Sub-category:",
+    "SelectCategory" : "Select a category",
+    "SelectSubCategory" : "Select a Sub-category",
     "Enter verification code" : "Enter verification code",
     "Confirm New Password" : "Confirm New Password",
     "New Password" : "Enter New password ",
@@ -106,12 +134,18 @@
     "Bp5" : "Develop a portfolio showcasing your skills and abilities to potential employers.",
     "Bh6" : "Interactive Learning Environment",
     "Bp6" : "Collaborate with fellow learners, exchanging ideas and feedback to enhance your understanding.",
-    "instructor" : "By John Smith",
-    "weeks" : "4 Weeks",
+    "weeks" : "Weeks",
     "Beginner" : "Beginner",
     "Intermediate" : "Intermediate",
-    "Expert" : "Expert",
-    "title" : "Web Design Fundamentals",
-    "des" : "Learn the fundamentals of web design, including HTML, CSS, and responsive design principles. Develop the skills to create visually appealing and user-friendly websites.",
-    "GetNow" : "Get it Now"
+    "Advance" : "Advance",
+    "GetNow" : "Get it Now",
+    "level" : " Level",
+    "SelectLevel" : "Select Level ",
+    "CourseLanguage" : "Course Language",
+    "SelectCourseLanguage" : "Select course language",
+    "english" : "english",
+    "arabic" : "arabic",
+    "Duration" : "Duration",
+    "CourseDuration": "Course duration",
+    "CoursePrice" : "Course price"
 }

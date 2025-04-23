@@ -33,7 +33,7 @@ export default function DashHead() {
       }
     }, []);
   return (
-    <div className=" w-full shadow-sm lg:px-10 px-5 flex items-center justify-between py-2.5 bg-white h-[61px]">
+    <div className=" w-full shadow-sm  px-5 flex items-center justify-between py-2.5 bg-white h-[61px]">
       <h3 className="text-lg font-semibold">{userName}</h3>
       <div className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden">
         {profileImage ? (

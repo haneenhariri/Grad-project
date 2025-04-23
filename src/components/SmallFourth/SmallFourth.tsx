@@ -1,5 +1,12 @@
-
-export default function SmallFourth({pic,alt,title,desribtion,color}) {
+interface SmallFourthProp
+{
+  pic:string;
+  alt:string;
+  title:string;
+  desribtion:string;
+  color:string;
+}
+export default function SmallFourth({pic,alt,title,desribtion,color} : SmallFourthProp) {
   return (
     <div className="bg-white flex justify-center items-center flex-col py-5 px-1 w-1/4		 mr-4">
         <div className=  {` w-16 h-16 flex justify-center items-center mb-6  ${color} ` }  >

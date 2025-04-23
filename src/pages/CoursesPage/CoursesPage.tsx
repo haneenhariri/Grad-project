@@ -284,7 +284,8 @@ if (selectedCategories.length > 0) {
                 level={course.level}
                 instructor={course.instructor}
                 title={course.title}
-                description={course.description}
+                rating={course.rate}
+                mainCategoryName={course.mainCategoryName}
               />
             ))}
           </div>

@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
-import { CouCard } from '../types/interfaces';
 import { fetchMyCourses } from '../services/profileStd';
 import { deleteCourse } from '../services/courses';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { myCourseProp } from '../types/interfaces';
+
 
 
 export default function MyCourse() {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-    const [courses, setCourses] = useState<CouCard[]>([]);
-    const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-    const [language, setLanguage] = useState<'en' | 'ar'>('en');  // تحديد اللغة
-
-  const handleDeleteCourse = async (id: number) => {
+  const [courses, setCourses] = useState<myCourseProp[]>([]);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
+  const handleDeleteCourse = async ( id : number ) => {
     try {
       await deleteCourse(id); 
       setCourses((prevCourses) => prevCourses.filter((course) => course.id !== id));  
@@ -33,11 +32,10 @@ export default function MyCourse() {
     }, []);
   return (
     <div>
-
         <div className="grid grid-cols-3 my-5 gap-5">
           {courses?.map((course, index) => (
               <div key={index} className=" p-5 bg-gray-300/15 rounded-lg">
-                <img src={`http://127.0.0.1:8000/storage/${course?.cover}`} alt={course.title} className="w-full h-48" />
+                <img src={`http://127.0.0.1:8000/storage/${course?.cover}`} alt={course.title[lang]} className="w-full h-48" />
                 <div className=" flex justify-between my-5">
                  <div className=" flex gap-2">
                    <span className=" p-1 bg-violet-600/10 border-violet-950 border text-xs rounded-md">{course.duration} weeks</span>
@@ -65,8 +63,8 @@ export default function MyCourse() {
                     )}
                  </div>
                 </div>
-                <h3 className="font-bold text-xl mb-2.5">{course.title[language]}</h3> {/* اختيار العنوان بناءً على اللغة */}
-                <p className="text-sm text-gray-600 mb-5 line-clamp-2">{course.description[language]}</p> {/* اختيار الوصف بناءً على اللغة */}
+                <h3 className="font-bold text-xl mb-2.5">{course.title[lang]}</h3> 
+                <p className="text-sm text-gray-600 mb-5 line-clamp-2">{course.description[lang]}</p> 
                 </div>
           ))}
         </div>

@@ -12,6 +12,7 @@ import { setSecureCookie } from "../../utils/cookiesHelper";
 import { AxiosError } from "axios";
 import { showToast } from "../../utils/toast";
 import Spinner from "../Spinner/Spinner";
+import Label from "../../Ui/Label/Label";
 
 export default function Login({ btn }: logbtn) {
   const { t } = useTranslation();
@@ -46,6 +47,7 @@ export default function Login({ btn }: logbtn) {
       if (data.data.token) {
         setSecureCookie("token", data.data.token);
         setSecureCookie("role", data.data.role);
+        setSecureCookie("id",data.data.user.id.toString());
         dispatch(loginSuccess(data.data.token));
         navigate("/");
       } else {
@@ -67,9 +69,7 @@ export default function Login({ btn }: logbtn) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mb-6">
-        <label className="mb-2.5 font-medium text-base block">
-          {t("Email")}
-        </label>
+        <Label label="Email"/>
         <input
           {...register("email")}
           className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
@@ -81,10 +81,7 @@ export default function Login({ btn }: logbtn) {
         {errors.email && (
           <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
         )}
-
-        <label className="mb-2.5 font-medium text-base block">
-          {t("Password")}
-        </label>
+        <Label label="Password"/>
         <input
           {...register("password")}
           className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${

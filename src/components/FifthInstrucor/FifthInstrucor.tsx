@@ -1,6 +1,15 @@
-import React from 'react'
-
-export default function FifthInstrucor({color,title,desc,li1,li2,li3,li4,pic1,}) {
+interface FifthInstrucorProps
+{
+  color : string;
+  title:string;
+  desc:string;
+  li1:string;
+  li2:string;
+  li3:string;
+  li4:string;
+  pic1:string;
+}
+export default function FifthInstrucor({color,title,desc,li1,li2,li3,li4,pic1} : FifthInstrucorProps) {
   return (
     <section className={ ` px-4 lg:px-20 desktop:px-40 flex justify-between py-24  ${color} `} >
       <div className='w-1/2'>

@@ -16,7 +16,7 @@ import { RootState } from "../../redux/store";
 import { imgProfile } from "../../services/profileStd";
 
 export default function OneCourse() {
-  const { id } = useParams<{ id }>();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);

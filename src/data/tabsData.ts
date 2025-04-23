@@ -1,3 +1,4 @@
+const user_id = 2;
 export const stdTabs = [
     {
         path:'/User/settings',
@@ -12,7 +13,7 @@ export const stdTabs = [
         text:'Teachers',
     },
     {
-        path:'/User/Message',
+        path:`/User/Message/${user_id}`,
         text:'Message',
     },
 ]

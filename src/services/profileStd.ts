@@ -7,6 +7,16 @@ export const imgProfile= async () =>
     console.log(respons.data.data)
     return respons.data;
 }
+
+export const instId= async () => 
+{
+    const respons = await axiosInstance.get('/profile');
+    const instId = respons.data.user_id;
+    console.log(instId)
+    localStorage.setItem('inst_id', instId.toString());
+    return instId;
+}
+
 export const EditProfile= async (information : EditProfileProps) => 
 {
     const formData = new FormData();

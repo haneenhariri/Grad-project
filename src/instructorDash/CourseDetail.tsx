@@ -3,7 +3,6 @@ import Adv from '../assets/AddCourse/ClipboardText.png';
 import Cur from '../assets/AddCourse/MonitorPlay.png';
 import Pub from '../assets/AddCourse/PlayCircle (1).png';
 import up from '../assets/AddCourse/UploadSimple.png';
-import img from '../assets/Image (28).png';
 import Button from '../Ui/Button/Button';
 import { useEffect, useState } from 'react';
 import { allCategories, watchSingleCourse } from '../services/courses';
@@ -242,7 +241,7 @@ export default function EditCourse() {
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
-                ))}
+                ))} 
               </select>
             </div>
             <div className='w-1/2'>

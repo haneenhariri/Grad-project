@@ -1,4 +1,3 @@
-
 import basic from '../../assets/AddCourse/Stack (1).png';
 import Adv from '../../assets/AddCourse/ClipboardText.png';
 import Cur from '../../assets/AddCourse/MonitorPlay.png';
@@ -7,24 +6,20 @@ import up from '../../assets/AddCourse/UploadSimple.png';
 import img from '../../assets/Image (28).png';
 import Button from '../../Ui/Button/Button';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { allCategories } from '../../services/courses';
+import axios, { AxiosError } from 'axios';
 import { getSecureCookie } from '../../utils/cookiesHelper';
 import { showToast } from '../../utils/toast';
-import { useParams } from 'react-router-dom';
-import { Category, CourseType, Lesson, SubCategory } from '../../types/interfaces';
-import { allCategories, watchSingleCourseInAR, watchSingleCourseInEn } from '../../services/courses';
-  
+import { Category, Lesson, SubCategory } from '../../types/interfaces';
+import Spinner from '../../components/Spinner/Spinner';
+ 
 
-
-export default function EditCourse() {
+export default function CreateCourse() {
   const [step, setStep] = useState(1);
-  const { id } = useParams<{ id: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
   const [category_id, setCategory_id] = useState("");
   const [subCategory_id, setSubCategory_id] = useState("");
   const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
-  const handleNext = () => setStep((prev) => (prev < 4 ? prev + 1 : prev));
-  const handlePrev = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
   const [titleEn, setTitleEn] = useState('');
   const [titleAr, setTitleAr] = useState('');
   const [level, setLevel] = useState('');
@@ -32,13 +27,28 @@ export default function EditCourse() {
   const [descriptionEn, setDescriptionEn] = useState('');
   const [descriptionAr, setDescriptionAr] = useState('');
   const [price, setPrice] = useState('');
+  const [courseLanguage,setCourseLanguage] = useState('');
   const [cover, setCover] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const token = getSecureCookie("token");
-  const [courseLanguage,setCourseLanguage] = useState('');
-  const [course, setCourse] = useState<CourseType[]>([]);
-  const [lessons, setLessons] = useState<Lesson[]>([]); // تأكد من أن القيمة الافتراضية مصفوفة فارغة
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lessons, setLessons] = useState<Lesson[]>([
+    {
+      titleAr: "الدرس الأول",
+      titleEn: "Lesson 1",
+      descriptionAr: "وصف الدرس الأول",
+      descriptionEn: "Lesson 1 description",
+      files: [
+        {
+          path: null,
+          type: "video" 
+        },
+      ],
+    },
+  ]);
 
+  const handleNext = () => setStep((prev) => (prev < 4 ? prev + 1 : prev));
+  const handlePrev = () => setStep((prev) => (prev > 1 ? prev - 1 : prev));
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -48,110 +58,173 @@ export default function EditCourse() {
     }
   };
 
-    const handleLessonChange = (
-      lessonIndex: number,
-      field: keyof Omit<Lesson, 'files'>,
-      value: string
-    ) => {
+  const handleLessonChange = (
+    lessonIndex: number,
+    field: keyof Omit<Lesson, 'files'>,
+    value: string
+  ) => {
+    const updatedLessons = [...lessons];
+    updatedLessons[lessonIndex][field] = value;
+    setLessons(updatedLessons);
+  };
+
+  const handleFileChange = (
+    lessonIndex: number,
+    fileIndex: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
       const updatedLessons = [...lessons];
-      updatedLessons[lessonIndex][field] = value;
+      const fileType = file.type.includes("video") ? "video" : "file";
+      updatedLessons[lessonIndex].files[fileIndex] = {
+        path: file,
+        type: fileType,
+      };
       setLessons(updatedLessons);
-    };
-    const handleFileChange = (
-      lessonIndex: number,
-      fileIndex: number,
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      const file = event.target.files?.[0];
-      if (file) {
-        const updatedLessons = [...lessons];
-        const fileType = file.type.includes("video") ? "video" : "file";
-        updatedLessons[lessonIndex].files[fileIndex] = {
-          path: file,
-          type: fileType,
-        };
-        setLessons(updatedLessons);
-      }
-    };
-    const addLesson = () => {
-      setLessons([
-        ...lessons,
-        {
-          titleAr: `الدرس ${lessons.length + 1}`,
-          titleEn: `Lesson ${lessons.length + 1}`,
-          descriptionAr: "وصف الدرس",
-          descriptionEn: "Lesson description",
-          files: [
-            {
-              path: null,
-              type: "video",
-            },
-          ],
-        },
-      ]);
-    };
-    const addFile = (lessonIndex: number) => {
-      const updatedLessons = [...lessons];
-      updatedLessons[lessonIndex].files.push({
-        path: null,
-        type: "video"
-      });
-      setLessons(updatedLessons);
-    };
+    }
+  };
+
+  const addLesson = () => {
+    setLessons([
+      ...lessons,
+      {
+        titleAr: `الدرس ${lessons.length + 1}`,
+        titleEn: `Lesson ${lessons.length + 1}`,
+        descriptionAr: "وصف الدرس",
+        descriptionEn: "Lesson description",
+        files: [
+          {
+            path: null,
+            type: "video",
+          },
+        ],
+      },
+    ]);
+  };
+
+  const addFile = (lessonIndex: number) => {
+    const updatedLessons = [...lessons];
+    updatedLessons[lessonIndex].files.push({
+      path: null,
+      type: "video"
+    });
+    setLessons(updatedLessons);
+  };
+
+  const removeFile = (lessonIndex: number, fileIndex: number) => {
+    const updatedLessons = [...lessons];
+    updatedLessons[lessonIndex].files.splice(fileIndex, 1);
+    setLessons(updatedLessons);
+  };
+
+  const removeLesson = (lessonIndex: number) => {
+    const updatedLessons = [...lessons];
+    updatedLessons.splice(lessonIndex, 1);
+    setLessons(updatedLessons);
+  };
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = event.target.value;
+    setCategory_id(selectedId);
+    const selectedCategory = categories.find((cat) => String(cat.id) === selectedId);
+    setSubCategories(selectedCategory?.sub_category || []);
+    setSubCategory_id("");
+  };
+
+  async function send(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsSubmitting(true);
+    // Validation
+    if (!titleEn || !titleAr || !subCategory_id || !cover) {
+      showToast('Please fill all required fields', 'error');
+      return;
+    }
   
-    const removeFile = (lessonIndex: number, fileIndex: number) => {
-      const updatedLessons = [...lessons];
-      updatedLessons[lessonIndex].files.splice(fileIndex, 1);
-      setLessons(updatedLessons);
-    };
-    const removeLesson = (lessonIndex: number) => {
-      const updatedLessons = [...lessons];
-      updatedLessons.splice(lessonIndex, 1);
-      setLessons(updatedLessons);
-    };
-    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-      const selectedId = event.target.value;
-      setCategory_id(selectedId);
-      const selectedCategory = categories.find((cat) => String(cat.id) === selectedId);
-      setSubCategories(selectedCategory?.sub_category || []);
-      setSubCategory_id("");
-    };
-    useEffect(() => {
-      const fetchCourse = async () => {
-        try {
-          const course = await watchSingleCourseInAR(Number(id));
-          setCourse(course);
-          setTitleAr(course.title);
-          setCategory_id(course.category_id);
-          setDuration(course.duration);
-          setDescriptionAr(course.description);
-          setCourseLanguage(course.language)
-          setPrice(course.price);
-          const fullCoverPath = course.cover
-            ? `http://127.0.0.1:8000/storage/${course.cover}`
-            : null;
-          setCover(fullCoverPath); // تعيين المسار الكامل للصورة
-          setPreview(fullCoverPath); // تعيين المسار الكامل للعرض
-        } catch (error) {
-          showToast("Error loading course", 'error');
+    if (lessons.length === 0) {
+      showToast('Please add at least one lesson', 'error');
+      return;
+    }
+  
+    for (const lesson of lessons) {
+      if (lesson.files.length === 0 || lesson.files.some(file => !file.path)) {
+        showToast(`Lesson "${lesson.titleEn}" must have at least one valid file`, 'error');
+        return;
+      }
+    }
+  
+    try {
+      const formData = new FormData();
+      
+      // Basic course info
+      formData.append("duration", duration);
+      formData.append("level", level);
+      formData.append("title[en]", titleEn);
+      formData.append("title[ar]", titleAr);
+      formData.append("description[en]", descriptionEn);
+      formData.append("description[ar]", descriptionAr);
+      formData.append("sub_category_id", subCategory_id);
+      formData.append("price", price);
+      formData.append("course_language", courseLanguage);
+      if (cover) {
+        formData.append("cover", cover);
+      }
+  
+      // Format lessons data to match Laravel's expected array format
+      lessons.forEach((lesson, lessonIndex) => {
+        formData.append(`lessons[${lessonIndex}][title][en]`, lesson.titleEn);
+        formData.append(`lessons[${lessonIndex}][title][ar]`, lesson.titleAr);
+        formData.append(`lessons[${lessonIndex}][description][en]`, lesson.descriptionEn);
+        formData.append(`lessons[${lessonIndex}][description][ar]`, lesson.descriptionAr);
+  
+        // Format files array
+        lesson.files.forEach((file, fileIndex) => {
+          if (file.path) {
+            // Append each file with proper array notation
+            formData.append(`lessons[${lessonIndex}][files][${fileIndex}][path]`, file.path);
+            formData.append(`lessons[${lessonIndex}][files][${fileIndex}][type]`, file.type);
+          }
+        });
+      });
+  
+      const response = await axios.post("http://127.0.0.1:8000/api/courses", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      showToast("Course created successfully!", 'success');
+      console.log("API Response:", response.data);
+  
+    } catch ( error: AxiosError<{ message?: string }>) {
+      console.error("Full error:", error);
+      
+      let errorMessage = 'Error creating course';
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        
+        // Handle Laravel validation errors if they exist
+        if (error.response.data.errors) {
+          const firstError = Object.values(error.response.data.errors)[0];
+          errorMessage = Array.isArray(firstError) ? firstError[0] : 'Validation error';
+        } else {
+          errorMessage = error.response.data?.message || errorMessage;
         }
-      };
-      fetchCourse();
-    }, [id]);
-    useEffect(() => {
-      const fetchCourse = async () => {
-        try {
-          const course = await watchSingleCourseInEn(Number(id));
-          setCourse(course);
-          setTitleEn(course.title);
-          setDescriptionEn(course.description);
-          setLevel(course.level);
-        } catch (error) {
-          showToast("Error loading course", 'error');
-        }
-      };
-      fetchCourse();
-    }, [id]);
+      } else if (error.request) {
+        console.error("No response received:", error.request);
+        errorMessage = 'No response from server';
+      } else {
+        console.error('Request setup error:', error.message);
+      }
+  
+      showToast(errorMessage, 'error');
+      
+    } finally {
+      setIsSubmitting(false); // تعطيل حالة التحميل بغض النظر عن النتيجة
+    }
+  }
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -164,73 +237,43 @@ export default function EditCourse() {
     };
     fetchCategory();
   }, []);
-
-    async function sendCourse(event: React.FormEvent<HTMLFormElement>) {
-      event.preventDefault();
-      try {
-        const formData = new FormData();
-        // Basic course info
-        formData.append("_method", "PUT"); 
-        formData.append("duration", duration);
-        formData.append("level", level);
-        formData.append("title[en]", titleEn);
-        formData.append("title[ar]", titleAr);
-        formData.append("description[en]", descriptionEn);
-        formData.append("description[ar]", descriptionAr);
-        formData.append("sub_category_id", subCategory_id);
-        formData.append("price", price);
-        formData.append("course_language", courseLanguage);
-        if (cover && typeof cover !== 'string') {
-          formData.append("cover", cover);
-        }
-    
-        const response = await axios.post(`http://127.0.0.1:8000/api/courses/${id}?_method=PUT`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        });
-    
-        showToast("Course update successfully!", 'success');
-        console.log("API Response:", response.data);
-    
-      } catch (error: any) {
-        console.error("Full error:", error);
-      }
-    }
+  if(isSubmitting){
+    return <Spinner/>
+  }
   return (
-    <div className="bg-white rounded-md">
-    {/* head */}
-    <div className="flex items-center border-b">
-      <div className={`${step == 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={basic} alt="Basic Information" />
-        <span>Basic Information</span>
+    <form onSubmit={send} className="bg-white rounded-md">
+      {/* Header */}
+      <div className="flex items-center border-b">
+        <div className={`${step === 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
+          <img  src={basic} alt="Basic Information" />
+          <span>Basic Information</span>
+        </div>
+        <div className={`${step === 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
+          <img src={Adv} alt="Advance Information" />
+          <span>Advance Information</span>
+        </div>
+        <div className={`${step === 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
+          <img src={Cur} alt="Curriculum" />
+          <span>Curriculum</span>
+        </div>
+        <div className={`${step === 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
+          <img src={Pub} alt="Publish Course" />
+          <span>Publish Course</span>
+        </div>
       </div>
-      <div className={`${step == 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Adv} alt="Advance Information" />
-        <span>Advance Information</span>
+
+      <div className='p-5 flex border-b justify-between'>
+        {step === 1 && <h2 className='text-2xl font-semibold'>Basic Information</h2>}
+        {step === 2 && <h2 className='text-2xl font-semibold'>Advance Information</h2>}
+        {step === 3 && <h2 className='text-2xl font-semibold'>Course Curriculum</h2>}
+        {step === 4 && <h2 className='text-2xl font-semibold'>Publish Course</h2>}
+        <div className='flex gap-5'>
+          <Button text='Save' textColor='text-violet-950' Bg='bg-[#FFEEE8]' />
+          <Button type='button' text='Save & Preview' onClick={handlePrev} textColor='text-violet-950' />
+        </div>
       </div>
-      <div className={`${step == 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Cur} alt="Curriculum" />
-        <span>Curriculum</span>
-      </div>
-      <div className={`${step == 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Pub} alt="Publish Course" />
-        <span>Publish Course</span>
-      </div>
-    </div>
-    <div className='p-5 flex border-b justify-between'>
-      {step === 1 && (<h2 className='text-2xl font-semibold'>Basic Information</h2>)}
-      {step === 2 && (<h2 className='text-2xl font-semibold'>Advance Information</h2>)}
-      {step === 3 && (<h2 className='text-2xl font-semibold'>Course Curriculum</h2>)}
-      {step === 4 && (<h2 className='text-2xl font-semibold'>Publish Course</h2>)}
-      <div className='flex gap-5'>
-        <Button text='Save' textColor='text-violet-950' Bg='bg-[#FFEEE8]' />
-        <Button type='button' text='Save & Preview' onClick={handlePrev} textColor='text-violet-950' />
-      </div>
-    </div>
+
       {/* Step 1: Basic Information */}
-      <form onSubmit={sendCourse}>
       {step === 1 && (
         <div className='p-5'>
           <div className='flex justify-between gap-2'>
@@ -278,7 +321,7 @@ export default function EditCourse() {
               >
                 <option value="">Select a category</option>
                 {categories.map((cat) => (
-                  <option selected={true} key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={cat.id}>
                     {cat.name}
                   </option>
                 ))}
@@ -297,7 +340,7 @@ export default function EditCourse() {
               >
                 <option value="">Select a sub-category</option>
                 {subCategories.map((sub) => (
-                  <option key={sub.id} selected={true} value={sub.id}>{sub.name}</option>
+                  <option key={sub.id} value={sub.id}>{sub.name}</option>
                 ))}
               </select>
             </div>
@@ -316,25 +359,25 @@ export default function EditCourse() {
                 required
               >
                 <option value="">Select Level</option>
-                <option selected={true} value="beginner">Beginner</option>
-                <option selected={true} value="intermediate">Intermediate</option>
-                <option selected={true} value="advance">Advance</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advance">Advance</option>
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="lang">
+              <label className="mb-2.5 font-medium text-base block" htmlFor="level">
                 Course Language
               </label>
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                id="lang"
+                id="level"
                 value={courseLanguage}
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
                 <option value="">Select course language</option>
-                <option selected={true} value="english">english</option>
-                <option selected={true} value="arabic">arabic</option>
+                <option value="english">english</option>
+                <option value="arabic">arabic</option>
               </select>
             </div>
             <div className='w-1/2'>
@@ -429,6 +472,7 @@ export default function EditCourse() {
               onChange={(e) => setDescriptionEn(e.target.value)}
               required
             />
+
             <label className="mb-2.5 font-medium text-base block" htmlFor="descriptionAr">
               Course Description [Ar]
             </label>
@@ -440,14 +484,15 @@ export default function EditCourse() {
               onChange={(e) => setDescriptionAr(e.target.value)}
               required
             />
+
             <div className='mt-5 flex justify-between'>
               <Button type='button' text='Back' textColor='border-gray border text-violet-950' onClick={handlePrev} />
-              <Button type='submit' text='Update Course info' textColor='text-white' Bg='bg-violet-950' />
+              <Button type='button' text='Save & Next' textColor='text-white' onClick={handleNext} Bg='bg-violet-950' />
             </div>
           </div>
         </div>
       )}
-      </form>
+
       {/* Step 3: Curriculum */}
       {step === 3 && (
         <div className='p-5'>
@@ -558,6 +603,7 @@ export default function EditCourse() {
           </div>
         </div>
       )}
+
       {/* Step 4: Publish Course */}
       {step === 4 && (
         <div className='p-5 min-h-screen flex flex-col items-center justify-center'>
@@ -605,6 +651,6 @@ export default function EditCourse() {
           </div>
         </div>
       )}
-  </div>
+    </form>
   );
 }

@@ -6,11 +6,11 @@ import DashHead from "../instructorDash/DashHead";
 
 export default function DashLayout() {
   return (
-    <div className=" flex ">
+    <div className="flex h-auto ">
       <DashSide/>
-      <div className="w-full">
+      <div className="w-full ">
         <DashHead/>
-        <div className="lg:px-10 px-5 py-4">
+        <div className=" p-4">
         <ToastProvider/>
         <Outlet/>
         </div>

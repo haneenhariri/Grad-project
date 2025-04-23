@@ -8,13 +8,15 @@ import { AxiosError } from "axios";
 import { showToast } from "../../utils/toast";
 import Spinner from "../Spinner/Spinner";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
+import Label from "../../Ui/Label/Label";
 
 export default function SignUp({ btn }: logbtn) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const validationSchema = Yup.object().shape({
+    
         name: Yup.string().required(t("RequiredField")),
         email: Yup.string()
         .email(t("InvalidEmail"))
@@ -62,9 +64,7 @@ export default function SignUp({ btn }: logbtn) {
 
     return (
         <form className="md:mb-6" onSubmit={handleSubmit(onSubmit)}>
-            <label className="mb-2.5 font-medium md:text-base text-sm block">
-                {t("Name")}
-            </label>
+            <Label label="Name"/>
             <input
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("NamePlace")}
@@ -72,9 +72,7 @@ export default function SignUp({ btn }: logbtn) {
                 {...register("name")}
             />
             {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name.message}</p>}
-            <label className="mb-2.5 font-medium md:text-base text-sm block">
-                {t("Email")}
-            </label>
+            <Label label="Email"/>
             <input
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("EmailPlace")}
@@ -83,9 +81,7 @@ export default function SignUp({ btn }: logbtn) {
 
             />
             {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>}
-            <label className="mb-2.5 font-medium md:text-base text-sm block">
-                {t("Password")}
-            </label>
+            <Label label="Password"/>
             <input
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("PasswordPlace")}
@@ -93,9 +89,7 @@ export default function SignUp({ btn }: logbtn) {
                 {...register("password")}
             />
             {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password.message}</p>}
-            <label className="mb-2.5 font-medium md:text-base text-sm block">
-                {t("Confirm")}
-            </label>
+            <Label label="Confirm"/>
             <input
                 className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
                 placeholder={t("Confirm")}

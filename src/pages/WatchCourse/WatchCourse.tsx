@@ -1,4 +1,3 @@
-import courseImg from '../../assets/Video Player.png';
 import arrow from '../../assets/ArrowLeft.png';
 import folder from '../../assets/icons/FolderNotchOpen.png';
 import videoIcon from '../../assets/icons/PlayCircle.png';
@@ -11,7 +10,8 @@ import { watchSingleCourse } from '../../services/courses';
 import { showToast } from '../../utils/toast';
 import Spinner from '../../components/Spinner/Spinner';
 import axios from 'axios';
-import { getSecureCookie, setSecureCookie } from '../../utils/cookiesHelper';
+import { getSecureCookie } from '../../utils/cookiesHelper';
+import Comment from '../../components/Comment/Comment';
 
 export default function WatchCourse() {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ export default function WatchCourse() {
 
   const handleSubmit = () => {
     if (rating === 0) {
-      showToast("Please select a rating before submitting.", 'warning');
+      showToast("Please select a rating before submitting.", 'error');
       return;
     }
     submitRating();
@@ -178,6 +178,7 @@ export default function WatchCourse() {
                 ))}
             </div>
           )}
+          <Comment lesson_id={selectedLesson?.id}/>
         </div>
         <div className='w-5/12'>
           <div className='mb-4 flex justify-between items-center'>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { fetchMyCourses } from "../../services/profileStd";
 import { CouCard } from "../../types/interfaces";
 import { Link } from "react-router-dom";
-import Spinner from "../Spinner/Spinner";
 
 
 export default function MyCourses() {
@@ -36,7 +35,6 @@ export default function MyCourses() {
                  <p className=" font-semibold text-sm">{course?.instructor}</p>
                 </div>
                 <h3 className=" font-bold text-xl mb-2.5">{course?.title}</h3>
-                <p className=" text-sm text-gray-600 mb-5 line-clamp-2">{course.description}</p>
                 <Link to={`/watch/${course.id}`}  className=" bg-White/95 text-sm font-medium p-3.5 rounded-md block text-center">Watch now</Link>
              </div>
           ))}
