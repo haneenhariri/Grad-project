@@ -96,7 +96,7 @@ export default function OneCourse() {
 
   return (
     <>
-      <section className="pt-7.5 pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-20 desktop:px-40">
+      <section className="pt-7.5 pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
         <div className=" md:w-3/4 w-full">
           <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-3.5">{course?.title}</h2>
           <div className="mb-5 w-full flex justify-between items-center">

@@ -88,7 +88,7 @@ export default function WatchCourse() {
 
   return (
     <section className="">
-      <div className='py-2.5 px-4 lg:px-20 desktop:px-40 flex justify-between items-center bg-white'>
+      <div className='py-2.5 pt-[108px] px-4 lg:px-10 desktop:px-40 flex justify-between items-center bg-white'>
         <div className='flex items-center gap-5'>
           <button onClick={() => navigate('/courses')} className='flex rounded-full w-12 h-12 bg-White/95 justify-center items-center'>
             <img src={arrow} alt="" />
@@ -116,7 +116,7 @@ export default function WatchCourse() {
           <Button text='Next lecture' Bg='bg-btn' textColor='text-white' />
         </div>
       </div>
-      <div className='flex gap-6 px-4 lg:px-20 desktop:px-40 py-10 justify-between'>
+      <div className='flex gap-6 px-4 lg:px-10 desktop:px-40 py-10 justify-between'>
         <div className="w-9/12">
           {/* عرض الفيديو إذا كان موجودًا */}
           {selectedLesson?.files?.some((file: any) => file.type === 'video') ? (

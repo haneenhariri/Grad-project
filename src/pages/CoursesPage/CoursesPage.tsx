@@ -118,7 +118,7 @@ if (selectedCategories.length > 0) {
   };
 
   return (
-    <section className="pt-7.5 pb-12 px-4 lg:px-20 desktop:px-40">
+    <section className="pt-[120px] pb-12 px-4 lg:px-10 desktop:px-40">
       <div className="flex sm:justify-between sm:flex-row flex-col gap-y-3 sm:items-center">
       <button
           className="flex w-max gap-2.5 items-center py-2.5 px-5 border border-violet-950"
@@ -272,7 +272,7 @@ if (selectedCategories.length > 0) {
             className={`grid gap-6 ${
               isFilterVisible
                 ? "lg:grid-cols-2 md:grid-cols-1"
-                : "grid-cols-1 lg:grid-cols-3 sm:grid-cols-2"
+                : "grid-cols-1 lg:grid-cols-4 sm:grid-cols-2"
             } w-full`}
           >
             {currentItems?.map((course, index) => (
@@ -285,7 +285,8 @@ if (selectedCategories.length > 0) {
                 instructor={course.instructor}
                 title={course.title}
                 rating={course.rate}
-                mainCategoryName={course.mainCategoryName}
+                price={course.price}
+                mainCategoryName={course?.sub_category.main_category?.name}
               />
             ))}
           </div>

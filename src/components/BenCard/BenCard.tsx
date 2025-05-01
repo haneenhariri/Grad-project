@@ -2,13 +2,16 @@ import { BenfCard } from "../../types/interfaces";
 import { useTranslation } from "react-i18next";
 
 
-export default function BenCard({num , h , p} : BenfCard) {
+export default function BenCard({img ,imgRTL, h , p , flex} : BenfCard) {
  const { t } = useTranslation();
   return (
-    <div className=" lg:p-10 p-5 bg-white rounded-lg ">
-        <h2 className=" text-right font-bold lg:text-[60px] md:text-[45px] text-2xl md-5 md:mb-10">{t(num)}</h2>
-        <h1 className=" font-semibold sm:text-xl text-lg mb-2.5">{t(h)}</h1>
-        <p className=" sm:text-base text-sm font-normal">{t(p)}</p>
+    <div className={`flex ${flex} items-center gap-8 justify-between w-full `}>
+        <img src={img} alt={h} className=" w-2/5 rtl:hidden"/>
+        <img src={imgRTL} alt={h} className=" w-2/5 hidden rtl:block"/>
+        <div className=" w-1/2">
+          <h2>{t(h)}</h2>
+          <p>{t(p)}</p>
+        </div>
     </div>
   )
 }

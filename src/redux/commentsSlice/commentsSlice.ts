@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../services/axiosInstance";
+import { CommentUser } from "../../components/Comment/Comment";
 
 interface Comment {
   id: number;
   content: string;
+  user : CommentUser[];
   replies: Comment[];
 }
 
@@ -24,6 +26,7 @@ export const fetchComments = createAsyncThunk(
     const response = await axiosInstance.get(
       `http://127.0.0.1:8000/api/lessons/${lesson_id}?lang=ar`
     );
+    console.log(response.data.data.comments)
     return response.data.data.comments;
   }
 );

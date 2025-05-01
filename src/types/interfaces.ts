@@ -16,10 +16,27 @@ export interface form
     LogBtn : string;
 
 };
+export interface CommentData {
+  id: number;
+  content: string;
+  lesson_id: number;
+  comment_id: number | null;
+  user_id: number;
+  user: {
+    id: number;
+    name: string;
+    profile_picture: string;
+    role: string;
+  };
+  replies: CommentData[];
+  created_at: string;
+}
+
 export interface AddCommentProps {
-    lesson_id: number;
-    onCommentAdded: () => void;
-  }
+  lesson_id: number;
+  comment_id?: number | null;
+  onCommentAdded: (newComment: CommentData) => void;
+}
 export interface CourseTypeProps {
   id: number;
   instructor_id: number;
@@ -68,7 +85,9 @@ export interface title
 }
 export interface BenfCard
 {
-    num: string;
+    flex:string;
+    imgRTL:string;
+    img: string;
     h : string;
     p : string;
 }
