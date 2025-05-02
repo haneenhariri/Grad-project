@@ -40,7 +40,10 @@
         "Course Detail" : "Course Detail",
         "Save & Preview" : "Save & Preview",
         "Cancel" : "Cancel",
-        "Save & Next" : "Save & Next"
+        "Save & Next" : "Save & Next",
+        "Start teaching" : "Start teaching",
+        "Join the Family" : "Join the Family",
+        "Browse all courses" : "Browse all courses"
     },
     "hero":
     {
@@ -67,6 +70,7 @@
     },
     "CoursesSection":
     {
+        "Become" : "Become an instructor",
         "title":"Recently added courses",
         "more" : "We have more Courses.",
         "Browse" : "Browse All",
@@ -74,6 +78,18 @@
         "Rating" : "Rating:",
         "Price" : "Price"
     },
+    "Support" : "Support",
+    "Help Center" : "Help Center",
+    "FAQs" : "FAQs",
+    "Terms & Condition" : "Terms & Condition",
+    "Privacy Policy" : "Privacy Policy",
+    "Certified Instructor" : "Certified Instructor",
+    "Total Rate" : "Total Rate",
+    "Top 4 Category" : "Top 4 Category",
+    "Quick Links" : "Quick Links",
+    "footerP" : "Learn from Industry Experts and Enhance Your Skills.",
+    "subFooter" : "Start learning with 67.1k students around the world.",
+    "Instructors": "Instructors from around the world teach millions of students on Orbah. We provide the tools and skills to teach what you love.",
     "Basic Information" : "Basic Information",
     "Advance Information" : "Advance Information",
     "Curriculum" : "Curriculum",
@@ -122,18 +138,6 @@
     "LoginGoogle" : "Login with Google",
     "SignGoogle" : "Sign Up with Google",
     "Name" : "Name",
-    "Bh" : "Flexible Learning Schedule",
-    "Bp" : "Fit your coursework around your existing commitments and obligations.",
-    "Bh2" : "Expert Instruction",
-    "Bp2" : "Learn from industry experts who have hands-on experience in design and development.",
-    "Bh3" : "Diverse Course Offerings",
-    "Bp3" : "Explore a wide range of design and development courses covering various topics.",
-    "Bh4" : "Updated Curriculum",
-    "Bp4" : "Access courses with up-to-date content reflecting the latest trends and industry practices.",
-    "Bh5" : "Practical Projects and Assignments",
-    "Bp5" : "Develop a portfolio showcasing your skills and abilities to potential employers.",
-    "Bh6" : "Interactive Learning Environment",
-    "Bp6" : "Collaborate with fellow learners, exchanging ideas and feedback to enhance your understanding.",
     "weeks" : "Weeks",
     "Beginner" : "Beginner",
     "Intermediate" : "Intermediate",

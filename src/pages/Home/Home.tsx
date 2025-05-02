@@ -1,4 +1,3 @@
-import Benefits from "../../components/Benefits/Benefits";
 import Courses from "../../components/Courses/Courses";
 import FooterSup from "../../components/Footer/FooterSup";
 import Hero from "../../components/Hero/Hero";
@@ -13,7 +12,6 @@ export default function Home() {
       <Hero/>
       <TopCategory/>
       <Courses/>
-      <Benefits/>
       <Instuctor/>
       </section>
       <FooterSup/>
