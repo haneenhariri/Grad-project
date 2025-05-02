@@ -79,6 +79,12 @@
         "Price" : "السعر",
         "Recommended Courses" : "الدورات الموصى بها"
     },
+    "All Courses" : "كامل الكورسات " ,
+    "Suggestion" : "  المقترحة : ",
+    "Sort by" : "ترتيب حسب :",
+    "Filter" : "العرض حسب",
+    "Most Popular" : "الأكثر شعبية",
+    "Trending" : "الأكثر رواجًا" ,
     "Support": "الدعم الفني",
     "Help Center" : "مركز الدعم",
     "FAQs" : "الأسئلة الشائعة",

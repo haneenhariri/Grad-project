@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import filterIcon from "../../assets/Faders.png";
 import CourseCard from "../../components/CourseCrad/CourseCard";
 import nextIcon from '../../assets/slider/ArrowLeft (1).png';
 import prevIcon from '../../assets/slider/ArrowRight (1).png';
 import { allCourses } from "../../services/courses";
 import Spinner from "../../components/Spinner/Spinner";
 import { showToast } from "../../utils/toast";
+import Suggestion from "../../components/Suggestion/Suggestion";
+import FilterButton from "./FilterButton";
+import Sort from "./Sort";
+import { useTranslation } from "react-i18next";
 
 
 export default function CoursesPage() {
@@ -23,6 +26,8 @@ export default function CoursesPage() {
   const [results, setResults] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = isFilterVisible ? 8 : 8;
+  const {t} = useTranslation();
+  
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener("resize", handleResize);
@@ -77,11 +82,11 @@ if (selectedCategories.length > 0) {
     if (selectedOption === "Trending") {
       filtered = [...filtered]
         .sort((a, b) => (b.id ?? 0) - (a.id ?? 0)) 
-        .slice(0, 6);
+        .slice(0, 2);
     } else if (selectedOption === "Most Popular") {
       filtered = [...filtered]
         .sort((a, b) => (b.rating ?? b.Rating ?? 0) - (a.rating ?? a.Rating ?? 0))
-        .slice(0, 6);
+        .slice(0, 8);
     }
     
     setResults(filtered);
@@ -116,32 +121,15 @@ if (selectedCategories.length > 0) {
         : [...prev, value]
     );
   };
-
+  const handelSort = (e : any) => 
+  {
+    setSelectedOption(e.target.value)
+  }
   return (
     <section className="pt-[120px] pb-12 px-4 lg:px-10 desktop:px-40">
       <div className="flex sm:justify-between sm:flex-row flex-col gap-y-3 sm:items-center">
-      <button
-          className="flex w-max gap-2.5 items-center py-2.5 px-5 border border-violet-950"
-          onClick={() => setIsFilterVisible((prev) => !prev)}
-        >
-          <img src={filterIcon} alt="filter" />
-          Filter
-        </button>
-        <div className="flex items-center gap-2.5">
-          <label htmlFor="sort" className="block">
-            Sort by:
-          </label>
-          <select
-            id="sort"
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-            className="bg-transparent border border-violet-950 py-2.5 px-5"
-          >
-            <option value="All Courses">All Courses</option>
-            <option value="Trending">Trending</option>
-            <option value="Most Popular">Most Popular</option>
-          </select>
-        </div>
+        <FilterButton onClick={() => setIsFilterVisible((prev) => !prev)}/>
+        <Sort selectedOption={selectedOption} onClick={handelSort} />
       </div>
       {isFilterVisible && isMobile && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
@@ -204,23 +192,17 @@ if (selectedCategories.length > 0) {
           </div>
         </div>
       )}
-      <div className="lg:flex hidden flex-wrap items-center gap-2.5 pt-6 pb-4 border-b border-violet-950">
-        <h3>Suggestion:</h3>
-        <button className="text-violet-800">user interface</button>
-        <button className="text-violet-800">user experience</button>
-        <button className="text-violet-800">web design</button>
-        <button className="text-violet-800">interface</button>
-        <button className="text-violet-800">app</button>
-      </div>
+      <Suggestion/>
       {loading && (
         <Spinner/>      )}
       {!loading  && (
         <div className="flex gap-6 mt-10">
+          {/* filter side */}
          {!isMobile && isFilterVisible && (
-            <div className="h-max bg-white md:w-4/12 w-1/2 border border-violet-950">
+            <div className="h-max bg-white md:w-3/12 w-1/2 border border-violet-950">
               <div className="p-2">
-                <h3 className="font-bold">Category</h3>
-                {["Web development", "Mobile Development", "AI", "Design", "Programming languages"].map((category) => (
+                <h3 className="font-bold">{t("Category")}</h3>
+                  {["Development", "AI & ML", "Data Science", "Design", "Cyber-security" , "IT & Software"].map((category) => (
                   <div key={category}>
                     <input
                       type="checkbox"
@@ -235,7 +217,7 @@ if (selectedCategories.length > 0) {
                 ))}
               </div>
               <div className="p-2">
-                <h3 className="font-bold">Rating</h3>
+                <h3 className="font-bold">{t("CoursesSection.Rating")}</h3>
                 {[5.000, 4, 3, 2, 1].map((rating) => (
                   <div key={rating}>
                     <input
@@ -251,7 +233,7 @@ if (selectedCategories.length > 0) {
                 ))}
               </div>
               <div className="p-2">
-                <h3 className="font-bold">Course Level</h3>
+                <h3 className="font-bold">{t("level")}</h3>
                 {["Beginner", "Intermediate", "Expert"].map((level) => (
                   <div key={level}>
                     <input
@@ -268,13 +250,8 @@ if (selectedCategories.length > 0) {
               </div>
             </div>
           )}
-          <div
-            className={`grid gap-6 ${
-              isFilterVisible
-                ? "lg:grid-cols-3 md:grid-cols-2"
-                : "grid-cols-1 lg:grid-cols-4 sm:grid-cols-2"
-            } w-full`}
-          >
+          {/* courses */}
+          <div className={`grid gap-6 ${isFilterVisible ? "lg:grid-cols-3 md:grid-cols-2" : "grid-cols-1 lg:grid-cols-4 sm:grid-cols-2" } w-full`}>
             {currentItems?.map((course, index) => (
               <CourseCard
                 key={index}
@@ -292,7 +269,6 @@ if (selectedCategories.length > 0) {
           </div>
         </div>
       )}
-
       {!loading && totalPages > 1 && (
         <div className="flex justify-center gap-4 mt-10">
           {currentPage > 1 && (

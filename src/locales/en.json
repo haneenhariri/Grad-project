@@ -79,6 +79,12 @@
         "Price" : "Price",
         "Recommended Courses":  "Recommended Courses"
     },
+    "All Courses" : "All Courses" ,
+    "Filter" : "Filter", 
+    "Trending" : "Trending",
+    "Most Popular" : "Most Popular",
+    "Suggestion" : "Suggestion:",
+    "Sort by" : "Sort by:",
     "Support" : "Support",
     "Help Center" : "Help Center",
     "FAQs" : "FAQs",
