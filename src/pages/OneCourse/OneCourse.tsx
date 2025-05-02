@@ -14,6 +14,7 @@ import Spinner from "../../components/Spinner/Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { imgProfile } from "../../services/profileStd";
+import { useTranslation } from "react-i18next";
 
 export default function OneCourse() {
   const { id } = useParams<{ id: string }>();
@@ -26,6 +27,8 @@ export default function OneCourse() {
   const [balance, setBalance] = useState<number | null>(null); 
   const [isSuccessfulPayment, setIsSuccessfulPayment] = useState(false);   
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const {t} = useTranslation();
+
   const handlePayment = async () => {
     if (!isAuthenticated) {
       navigate("/auth/login");
@@ -96,24 +99,28 @@ export default function OneCourse() {
 
   return (
     <>
-      <section className="pt-7.5 pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
+      <section className=" pt-[108px] h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
         <div className=" md:w-3/4 w-full">
-          <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-3.5">{course?.title}</h2>
-          <div className="mb-5 w-full flex justify-between items-center">
-            <p className=" text-gray-600 md:text-base text-sm font-semibold">
-              Created by: <span className=" text-black md:text-lg text-base">{course?.instructor}</span>
-            </p>
-            <div className=" flex items-center gap-1.5">
-              {renderStars(course?.rating)}
-              {course?.rating}
-            </div>
-          </div>
+          <div className=" flex gap-6">
           <img
             src={`http://127.0.0.1:8000/storage/${course?.cover}`}
             alt={course?.title}
-            className="lg:w-10/12 md:w-3/4 w-full mb-5 h-1/2"
-          />
-          <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">Description</h3>
+            className="  mb-5 "
+           />
+              <div>
+                    <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-3.5">{course?.title}</h2>
+                    <div className="mb-5 w-full flex justify-between items-center">
+                      <p className=" text-gray-600 md:text-base text-sm font-semibold">
+                        Created by: <span className=" text-black md:text-lg text-base">{course?.instructor}</span>
+                      </p>
+                      <div className=" flex items-center gap-1.5">
+                        {renderStars(course?.rating)}
+                        {course?.rating}
+                      </div>
+                    </div>
+              </div>
+          </div>
+          <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">{t("Description")}</h3>
           <p className=" text-gray-800 lg:text-base text-sm">{course.description}</p>
         </div>
         {/* buy */}

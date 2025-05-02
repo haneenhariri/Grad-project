@@ -158,5 +158,6 @@
     "arabic" : "arabic",
     "Duration" : "Duration",
     "CourseDuration": "Course duration",
-    "CoursePrice" : "Course price"
+    "CoursePrice" : "Course price",
+    "Description" : "Description"
 }

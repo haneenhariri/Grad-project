@@ -34,7 +34,7 @@ export const allCourses = async () =>
 }
 
 export const singleCourse = async (id: number) => {
-      const response = await axiosInstance.get('/courses'); 
+      const response = await axiosInstance.get(`/courses?lang=${language}`); 
       const selectedCourse = response.data.data.find((course: CouCard) => course.id === id);
       return selectedCourse;
 };

@@ -155,5 +155,6 @@
     "arabic" : "العربية",
     "Duration" : "المدة",
     "CourseDuration": "مدة الدورة",
-    "CoursePrice" : "سعر الدورة "
+    "CoursePrice" : "سعر الدورة ",
+    "Description" : "وصف الكورس"
 }
