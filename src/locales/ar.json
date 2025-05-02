@@ -76,7 +76,8 @@
         "Browse" : "عرض الجميع ",
         "CourseBy" : "من قبل ",
         "Rating" : ":التقييم",
-        "Price" : "السعر"
+        "Price" : "السعر",
+        "Recommended Courses" : "الدورات الموصى بها"
     },
     "Support": "الدعم الفني",
     "Help Center" : "مركز الدعم",

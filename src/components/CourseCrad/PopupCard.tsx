@@ -5,10 +5,22 @@ import clock from '../../assets/icons/Clock (1).png';
 import Button from "../../Ui/Button/Button";
 import { useNavigate } from "react-router-dom";
 import { CouCard } from "../../types/interfaces";
+import { addWishCourse } from "../../services/wishlist";
+import { showToast } from "../../utils/toast";
 
 export default function PopupCard({mainCategoryName ,title,price ,id,instructor, duration, rating ,level } :CouCard) {
   const {t} = useTranslation();
   const navigate = useNavigate();
+  const handelAddToWishList = async(id : number) => 
+  {
+    try{
+      const added = await addWishCourse(id);
+      console.log(added);
+      showToast("added" , 'success');
+    }catch(err: any){
+      console.log(err);
+    }
+  }
   return (
     <div className={`absolute top-14 w-[300px] bg-white shadow-md lg:p-5 text-sm rounded p-2 opacity-0 group-hover:opacity-100 transition duration-300 z-10`}>
       <div className="py-1 px-1.5 w-max mb-2.5 flex items-center bg-violet-600/10 text-xs rounded">
@@ -40,7 +52,7 @@ export default function PopupCard({mainCategoryName ,title,price ,id,instructor,
       <span className="text-violet-600 text-lg font-semibold">{price}$</span>
       </div>
       <div className="my-2.5">
-        <Button text="Add to Fav" textColor="text-white w-full !text-lg !rounded-none" Bg="bg-violet-950" />
+        <Button text="Add to Fav" onClick={()=> handelAddToWishList(id)} textColor="text-white w-full !text-lg !rounded-none" Bg="bg-violet-950" />
       </div>
       <div className="my-2.5">
         <Button text="Course Detail" textColor="text-white w-full !text-lg !rounded-none" Bg="bg-violet-950" onClick={() => navigate(`/oneCourse/${id}`)} />

@@ -76,7 +76,8 @@
         "Browse" : "Browse All",
         "CourseBy" : "Course by : ",
         "Rating" : "Rating:",
-        "Price" : "Price"
+        "Price" : "Price",
+        "Recommended Courses":  "Recommended Courses"
     },
     "Support" : "Support",
     "Help Center" : "Help Center",

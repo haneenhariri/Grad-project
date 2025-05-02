@@ -22,7 +22,7 @@ export default function CoursesPage() {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = isFilterVisible ? 2 : 6;
+  const itemsPerPage = isFilterVisible ? 8 : 8;
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener("resize", handleResize);
@@ -271,7 +271,7 @@ if (selectedCategories.length > 0) {
           <div
             className={`grid gap-6 ${
               isFilterVisible
-                ? "lg:grid-cols-2 md:grid-cols-1"
+                ? "lg:grid-cols-3 md:grid-cols-2"
                 : "grid-cols-1 lg:grid-cols-4 sm:grid-cols-2"
             } w-full`}
           >
@@ -294,7 +294,7 @@ if (selectedCategories.length > 0) {
       )}
 
       {!loading && totalPages > 1 && (
-        <div className="flex justify-center gap-4 mt-8">
+        <div className="flex justify-center gap-4 mt-10">
           {currentPage > 1 && (
             <button
               onClick={() => handlePageChange(currentPage - 1)}

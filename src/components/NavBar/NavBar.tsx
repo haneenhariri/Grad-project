@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { navAuth } from "../../data/navData";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthSide from "./AuthSide";
 import menu from "../../assets/nav/icon/toggle.svg";
@@ -14,10 +14,12 @@ import TopNav from "../TopNav/TopNav";
 
 export default function NavBar() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeButton, setActiveButton] = useState(2);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
@@ -25,7 +27,15 @@ export default function NavBar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  const handleWishlist = async ()=>
+  {
+    if (!isAuthenticated) {
+      navigate("/auth/login");
+      return;
+    }else{
+      navigate('/wishlist')
+    }
+  }
   useEffect(() => {
     console.log("Authentication state changed:", isAuthenticated);
   }, [isAuthenticated]); 
@@ -46,7 +56,7 @@ export default function NavBar() {
       </div>
       <div className=" flex items-center gap-2">
       <div className="mx-4 flex justify-center items-center gap-6">
-        <img src={heart} alt="whish list" className=" w-6 h-6"/>
+        <button onClick={() => handleWishlist()}> <img src={heart} alt="whish list" className=" w-6 h-6"/></button>
         <img src={shop} alt="ShoppingCartSimple" className=" w-6 h-6"/>
       </div>
       {isAuthenticated ? (
