@@ -35,7 +35,8 @@ const InstructorList = lazy(() => import(/* webpackChunkName: "instructor-list" 
 const Students = lazy(() => import(/* webpackChunkName: "students" */ './Admin/Students.tsx'));
 const Payments = lazy(() => import(/* webpackChunkName: "payments" */ './Admin/Payments.tsx'));
 const AdminSettings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './Admin/AdminSettings.tsx'));
-const Wishlist = lazy(()=> import(/* webpackChunkName: Wishlist */ './pages/Wishlist/Wishlist.tsx'))
+const Wishlist = lazy(()=> import(/* webpackChunkName: Wishlist */ './pages/Wishlist/Wishlist.tsx'));
+const PurchaseHistory = lazy( () => import( /* webpackChunkName: PurchaseHistory */ './components/PurchaseHistory/PurchaseHistory.tsx'))
 const routes = createBrowserRouter([
   {
     path: '/',
@@ -60,6 +61,7 @@ const routes = createBrowserRouter([
           { path: 'usercourse', element: <Courses /> },
           { path: 'Teachers', element: <Teachers /> },
           { path: 'Message/:user_id', element: <Message/> },
+          { path: 'purchaseHistory', element: <PurchaseHistory/> },
         ],
       },
       { path: '/Instructor', element: <InstructorPage /> },

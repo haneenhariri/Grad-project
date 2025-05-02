@@ -16,4 +16,8 @@ export const stdTabs = [
         path:`/User/Message/${user_id}`,
         text:'Message',
     },
+    {
+        path:`/User/purchaseHistory`,
+        text:'Purchase History',
+    },
 ]
