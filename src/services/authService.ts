@@ -25,3 +25,4 @@ export const logout = async ()=>
     const respons = await axiosInstance.post('/logout');
     return respons.data;
 }
+

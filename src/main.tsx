@@ -12,6 +12,7 @@ import './utils/i18n.ts';
 import EditeCourse from './instructorDash/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
 import Teachers from './components/Teachers/Teachers.tsx';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import Message from './components/Message/Message.tsx';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
@@ -60,7 +61,7 @@ const routes = createBrowserRouter([
           { path: 'settings', element: <ProfileSettings /> },
           { path: 'usercourse', element: <Courses /> },
           { path: 'Teachers', element: <Teachers /> },
-          { path: 'Message/:user_id', element: <Message/> },
+          { path: 'Message/:user_id', element: <Message /> },
           { path: 'purchaseHistory', element: <PurchaseHistory/> },
         ],
       },
@@ -101,7 +102,7 @@ const routes = createBrowserRouter([
       { path: 'Create', element: <CreatCourse /> },
       { path: 'Earning', element: <Earning /> },
       { path: 'edit/:id', element: <EditeCourse /> },
-      { path: 'Message/:user_id', element: <Message/> },
+      { path: 'Message/:user_id', element: <Message /> },
       {
         path: 'MyCourses',
         element: <MyCourse />,
@@ -118,12 +119,16 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Spinner />}>
-          <RouterProvider router={routes} />
-        </Suspense>
-      </QueryClientProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <Suspense fallback={<Spinner />}>
+            <RouterProvider router={routes} />
+          </Suspense>
+        </QueryClientProvider>
+      </Provider>
+    </ErrorBoundary>
   </StrictMode>
 );
+
+

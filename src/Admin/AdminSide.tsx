@@ -8,7 +8,7 @@ import Logo from "../Ui/Logo/Logo";
 
 export default function AdminSide() {
   return (
-    <div className=" w-2/12  max-h-full bg-gray-900 ">
+    <div className=" w-2/12  min-h-screen bg-gray-900 ">
         <div className="flex items-center  p-2.5 border-b gap-2.5">
           <Logo textColor="text-white"/>
         </div>

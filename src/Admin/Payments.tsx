@@ -1,30 +1,41 @@
-import { useState, useEffect } from "react";
-import Button from "../Ui/Button/Button";
-import img from "../assets/Search (1).png";
-import axiosInstance from "../services/axiosInstance";
-
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { allPayment } from "../services/payment";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  getFilteredRowModel,
+} from '@tanstack/react-table';
+import Search from "../components/Search/Search";
 interface PaymentHistory {
   student: string;
-  accountType: "Student" | "Instructor";
+  instructor: string ;
   amount: number;
   transactionDate: string;
   course: string;
   account_id:string;
+  created_at:string;
 }
 
 export default function Payments() {
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
-
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await axiosInstance.get('/payments/all');
-        if (response.data.status === "success") {
-          const transformedData = response.data.data.map((payment: any) => ({
+        const response = await allPayment();
+        if (response.status === "success") {
+          const transformedData = response.data.map((payment:PaymentHistory) => ({
             student: `${payment.student}`, 
-            accountType: payment.instructor === "instructor" ? "Instructor" : "Student",
+            instructor: payment.instructor,
             amount: payment.amount,
-            account_id: payment.account_id,
             transactionDate: new Date(payment.created_at).toLocaleDateString(),
             course: payment.course,
           }));
@@ -37,49 +48,204 @@ export default function Payments() {
 
     fetchPayments();
   }, []);
+  const columnHelper = createColumnHelper<PaymentHistory>();
+
+  const columns = useMemo(() => 
+  [
+    columnHelper.accessor('student', {
+      header: 'From',
+      cell: info => (
+        <div className="font-medium text-gray-900">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('instructor', {
+      header: 'To',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('amount', {
+      header: 'Amount',
+      cell: info => (
+        <div className="font-medium text-gray-900">{`$${info.getValue()}`}</div>
+      ),
+    }),
+    columnHelper.accessor('transactionDate', {
+      header: 'Transaction Date',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('course', {
+      header: 'Course',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+
+  ] , [navigate]);
+    // إنشاء جدول باستخدام useReactTable
+    const table = useReactTable({
+      data: paymentHistory,
+      columns,
+      state: {
+        sorting,
+        globalFilter,
+      },
+      onSortingChange: setSorting,
+      onGlobalFilterChange: setGlobalFilter,
+      getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      initialState: {
+        pagination: {
+          pageSize: 10,
+        },
+      },});
+
 
   return (
     <>
-      <div className="flex gap-4 justify-end mb-4">
-        <img src={img} alt="" className="border-2 border-violet-950" />
-        <Button Bg="bg-btn" text="Add Payment" textColor="text-white" />
+      <div className="flex mb-6">
+        <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
       </div>
-      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full h-full table-auto">
-            <thead>
-              <tr className="text-left">
-                <th className="p-3 text-gray-600 border-b border-gray-200">Account Name</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Account Id</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Account Type</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Amount</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Transaction Date</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Course</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Payment Status</th>
-              </tr>
-            </thead>
+          <table className="w-full border-collapse">
             <tbody>
-              {paymentHistory.map((payment, index) => (
-                <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="p-3">{payment.student}</td>
-                  <td className="p-3 text-center">{payment.account_id}</td>
-                  <td className="p-3">
-                    <span className={`px-2 py-1 text-sm font-semibold rounded-md ${payment.accountType === "Student" ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"}`}>
-                      {payment.accountType}
-                    </span>
-                  </td>
-                  <td className="p-3">${payment.amount}</td>
-                  <td className="p-3">{payment.transactionDate}</td>
-                  <td className="p-3">{payment.course}</td>
-                  <td className="p-3">
-                    <span className={`px-2 py-1 text-sm font-semibold rounded-md ${payment.accountType === "Student" ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
-                      {payment.accountType === "Student" ? "Payment Made" : "Payment Received"}
-                    </span>
-                  </td>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id} className="bg-gray-50">
+                  {headerGroup.headers.map(header => (
+                    <th 
+                      key={header.id} 
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      <div className="flex items-center">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.getCanSort() && (
+                          <span className="ml-2">
+                            {{
+                              asc: (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 15l-6-6-6 6"/>
+                                </svg>
+                              ),
+                              desc: (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-30">
+                                <path d="M18 15l-6-6-6 6"/>
+                                <path d="M6 9l6 6 6-6"/>
+                              </svg>
+                            )}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                  ))}
                 </tr>
               ))}
             </tbody>
+             {table.getRowModel().rows.length>0?(
+              table.getRowModel().rows.map(row => (
+                <tr key={row.id} className="hover:bg-gray-50 transition-colors">
+                  {row.getVisibleCells().map(cell => (
+                    <td 
+                      key={cell.id} 
+                      className="px-6 py-4 text-sm border-b border-gray-200"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+             ):
+             (
+              <tr >
+                <td colSpan={columns.length} className="px-6 py-10 text-center text-gray-500"> 
+                  No Payments found
+                </td>
+              </tr>
+             )}
           </table>
+        </div>
+        {/* pagination */}
+        <div className="flex flex-wrap items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <div className="flex items-center space-x-2">
+              <button
+                className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => table.setPageIndex(0)}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="11 17 6 12 11 7"></polyline>
+                  <polyline points="18 17 13 12 18 7"></polyline>
+                </svg>
+              </button>
+              <button
+                className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button
+                className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+              <button
+                className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                disabled={!table.getCanNextPage()}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="13 17 18 12 13 7"></polyline>
+                  <polyline points="6 17 11 12 6 7"></polyline>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="flex items-center text-sm text-gray-600">
+              <span className="flex items-center gap-1">
+                Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{' '}
+                <strong>{table.getPageCount()}</strong>
+              </span>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600">Rows per page:</span>
+              <select
+                value={table.getState().pagination.pageSize}
+                onChange={e => {
+                  table.setPageSize(Number(e.target.value))
+                }}
+                className="p-1.5 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
+              >
+                {[10, 20, 30, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
         </div>
       </div>
     </>

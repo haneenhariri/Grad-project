@@ -44,3 +44,9 @@ export const allTeacher = async() =>
   return response.data
 
 }
+
+export const deleteTeacher = async(id : number) =>
+{
+  const response = await axiosInstance.delete(`/users/${id}`);
+  return response.data
+}

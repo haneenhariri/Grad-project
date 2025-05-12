@@ -1,16 +1,10 @@
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../services/axiosInstance";
-import { CommentUser } from "../../components/Comment/Comment";
-
-interface Comment {
-  id: number;
-  content: string;
-  user : CommentUser[];
-  replies: Comment[];
-}
+import { CommentData } from "../../types/interfaces";
 
 interface CommentsState {
-  comments: Comment[];
+  comments: CommentData[];
   loading: boolean;
   error: string | null;
 }
@@ -26,17 +20,28 @@ export const fetchComments = createAsyncThunk(
     const response = await axiosInstance.get(
       `http://127.0.0.1:8000/api/lessons/${lesson_id}?lang=ar`
     );
-    console.log(response.data.data.comments)
     return response.data.data.comments;
   }
 );
 export const addNewComment = createAsyncThunk(
   'comments/addNewComment',
-  async ({ lesson_id, content }: { lesson_id: number; content: string }) => {
-    const response = await axiosInstance.post('/comments', {
+  async ({ lesson_id, content, parentCommentId }: { 
+    lesson_id: number; 
+    content: string;
+    parentCommentId?: number | null;
+  }) => {
+    // إنشاء كائن البيانات الأساسي
+    const commentData: any = {
       lesson_id,
-      content,
-    });
+      content
+    };
+    
+    // إضافة comment_id فقط إذا كان موجودًا (للردود)
+    if (parentCommentId) {
+      commentData.comment_id = parentCommentId;
+    }
+    
+    const response = await axiosInstance.post('/comments', commentData);
     return response.data.data;
   }
 );
@@ -46,23 +51,23 @@ const commentsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // جلب التعليقات
       .addCase(fetchComments.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.loading = false;
-        state.comments = action.payload;
+        state.comments = action.payload || [];
       })
       .addCase(fetchComments.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'فشل في تحميل التعليقات';
+        state.error = action.error.message || 'Failed to fetch comments';
       })
-      
-      // إضافة تعليق
       .addCase(addNewComment.fulfilled, (state, action) => {
-        state.comments.unshift(action.payload); // إضافة التعليق الجديد في الأعلى
+        const newComment = action.payload;
+        
+        // لا نحتاج لإضافة التعليق يدويًا هنا لأننا سنقوم بإعادة تحميل التعليقات
+        // بعد إضافة تعليق جديد أو رد جديد
       });
   },
 });

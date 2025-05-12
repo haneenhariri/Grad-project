@@ -18,24 +18,31 @@ export interface form
 };
 export interface CommentData {
   id: number;
-  content: string;
+  user_id: number;
   lesson_id: number;
   comment_id: number | null;
-  user_id: number;
+  content: string;
+  created_at?: string;
+  updated_at?: string;
   user: {
     id: number;
     name: string;
+    email: string;
     profile_picture: string;
     role: string;
   };
-  replies: CommentData[];
-  created_at: string;
+  replies?: any[]; // إضافة مصفوفة الردود
 }
 
 export interface AddCommentProps {
   lesson_id: number;
-  comment_id?: number | null;
-  onCommentAdded: (newComment: CommentData) => void;
+  parentCommentId?: number | null;
+  onCommentAdded: () => void;
+}
+
+export interface ReplyProps {
+  parentComment: CommentData;
+  onReplyAdded: () => void;
 }
 export interface CourseTypeProps {
   id: number;

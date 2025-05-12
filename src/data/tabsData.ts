@@ -21,3 +21,19 @@ export const stdTabs = [
         text:'Purchase History',
     },
 ]
+
+export const courseTabs =
+[
+    {
+        path:'#Description',
+        text:'Description',
+    },
+    {
+        path:'#Attach',
+        text:'Attach File',
+    },
+    {
+        path:'#Comments',
+        text:'Comments',
+    },
+]

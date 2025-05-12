@@ -13,8 +13,11 @@ import Button from "../../Ui/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { imgProfile } from "../../services/profileStd";
+import { imgProfile, fetchMyCourses } from "../../services/profileStd";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+
+
 
 export default function OneCourse() {
   const { id } = useParams<{ id: string }>();
@@ -28,21 +31,31 @@ export default function OneCourse() {
   const [isSuccessfulPayment, setIsSuccessfulPayment] = useState(false);   
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const {t} = useTranslation();
+  const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState<boolean>(false);
 
   const handlePayment = async () => {
     if (!isAuthenticated) {
       navigate("/auth/login");
       return;
     }
-  
+
+    // التحقق مما إذا كان الطالب قد التحق بالكورس بالفعل
+    if (isAlreadyEnrolled) {
+      setPaymentMessage("You are already enrolled in this course.");
+      setIsSuccessfulPayment(false);
+      setShowModal(true);
+      return;
+    }
+
     if (balance !== null && balance >= course?.price) {
       try {
         const response = await buyCourse(course.id);
-  
+
         if (response.status === "success") {
           setPaymentMessage(response.message || "تم الدفع بنجاح"); 
           setIsSuccessfulPayment(true);
-          setBalance(balance - course.price); 
+          setBalance(balance - course.price);
+          setIsAlreadyEnrolled(true); // تحديث حالة الالتحاق
         } else {
           setPaymentMessage(response.message || "حدث خطأ أثناء معالجة الدفع.");
           setIsSuccessfulPayment(false);
@@ -152,12 +165,22 @@ export default function OneCourse() {
             </div>
           </div>
           <div className="border-b  md:p-5 p-2.5 ">
-            <Button
-              text="Buy now"
-              textColor="text-white w-full !text-lg !rounded-none"
-              Bg="bg-violet-950"
-              onClick={handlePayment}
-            />
+            {/* زر الالتحاق */}
+            {isAlreadyEnrolled ? (
+              <Link 
+                to={`/watch/${course.id}`}
+                className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
+              >
+                Go to Course
+              </Link>
+            ) : (
+              <button
+                onClick={handlePayment}
+                className="px-6 py-3 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors"
+              >
+                Enroll Now
+              </button>
+            )}
           </div>
           <div className="border-b md: md:p-5  p-2.5 ">
             <p className=" text-base mb-2.5 font-semibold">This course includes:</p>

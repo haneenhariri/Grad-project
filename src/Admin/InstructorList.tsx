@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import Button from "../Ui/Button/Button";
-import { allRequest, allTeacher } from "../services/teacherForm";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { allRequest, allTeacher, deleteTeacher } from "../services/teacherForm";
 import axios from "axios";
 import { getSecureCookie } from "../utils/cookiesHelper";
+import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
+import Search from "../components/Search/Search";
+import Button from "../Ui/Button/Button";
 
 interface Instructor {
   id: number;
@@ -19,13 +21,35 @@ export default function InstructorList() {
   const [instructors, setInstructors] = useState<Instructor[]>([]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const [selectedInstructor, setSelectedInstructor] = useState<Instructor | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  // إغلاق القائمة المنسدلة عند النقر خارجها
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  const handelDeleteUser = async (id :number) => {
+    try{
+      await deleteTeacher(id);
+      setInstructors((prev) => prev.filter((instructor) => instructor.id !== id));
+      setOpenDropdown(null);
+    }catch (error) {
+      console.error(error);
+    }
+  }
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
         const [requestRes, teacherRes] = await Promise.all([allRequest(), allTeacher()]);
-
         const formatData = (data: Instructor[]): Instructor[] =>
           data.map((item) => ({
             id: item.id,
@@ -48,7 +72,103 @@ export default function InstructorList() {
 
     fetchInstructors();
   }, []);
+  const columnHelper = createColumnHelper<Instructor>();
+  const columns = useMemo(() => [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: info => (
+        <div className="font-medium text-gray-900">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('email', {
+      header: 'Email',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('education', {
+      header: 'Education',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('specialization', {
+      header: 'Specialization',
+      cell: info => (
+        <div className="text-gray-700">{info.getValue()}</div>
+      ),
+    }),
+    columnHelper.accessor('status', {
+      header: 'Status',
+      cell: info => (
+        <span
+          className={`px-3 py-1 rounded-full text-xs font-medium ${
+            info.getValue() === "accepted"
+              ? "text-green-700 bg-green-100"
+              : info.getValue() === "pending"
+              ? "text-yellow-700 bg-yellow-100"
+              : "text-red-700 bg-red-100"
+          }`}
+        >
+          {info.getValue()}
+        </span>
+      ),
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: props => {
+        const instructorId = props.row.original.id;
+        const rowIndex = props.row.index;
+        return (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+              onClick={() => setOpenDropdown(openDropdown === rowIndex ? null : rowIndex)}
+              aria-label="Actions"
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 16v6" />
+                <path d="M12 2v6" />
+                <path d="M16.24 7.76l-1.41 1.41" />
+                <path d="M7.76 7.76l1.41 1.41" />
+              </svg>
+            </button>
+            {openDropdown === rowIndex && (
+              <div className="absolute z-10 right-0 mt-2 w-44 bg-white border border-gray-200 shadow-lg rounded-md">
+                <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => setSelectedInstructor(props.row.original)}>
+                  View
+                </button>
+                <button className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100" onClick={() => handelDeleteUser(instructorId)}>
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      },
+    })
+  ], [openDropdown]);
+  const table = useReactTable({
+    data: instructors,
+    columns,
+    state: {
+      sorting,
+      globalFilter,
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
 
+  })
   const token = getSecureCookie("token");
 
   const updateInstructorStatus = async (id: number, status: "accepted" | "rejected") => {
@@ -66,77 +186,86 @@ export default function InstructorList() {
       console.error("Failed to update status:", error);
     }
   };
-
-  const filteredInstructors = instructors.filter((instructor) =>
-    instructor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    instructor.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    instructor.education.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    instructor.specialization.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <>
-      <div className="flex gap-4 justify-end mb-4">
-        <div className="border-2 border-violet-950 p-3">
-          <input
-            type="text"
-            placeholder="Search"
-            className="bg-transparent h-full w-full outline-none"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <Button Bg="bg-btn" text="Add Instructor" textColor="text-white" />
+      <div className=" flex justify-between items-center mb-6">
+        <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
+        <Button text="Add Instructor" Bg="bg-btn" textColor="text-white"/>
       </div>
-      
-      <div className="p-6 h-screen bg-white rounded-lg shadow-md">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full h-full">
+         <table className="w-full border-collapse">
             <thead>
-              <tr className="text-left">
-                <th className="p-3 text-gray-600 border-b border-gray-200">Name</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Email</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Profile</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Education</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Status</th>
-                <th className="p-3 text-gray-600 border-b border-gray-200">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredInstructors.map((instructor) => (
-                <tr key={instructor.id} className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="p-3">{instructor.name}</td>
-                  <td className="p-3 text-sm">{instructor.email}</td>
-                  <td className="p-3 text-sm">
-                    <button onClick={() => setSelectedInstructor(instructor)} className="text-blue-600">View</button>
-                  </td>
-                  <td className="p-3 text-sm">{instructor.education}</td>
-                  <td className="p-3 text-sm font-semibold">
-                    <span className={`${instructor.status === "accepted" ? "text-green-600 bg-green-100 px-2 py-1 rounded-md" 
-                      : instructor.status === "rejected" ? "text-red-600 bg-red-100 px-2 py-1 rounded-md" 
-                      : "text-yellow-600 bg-yellow-100 px-2 py-1 rounded-md"}`}>
-                      {instructor.status}
-                    </span>
-                  </td>
-                  <td className="p-3 text-sm text-center relative">
-                    <button className="text-gray-500 text-sm hover:text-gray-700" 
-                      onClick={() => setOpenDropdown(openDropdown === instructor.id ? null : instructor.id)}>
-                      &#8226;&#8226;&#8226;
-                    </button>
-                    {openDropdown === instructor.id && (
-                      <div className="absolute z-10 right-0 mt-2 w-44 bg-white border border-gray-200 shadow-lg rounded-md">
-                        <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Edit</button>
-                        <button className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">Delete</button>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id} className="bg-gray-50">
+                  {headerGroup.headers.map(header => (
+                    <th 
+                      key={header.id} 
+                      className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      <div className="flex items-center">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.getCanSort() && (
+                          <span className="ml-2">
+                            {{
+                              asc: (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M18 15l-6-6-6 6"/>
+                                </svg>
+                              ),
+                              desc: (
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                              ),
+                            }[header.column.getIsSorted() as string] ?? (
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-30">
+                                <path d="M18 15l-6-6-6 6"/>
+                                <path d="M6 9l6 6 6-6"/>
+                              </svg>
+                            )}
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </td>
+                    </th>
+                  ))}
                 </tr>
               ))}
+            </thead>
+            <tbody>
+              {table.getCoreRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map(row => (
+                  <tr key={row.id} className="hover:bg-gray-50 transition-colors">
+                    {row.getVisibleCells().map(cell => (
+                      <td 
+                        key={cell.id} 
+                        className="px-6 py-4 text-sm border-b border-gray-200"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ):
+              (
+                <tr>
+                  <td colSpan={columns.length}
+                      className="px-6 py-10 text-center text-gray-500">
+                      No Instructor found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
-
       {selectedInstructor && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">

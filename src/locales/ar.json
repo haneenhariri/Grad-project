@@ -43,7 +43,12 @@
         "Save & Next" : "حفظ & تقدم",
         "Start teaching" : "ابدأ التدريس",
         "Join the Family" : "انضم للعائلة",
-        "Browse all courses" : "تصفح جميع الدورات"
+        "Browse all courses" : "تصفح جميع الدورات",
+        "Write a Review" : "اكتب تقييم",
+        "Next lecture" : "الدرس التالي",
+        "Submit Review" : "ارسال التقييم",
+        "Add Course" : "اضافة دورة",
+        "Add Instructor" : "اضافة مدرس"
     },
     "hero":
     {
@@ -156,5 +161,6 @@
     "Duration" : "المدة",
     "CourseDuration": "مدة الدورة",
     "CoursePrice" : "سعر الدورة ",
-    "Description" : "وصف الكورس"
+    "Description" : "وصف الكورس",
+    "Administrator" : "المسؤول"
 }

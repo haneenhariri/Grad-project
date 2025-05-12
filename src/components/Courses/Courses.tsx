@@ -13,6 +13,7 @@ export default function Courses() {
   const [courses, setCourses] = useState<CourseTypeProps[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
+  const [intervalValue , setIntervalValue] = useState(0.5);
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -27,8 +28,13 @@ export default function Courses() {
         setLoading(false); 
       }
     };
-
-    fetchCourses();
+    const timerid = setTimeout(() =>
+    {
+      fetchCourses();
+    },intervalValue*1000);
+    return() =>{
+      clearInterval(timerid)
+    }
   }, []);
 
   return (

@@ -1,68 +1,112 @@
-import arrow from '../../assets/ArrowLeft.png';
-import folder from '../../assets/icons/FolderNotchOpen.png';
-import videoIcon from '../../assets/icons/PlayCircle.png';
-import clock from '../../assets/icons/Clock.png';
-import { useNavigate, useParams } from 'react-router-dom';
-import Button from '../../Ui/Button/Button';
-import { useEffect, useState } from 'react';
-import fileIcon from '../../assets/FileText.png';
-import { watchSingleCourse } from '../../services/courses';
-import { showToast } from '../../utils/toast';
-import Spinner from '../../components/Spinner/Spinner';
-import axios from 'axios';
-import { getSecureCookie } from '../../utils/cookiesHelper';
-import Comment from '../../components/Comment/Comment';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { watchSingleCourse } from "../../services/courses";
+import { updateLessonProgress, getCourseProgress } from "../../services/courseProgress"; // تغيير المسار هنا
+import Spinner from "../../components/Spinner/Spinner";
+import { showToast } from "../../utils/toast";
+import Comment from "../../components/Comment/Comment";
+import Head from "./Head";
 
 export default function WatchCourse() {
-  const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const [course, setCourse] = useState<any>(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [rating, setRating] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [review, setReview] = useState("");
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
-  const token = getSecureCookie('token'); // استرجاع التوكن
-
-  const handleRating = (index: number) => {
-    setRating(index + 1);
-  };
-  const submitRating = async () => {
+  const [completedPercentage, setCompletedPercentage] = useState(0);
+  // إضافة سجل تصحيح الأخطاء للتحقق من قيمة id
+  useEffect(() => {
+    console.log("Course ID from params:", id);
+  }, [id]);
+  // دالة لتحميل تقدم الطالب في الكورس
+  const loadCourseProgress = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/rates', {
-        course_id: Number(id), // إرسال معرف الكورس
-        rate: rating, // إرسال التقييم
-        review: review, // إرسال المراجعة
-      },{
-        headers: {
-          'Authorization': `Bearer ${token}`, // إضافة التوكن إلى الرؤوس
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.status === 200) {
-        showToast("Rating submitted successfully!", 'success');
-        setShowPopup(false);
+      if (!id) return;
+      
+      const progressData = await getCourseProgress(Number(id));
+      console.log("Progress data:", progressData);
+      
+      // تحديث الدروس المكتملة
+      const completedLessonIds = new Set(
+        progressData.lessons_progress
+          .filter((lessonProgress) => lessonProgress.completed)
+          .map((lessonProgress) => lessonProgress.lesson_id)
+      );
+      
+      setCompletedLessons(completedLessonIds);
+      
+      // تحديث النسبة المئوية الإجمالية للتقدم
+      if (progressData.overall_progress && 
+          typeof progressData.overall_progress.overall_progress === 'number') {
+        setCompletedPercentage(progressData.overall_progress.overall_progress);
+      } else if (progressData.overall_progress) {
+        setCompletedPercentage(progressData.overall_progress);
+      } else {
+        // حساب النسبة المئوية يدويًا إذا لم تكن متوفرة
+        const totalLessons = course?.lessons?.length || 0;
+        const completedCount = completedLessonIds.size;
+        
+        if (totalLessons > 0) {
+          const percentage = (completedCount / totalLessons) * 100;
+          setCompletedPercentage(percentage);
+        } else {
+          setCompletedPercentage(0);
+        }
       }
     } catch (error) {
-      console.error("Error submitting rating:", error);
-      showToast("Failed to submit rating. Please try again.", 'error');
+      console.error("Error loading course progress:", error);
+      // في حالة الفشل، نستمر بدون بيانات التقدم
+      setCompletedPercentage(0);
     }
   };
 
-  const handleSubmit = () => {
-    if (rating === 0) {
-      showToast("Please select a rating before submitting.", 'error');
-      return;
+  // دالة لتحديث تقدم الطالب عند إكمال درس
+  const markLessonAsCompleted = async (lessonId: number) => {
+    try {
+      if (!id) return;
+      
+      // تحديث واجهة المستخدم أولاً (Optimistic UI Update)
+      setCompletedLessons(prev => {
+        const newSet = new Set(prev);
+        newSet.add(lessonId);
+        return newSet;
+      });
+      
+      // طباعة القيم المرسلة للتأكد من صحتها
+      const courseIdNum = Number(id);
+      const lessonIdNum = Number(lessonId);
+      
+      // استخدام دالة updateLessonProgress من الخدمة
+      await updateLessonProgress(courseIdNum, lessonIdNum, true);
+      
+      // إعادة تحميل تقدم الطالب للحصول على النسبة المئوية المحدثة
+      await loadCourseProgress();
+      
+      showToast("Lesson marked as completed!", "success");
+    } catch (error) {
+      // تحسين معالجة الخطأ لعرض المزيد من التفاصيل
+      console.error("Full error object:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        showToast(`Error: ${error.response.data.message || "Unknown error"}`, "error");
+      } else {
+        console.error("Error marking lesson as completed:", error);
+        showToast("Error marking lesson as completed", "error");
+      }
+      
+      // إلغاء التحديث في واجهة المستخدم في حالة الفشل
+      setCompletedLessons(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(lessonId);
+        return newSet;
+      });
     }
-    submitRating();
   };
 
 
-  const markLessonAsCompleted = (lessonId: number) => {
-    setCompletedLessons((prev) => new Set(prev).add(lessonId));
-  };
+
+
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -70,8 +114,10 @@ export default function WatchCourse() {
         const data = await watchSingleCourse(Number(id));
         setCourse(data);
         if (data.lessons.length > 0) {
-          setSelectedLesson(data.lessons[0]); // Set the first lesson as selected by default
+          setSelectedLesson(data.lessons[0]); 
         }
+        
+        await loadCourseProgress();
       } catch (error) {
         showToast("Error loading course", 'error');
       } finally {
@@ -83,161 +129,157 @@ export default function WatchCourse() {
 
   if (loading) return <Spinner />;
 
-  const totalLessons = course?.lessons.length || 0;
-  const completedPercentage = totalLessons > 0 ? (completedLessons.size / totalLessons) * 100 : 0;
-
-  return (
-    <section className="">
-      <div className='py-2.5 pt-[108px] px-4 lg:px-10 desktop:px-40 flex justify-between items-center bg-white'>
-        <div className='flex items-center gap-5'>
-          <button onClick={() => navigate('/courses')} className='flex rounded-full w-12 h-12 bg-White/95 justify-center items-center'>
-            <img src={arrow} alt="" />
-          </button>
-          <div>
-            <h2 className='text-2xl font-bold mb-3'>{course?.title}</h2>
-            <div className='flex items-center gap-4'>
-              <div className='flex items-center gap-1.5'>
-                <img src={folder} alt="" className='w-5 h-5' />
-                <span className='text-xs text-gray-600'>{course?.lessons.length} Sections</span>
-              </div>
-              <div className='flex items-center gap-1.5'>
-                <img src={videoIcon} alt="" className='w-5 h-5' />
-                <span className='text-xs text-gray-600'>{course?.lessons.reduce((acc: number, lesson: any) => acc + lesson.files.length, 0)} lectures</span>
-              </div>
-              <div className='flex items-center gap-1.5'>
-                <img src={clock} alt="" className='w-5 h-5' />
-                <span className='text-xs text-gray-600'>{course?.duration} mins</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='flex gap-2.5'>
-          <Button onClick={() => setShowPopup(true)} text='Write a Review' Bg='bg-White/95' textColor='' />
-          <Button text='Next lecture' Bg='bg-btn' textColor='text-white' />
-        </div>
-      </div>
-      <div className='flex gap-6 px-4 lg:px-10 desktop:px-40 py-10 justify-between'>
-        <div className="w-9/12">
-          {/* عرض الفيديو إذا كان موجودًا */}
-          {selectedLesson?.files?.some((file: any) => file.type === 'video') ? (
-            <video
-              key={selectedLesson.id} // أضف هذا السطر - المفتاح الفريد يجبر إعادة التحميل
-              controls
-              className='w-full'
-              onEnded={() => markLessonAsCompleted(selectedLesson.id)}
-            >
-              <source
-                src={`http://127.0.0.1:8000/storage/${
-                  selectedLesson.files.find((file: any) => file.type === 'video').path
-                }`}
-                type="video/mp4"
-              />
-              Your browser does not support the video tag.
-            </video>
-          ) : (
-            <div>No video available for this lesson</div>
-          )}
-
-          <h2 className='my-6 text-2xl font-bold'>{selectedLesson?.title}</h2>
-
-          <div className='border-y mb-10'>
-            <button className='w-1/4 py-5 border-b border-b-violet-600'>Description</button>
-            <button className='w-1/4 py-5'>Lectures Notes</button>
-            <button className='w-1/4 py-5'>Attach File</button>
-            <button className='w-1/4 py-5'>Comments</button>
-          </div>
-
-          <div>
-            <h2 className='mb-3'>Lectures Description</h2>
-            <p className='text-sm text-gray-700'>{selectedLesson?.description}</p>
-          </div>
-
-          {/* عرض الملفات إذا كانت موجودة */}
-          {selectedLesson?.files?.some((file: any) => file.type !== 'video') && (
-            <div>
-              <h2 className='mb-5'>Attach Files ({selectedLesson?.files?.filter((file: any) => file.type !== 'video').length || 0})</h2>
-              {selectedLesson?.files
-                ?.filter((file: any) => file.type !== 'video')
-                .map((file: any) => (
-                  <div key={file.id} className="flex items-center justify-between p-4 border rounded-lg shadow-md bg-white w-full mb-2">
-                    <div className="flex items-center gap-2">
-                      <img src={fileIcon} alt="" />
-                      <div>
-                        <p className="font-medium text-lg">{file.origin_name}</p>
-                        <p className="text-sm text-gray-500">{file.extension}</p>
-                      </div>
-                    </div>
-                    <a
-                      href={`http://127.0.0.1:8000/storage/${file.path}`}
-                      download
-                      className="bg-violet-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-violet-950 transition-all"
+  const renderSelectedLesson = () => {
+    if (!selectedLesson) return null;
+    console.log("Selected lesson:", selectedLesson);
+    return (
+      <div className=" rounded-lg   overflow-hidden mb-6">
+        {selectedLesson.files && selectedLesson.files.length > 0 ? (
+          selectedLesson.files.map((file: any, index: number) => {
+            console.log("File data:", file);
+            return (
+              <div key={index} className="mb-4">
+                {file.type === 'video' && (
+                  <>
+                    <video 
+                      src={`http://127.0.0.1:8000/storage/${file.path}`} 
+                      controls 
+                      className="w-full h-auto"
+                      onError={(e) => console.error("Video error:", e)}
+                      onEnded={() => {
+                        if (!completedLessons.has(selectedLesson.id)) {
+                          markLessonAsCompleted(selectedLesson.id);
+                        }
+                      }}
+                    />
+                  </>
+                )}
+                {file.type === 'image' && (
+                  <>
+                    <img 
+                      src={`http://127.0.0.1:8000/storage/${file.path}`} 
+                      alt={selectedLesson.title} 
+                      className="w-full h-auto"
+                      onError={(e) => console.error("Image error:", e)}
+                    />
+                  </>
+                )}
+                {file.type === 'pdf' && (
+                  <div className="p-4 border rounded">
+                    <a 
+                      href={`http://127.0.0.1:8000/storage/${file.path}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline flex items-center"
                     >
-                      Download File
+                      View PDF Document
                     </a>
                   </div>
-                ))}
-            </div>
-          )}
-          <Comment lesson_id={selectedLesson?.id}/>
-        </div>
-        <div className='w-5/12'>
-          <div className='mb-4 flex justify-between items-center'>
-            <h2>Course Contents</h2>
-            <p className='text-sm text-[#23BD33]'>{Math.round(completedPercentage)}% Completed</p>
-          </div>
-          <div className='mt-7'>
-            {course?.lessons.map((lesson: any) => (
-              <div
-                key={lesson.id}
-                className={`p-4 border rounded-lg mb-2 cursor-pointer ${selectedLesson?.id === lesson.id ? 'bg-violet-50' : 'bg-white'}`}
-                onClick={() => setSelectedLesson(lesson)}
-              >
-                <h3 className='font-medium'>{lesson.title}</h3>
-                <p className='text-sm text-gray-500'>{lesson.files.length} files</p>
-                {completedLessons.has(lesson.id) && (
-                  <span className='text-sm text-green-600'>Completed</span>
                 )}
+                {!['video', 'image', 'pdf'].includes(file.type) && (
+                  <div className="p-4 border rounded">
+                    <a 
+                      href={`http://127.0.0.1:8000/storage/${file.path}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline flex items-center"
+                    >
+                      Download File ({file.origin_name})
+                    </a>
+                  </div>
+                )} 
               </div>
-            ))}
+            );
+          })
+        ) : (
+          <div className="text-center text-gray-500">
+            No files available for this lesson
+          </div>
+        )}
+        <div className="">
+          <h2 className="text-xl font-semibold mb-2">{selectedLesson.title}</h2>
+          <h2 className="text-xl font-semibold mb-2">Lectures Description</h2>
+          <p  id="Description" className="text-gray-700  mb-4">{selectedLesson.description}</p>
+          {!completedLessons.has(selectedLesson.id) && (
+            <button 
+              onClick={() => markLessonAsCompleted(selectedLesson.id)}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+            >
+              Mark as Completed
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+     <Head title={course?.title}/>
+      <div className="px-4 lg:px-10 desktop:px-40 py-8">
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className='w-full md:w-10/12'>
+          {renderSelectedLesson()}
+          
+          {/* قسم التعليقات */}
+          <div id="Comments">
+          <Comment lesson_id={selectedLesson?.id || 0} />
+          </div>
+        </div>
+        
+        <div className='w-full md:w-5/12'>
+          <div className='bg-white rounded-lg shadow-sm p-5'>
+            <div className='mb-4'>
+              <div className='flex justify-between items-center mb-2'>
+                <h2>Course Contents</h2>
+                <p className='text-sm text-[#23BD33]'>
+                  {isNaN(completedPercentage) ? '0' : Math.round(completedPercentage)}% Completed
+                </p>
+              </div>
+              
+              {/* شريط التقدم */}
+              <div className="w-full bg-gray-200 rounded-full h-2.5">
+                <div 
+                  className="bg-green-600 h-2.5 rounded-full" 
+                  style={{ width: `${isNaN(completedPercentage) ? 0 : completedPercentage}%` }}
+                ></div>
+              </div>
+            </div>
+            
+            {/* قائمة الدروس */}
+            <div className='mt-7'>
+              {course?.lessons.map((lesson: any) => (
+                <div
+                  key={lesson.id}
+                  className={`p-4 border rounded-lg mb-2 cursor-pointer ${
+                    selectedLesson?.id === lesson.id ? 'bg-violet-50' : 'bg-white'
+                  }`}
+                  onClick={() => setSelectedLesson(lesson)}
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h3 className='font-medium'>{lesson.title}</h3>
+                      <p className='text-sm text-gray-500'>{lesson.files?.length || 0} files</p>
+                    </div>
+                    {completedLessons.has(lesson.id) ? (
+                      <span className='text-sm text-green-600 flex items-center'>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        Completed
+                      </span>
+                    ) : (
+                      <span className='text-sm text-gray-400'>Not completed</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      {showPopup && (
-        <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50'>
-          <div className='bg-white p-6 rounded shadow-md w-1/2'>
-            <h3 className='text-lg font-bold mb-4 border-b pb-3'>Write a Review</h3>
-            <div className='flex justify-center gap-1 mb-4'>
-              {Array(5).fill(0).map((_, index) => (
-                <span
-                  key={index}
-                  onClick={() => handleRating(index)}
-                  className={`cursor-pointer text-5xl ${index < rating ? 'text-yellow-400' : 'text-gray-400'}`}>
-                  ★
-                </span>
-              ))}
-            </div>
-            <label htmlFor="">Feedback</label>
-            <textarea
-              className='w-full p-2 border rounded mt-2 h-32 mb-4'
-              placeholder="Write your review here..."
-              value={review}
-              onChange={(e) => setReview(e.target.value)}>
-            </textarea>
-            <div className='flex justify-end gap-2'>
-              <button
-                onClick={() => setShowPopup(false)}
-                className='px-4 py-2 bg-gray-200 rounded'>
-                Cancel
-              </button>
-              <button
-                onClick={handleSubmit}
-                className='px-4 py-2 bg-violet-950 text-white rounded'>
-                Submit Review
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+    </div>
+    </>
+
   );
 }

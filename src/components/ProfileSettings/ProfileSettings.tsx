@@ -21,10 +21,10 @@ export default function ProfileSettings() {
       setEmail("");
       setImage(undefined);
       setPreview(null);
-
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      console.error("Error updating profile", error);
+      console.error("Error updating profile:", error);
+      showToast(error.response?.data?.message || "Error updating profile", 'error');
     },
   });
 
@@ -39,12 +39,25 @@ export default function ProfileSettings() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({
-      _method : "PUT",
-      name: name,
-      email: email,
-      profile_picture: image, 
-    });
+    
+    // إنشاء كائن البيانات فقط مع الحقول التي تم تغييرها
+    const profileData: any = {};
+    
+    if (name) profileData.name = name;
+    if (email) profileData.email = email;
+    if (image) profileData.profile_picture = image;
+    
+    // طباعة البيانات للتحقق
+    console.log("Submitting profile data:", profileData);
+    
+    // التحقق من وجود بيانات للإرسال
+    if (Object.keys(profileData).length === 0) {
+      showToast('No changes to update', 'info');
+      return;
+    }
+    
+    // إرسال البيانات
+    mutation.mutate(profileData);
   };
 
   return (
@@ -76,7 +89,7 @@ export default function ProfileSettings() {
               </div>
             </div>
             <div className="flex rounded-md mb-6 relative md:w-1/2 w-full p-3 border border-violet-400 flex-col justify-evenly items-center">
-              <label htmlFor="imageUpload" className="cursor-pointer  lg:text-base text-sm">
+              <label htmlFor="imageUpload" className="cursor-pointer lg:text-base text-sm">
                 <div className="w-40 h-40 overflow-hidden rounded-md border-2 border-gray-300">
                   {preview ? (
                     <img
@@ -102,7 +115,12 @@ export default function ProfileSettings() {
                 Image size should be under 1MB and image ratio needs to be 1:1
               </p>
             </div>
-            <Button Bg="bg-btn" textColor="text-white" text="Save changes" />
+            <Button 
+              Bg="bg-btn" 
+              textColor="text-white" 
+              text={mutation.isPending ? "Saving..." : "Save changes"} 
+              disabled={mutation.isPending}
+            />
           </form>
         </div>
         <div className="border"></div>

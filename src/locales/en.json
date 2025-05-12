@@ -43,7 +43,12 @@
         "Save & Next" : "Save & Next",
         "Start teaching" : "Start teaching",
         "Join the Family" : "Join the Family",
-        "Browse all courses" : "Browse all courses"
+        "Browse all courses" : "Browse all courses",
+        "Write a Review" : "Write a Review",
+        "Next lecture" : "Next lecture",
+        "Submit Review" : "Submit Review",
+        "Add Course" : "Add Course",
+        "Add Instructor" : "Add Instructor"
     },
     "hero":
     {
@@ -159,5 +164,6 @@
     "Duration" : "Duration",
     "CourseDuration": "Course duration",
     "CoursePrice" : "Course price",
-    "Description" : "Description"
+    "Description" : "Description",
+    "Administrator" : "Administrator"
 }
