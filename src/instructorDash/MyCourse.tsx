@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchMyCourses } from '../services/profileStd';
 import { deleteCourse } from '../services/courses';
-import { useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { myCourseProp } from '../types/interfaces';
 
 
@@ -23,6 +23,7 @@ export default function MyCourse() {
       const getCourses = async () => {
         try {
           const myCourses = await fetchMyCourses();
+          console.log("courses",myCourses)
           setCourses(myCourses);
         } catch (error) {
           console.error("Error fetching courses:", error);
@@ -50,7 +51,7 @@ export default function MyCourse() {
                     </button>
                     {openDropdown === index && (
                       <div className="absolute z-10 right-0 mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md">
-                        <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/MyCourses/detail/${course.id}`)}>
+                        <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/detail/${course.id}`)}>
                           Edit
                         </button>
                         <button

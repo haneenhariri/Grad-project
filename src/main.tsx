@@ -14,6 +14,7 @@ import Spinner from './components/Spinner/Spinner.tsx';
 import Teachers from './components/Teachers/Teachers.tsx';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import Message from './components/Message/Message.tsx';
+import ProtectedCourseRoute from './hooks/ProtectedCourseRoute';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -46,7 +47,13 @@ const routes = createBrowserRouter([
       { path: '', element: <Home /> },
       { path: '/courses', element: <CoursesPage /> },
       { path: '/oneCourse/:id', element: <OneCourse /> },
-      { path: '/watch/:id', element: <WatchCourse /> },
+      { 
+        path: '/watch/:id', 
+        element: <ProtectedCourseRoute />,
+        children: [
+          { index: true, element: <WatchCourse /> }
+        ]
+      },
       { path: '/auth/:formType', element: <Auth /> },
       {path: '/wishlist' , element:( <Wishlist/>)},
       {
@@ -103,14 +110,8 @@ const routes = createBrowserRouter([
       { path: 'Earning', element: <Earning /> },
       { path: 'edit/:id', element: <EditeCourse /> },
       { path: 'Message/:user_id', element: <Message /> },
-      {
-        path: 'MyCourses',
-        element: <MyCourse />,
-        children: [
-          { path: '', element: <MyCourse /> },
-          { path: 'detail/:id', element: <EditeCourse/> },
-        ],
-      },
+      { path: 'MyCourses', element: <MyCourse /> },
+      { path: 'detail/:id', element: <EditeCourse /> },
     ],
   },
 ]);
@@ -130,5 +131,7 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+
 
 

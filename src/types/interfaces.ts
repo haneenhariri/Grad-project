@@ -31,9 +31,24 @@ export interface CommentData {
     profile_picture: string;
     role: string;
   };
-  replies?: any[]; // إضافة مصفوفة الردود
+  replies?: repliesData[]
 }
-
+export interface repliesData {
+  id: number;
+  user_id: number;
+  lesson_id: number;
+  comment_id: number | null;
+  content: string;
+  created_at?: string;
+  updated_at?: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    profile_picture: string;
+    role: string;
+  };
+}
 export interface AddCommentProps {
   lesson_id: number;
   parentCommentId?: number | null;
@@ -130,6 +145,12 @@ export interface myCourseProp
   duration: number;
   level: string;
   cover: string;
+  price: number;
+  instructor: string;
+  sub_category: SubCategory;
+  status: string;
+  course_language: string;
+  rating: number | null;
 }
 export interface Credentials {
     email: string;
@@ -214,9 +235,11 @@ export interface SubCategory {
 export interface LessonFile {
   path: File | null;
   type: "video" | "file";
+  files?: string[]; 
 }
 
 export interface Lesson {
+  id : number;
   titleAr: string;
   titleEn: string;
   descriptionAr: string;

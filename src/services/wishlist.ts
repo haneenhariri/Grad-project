@@ -27,10 +27,10 @@ export const getWishList = async() =>
     }throw { message: "An unexpected error occurred" }; 
     }
 }
-export const getRecommended = async() =>
+export const getRecommended = async(lang: 'ar' | 'en') =>
 {
     try{
-        const response = await axiosInstance.get('/recommended-courses');
+        const response = await axiosInstance.get(`/recommended-courses?lang=${lang}`);
         console.log(response.data);
         return response.data;
     }catch (error : unknown) {

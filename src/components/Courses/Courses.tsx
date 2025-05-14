@@ -8,34 +8,38 @@ import SectionsTitle from "../../Ui/SectionsTitle/SectionsTitle";
 import arrow from '../../assets/ArrowRight (3).png'
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 export default function Courses() {
-  const {t} = useTranslation()
+    const { t } = useTranslation();
+  const lang = useSelector((state: RootState) => state.language.lang);
   const [courses, setCourses] = useState<CourseTypeProps[]>([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null); 
-  const [intervalValue , setIntervalValue] = useState(0.5);
+  const [intervalValue ] = useState(0.5);
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const data = await allCourses();  
+        const data = await allCourses(lang);  // تمرير اللغة هنا
         setCourses(data); 
-      } catch (err : unknown) {
+      } catch (err: unknown) {
         setError("حدث خطأ أثناء تحميل البيانات!");  
         if (err instanceof AxiosError) {
           throw err.response?.data || { message: "Error fetching courses:" };
-      }
+        }
       } finally {
         setLoading(false); 
       }
     };
-    const timerid = setTimeout(() =>
-    {
+    const timerId = setTimeout(() => {
       fetchCourses();
-    },intervalValue*1000);
-    return() =>{
-      clearInterval(timerid)
-    }
-  }, []);
+    }, intervalValue * 1000);
+
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [lang]);
 
   return (
     <section className="sm:mb-20  mb-10">

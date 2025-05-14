@@ -14,11 +14,10 @@ export const fetchMyCourses = async() =>
 {
     try {
         const response = await axiosInstance.get('/profile');
-        console.log("API response from profile:", response.data);
+        console.log("API response from profile:", response.data.data.courses);
         
-        // نتحقق من وجود البيانات في الهيكل المتوقع
-        if (response.data && response.data.status === "success" && Array.isArray(response.data.data)) {
-            return response.data.data;
+        if (response.data && Array.isArray(response.data.data.courses)) {
+            return response.data.data.courses;
         }
         
         return [];

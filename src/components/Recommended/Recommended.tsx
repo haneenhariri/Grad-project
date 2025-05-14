@@ -4,18 +4,19 @@ import { getRecommended } from "../../services/wishlist";
 import { useTranslation } from "react-i18next";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { allCourses } from "../../services/courses";
+import { allCourses, courseDataProps } from "../../services/courses";
 
 export default function Recommended() {
     const {t} = useTranslation()
+    const lang = useSelector((state: RootState) => state.language.lang);
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    const [recommended, setRecommended] = useState<any[]>([]);
+    const [recommended, setRecommended] = useState<courseDataProps[]>([]);
     useEffect(() => {
         if(!isAuthenticated || recommended.length == 0 )
         {
             const fetchCourse = async () => {
                 try {
-                    const data = await allCourses();
+                    const data = await allCourses(lang);
                         setRecommended(data);
                       } catch (error : unknown ) {
                         console.log("Error loading course" , error);
@@ -26,7 +27,7 @@ export default function Recommended() {
         const fetchRecommendedCourse = async () =>
         {
             try{
-                const data = await getRecommended();
+                const data = await getRecommended(lang);
                 setRecommended(data.data);
             }catch( err : unknown)
             {
@@ -34,7 +35,7 @@ export default function Recommended() {
             }
         };
         fetchRecommendedCourse();
-    },[]
+    },[lang]
     );
   return (
     <section className=" shadow-md rounded-md !bg-white p-10">

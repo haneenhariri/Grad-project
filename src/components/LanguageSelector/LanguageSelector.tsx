@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { setLanguage } from "../../redux/languageSlice/languageSlice";
 
 export default function LanguageSelector() {
+    const dispatch = useDispatch();
+    const language = useSelector((state: RootState) => state.language.lang);
     const { i18n } = useTranslation();
-    const [language, setLanguage] = useState(localStorage.getItem("language") || "en");
 
     useEffect(() => {
         i18n.changeLanguage(language);
@@ -12,11 +16,16 @@ export default function LanguageSelector() {
         document.documentElement.lang = language;
         document.body.style.textAlign = language === "ar" ? "right" : "left";
     }, [language, i18n]);
-    
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedLang = e.target.value as 'ar' | 'en';
+        dispatch(setLanguage(selectedLang));
+    };
+
     return (
         <select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={handleChange}
             className="bg-transparent text-gray-400 font-medium text-sm border-0"
         >
             <option value="en">English</option>

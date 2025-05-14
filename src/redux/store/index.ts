@@ -2,11 +2,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../authSlice";
 import commentsReducer from "../commentsSlice/commentsSlice";
+import languageReducer from '../languageSlice/languageSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     comments: commentsReducer,
+    language: languageReducer,
   },
 });
 

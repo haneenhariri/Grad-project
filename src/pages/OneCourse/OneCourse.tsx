@@ -9,15 +9,12 @@ import level from '../../assets/icons/bar-chart.png'
 import file from '../../assets/icons/Notebook.png'
 import divec from '../../assets/icons/Monitor.png'
 import online from '../../assets/Stack.png'
-import Button from "../../Ui/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
-import { imgProfile, fetchMyCourses } from "../../services/profileStd";
+import { imgProfile } from "../../services/profileStd";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
-
 
 export default function OneCourse() {
   const { id } = useParams<{ id: string }>();
@@ -35,15 +32,13 @@ export default function OneCourse() {
 
   const handlePayment = async () => {
     if (!isAuthenticated) {
-      navigate("/auth/login");
+      navigate("/auth/login", { state: { from: `/oneCourse/${id}` } });
       return;
     }
 
     // التحقق مما إذا كان الطالب قد التحق بالكورس بالفعل
     if (isAlreadyEnrolled) {
-      setPaymentMessage("You are already enrolled in this course.");
-      setIsSuccessfulPayment(false);
-      setShowModal(true);
+      navigate(`/watch/${course?.id}`);
       return;
     }
 
@@ -77,6 +72,14 @@ export default function OneCourse() {
       try {
         const response = await imgProfile();
         setBalance(response.data.account.balance); // تحديث الرصيد من API
+        
+        // التحقق مما إذا كان الطالب مشترك بالفعل في هذا الكورس
+        if (response.data.courses && Array.isArray(response.data.courses) && id) {
+          const isEnrolled = response.data.courses.some(
+            (course: any) => course.id === Number(id)
+          );
+          setIsAlreadyEnrolled(isEnrolled);
+        }
       } catch (error) {
         console.error("Error fetching user data", error);
       }
@@ -86,7 +89,7 @@ export default function OneCourse() {
       try {
         const data = await singleCourse(Number(id));
         setCourse(data);
-      } catch (error ) {
+      } catch (error) {
         setError("Error loading course");
       } finally {
         setLoading(false);
@@ -95,7 +98,7 @@ export default function OneCourse() {
 
     fetchUserData();
     fetchCourse();
-  }, [id]);
+  }, [id, isAuthenticated]);
 
   const renderStars = (rating: number | null) => {
     return (
@@ -164,22 +167,34 @@ export default function OneCourse() {
               <span className=" text-sm text-gray-600  ">{course?.level}</span>
             </div>
           </div>
-          <div className="border-b  md:p-5 p-2.5 ">
-            {/* زر الالتحاق */}
-            {isAlreadyEnrolled ? (
-              <Link 
-                to={`/watch/${course.id}`}
-                className="px-6 py-3 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors"
-              >
-                Go to Course
-              </Link>
+          <div className="border-b md:p-5 p-2.5">
+            {isAuthenticated ? (
+              isAlreadyEnrolled ? (
+                // إذا كان الطالب مسجل بالفعل، عرض زر المشاهدة
+                <Link 
+                  to={`/watch/${course?.id}`}
+                  className="w-full block text-center py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
+                >
+                  {t('Watch Course')}
+                </Link>
+              ) : (
+                // إذا لم يكن مسجل، عرض زر الدفع
+                <button
+                  onClick={handlePayment}
+                  className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-md transition-colors"
+                >
+                  {t('Enroll Now')} - ${course?.price}
+                </button>
+              )
             ) : (
-              <button
-                onClick={handlePayment}
-                className="px-6 py-3 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-colors"
+              // إذا لم يكن مسجل دخول، عرض زر تسجيل الدخول
+              <Link
+                to="/auth/login"
+                state={{ from: `/oneCourse/${id}` }}
+                className="w-full block text-center py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-md transition-colors"
               >
-                Enroll Now
-              </button>
+                {t('Login to Enroll')}
+              </Link>
             )}
           </div>
           <div className="border-b md: md:p-5  p-2.5 ">
