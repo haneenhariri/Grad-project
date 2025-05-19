@@ -1,4 +1,5 @@
 
+
 export interface logbtn {
   btn: string;
 }
@@ -247,3 +248,39 @@ export interface Lesson {
   files: LessonFile[];
 }
 
+export interface MessageProps {
+  id: number;
+  sender_id: number;
+  received_id: number;
+  content: string;
+  created_at: string;
+  updated_at : string;
+  received:
+  {
+    id: number;
+    name: string;
+    profile_picture?: string;
+  };
+  sender :
+  {
+    id: number;
+    name: string;
+    profile_picture?: string;
+  };
+}
+
+export interface InputProps {
+  placeholder?: string;
+  label?: string;
+  type?: string;
+  name?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string | undefined;
+  maxLength?: number;
+  showCount?: boolean;
+  required?: boolean;
+  icon?: React.ReactNode;
+  className?: string;
+  rest?: React.InputHTMLAttributes<HTMLInputElement>;
+}

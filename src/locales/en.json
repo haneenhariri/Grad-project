@@ -85,6 +85,7 @@
         "Price" : "Price",
         "Recommended Courses":  "Recommended Courses"
     },
+    "Message" : "Message" ,
     "All Courses" : "All Courses" ,
     "Filter" : "Filter", 
     "Trending" : "Trending",

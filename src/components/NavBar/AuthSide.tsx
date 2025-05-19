@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Logout from "../Logout/Logout";
 import { imgProfile } from "../../services/profileStd";
-import { data, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { getSecureCookie } from "../../utils/cookiesHelper";
 
 export default function AuthSide() {

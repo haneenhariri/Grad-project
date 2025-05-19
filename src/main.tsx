@@ -10,11 +10,15 @@ import DashLayout from './layout/DashLayout.tsx';
 import './index.css';
 import './utils/i18n.ts';
 import EditeCourse from './instructorDash/EditeCourse/EditeCourse.tsx';
+import  AdminEditeCourse  from './Admin/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
 import Teachers from './components/Teachers/Teachers.tsx';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import Message from './components/Message/Message.tsx';
 import ProtectedCourseRoute from './hooks/ProtectedCourseRoute';
+import ChargeAccount from './Admin/Payments/ChargeAccount.tsx';
+import Quiz from './pages/Quiz/Quiz.tsx';
+import Dash from './Admin/Dash/Dash.tsx';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -54,6 +58,7 @@ const routes = createBrowserRouter([
           { index: true, element: <WatchCourse /> }
         ]
       },
+      { path: '/quiz/:id', element: <Quiz /> },
       { path: '/auth/:formType', element: <Auth /> },
       {path: '/wishlist' , element:( <Wishlist/>)},
       {
@@ -85,14 +90,16 @@ const routes = createBrowserRouter([
       </RoleProtectedRoute>
     ),
     children: [
-      { index: true, element: <InstractorDash /> },
-      { path: 'dash', element: <InstractorDash /> },
+      { index: true, element: <Dash /> },
+      { path: 'dash', element: <Dash /> },
       { path: 'Settings', element: <AdminSettings /> },
       { path: 'Courses', element: <AdminCourse /> },
       { path: 'Create', element: <CreatCourse /> },
       { path: 'Payments', element: <Payments /> },
+      { path: 'ChargeAccount', element: <ChargeAccount/> },
       { path: 'instructorlist', element: <InstructorList /> },
       { path: 'Students', element: <Students /> },
+      { path: 'detail/:id', element: <AdminEditeCourse /> },
     ],
   },
   {

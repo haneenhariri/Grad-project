@@ -18,3 +18,85 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* أنماط اللوغو المحسن */
+.logo-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.logo-container img {
+  z-index: 1;
+  filter: drop-shadow(0 0 5px rgba(156, 77, 244, 0.3));
+}
+
+.logo-container:hover {
+  transform: translateY(-2px);
+}
+
+.logo-container:hover img {
+  filter: drop-shadow(0 0 8px rgba(156, 77, 244, 0.5));
+}
+
+.logo-text {
+  position: relative;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+}
+
+.code-bracket {
+  display: inline-block;
+  transform: scale(1.2);
+  margin: 0 2px;
+  color: #9C4DF4;
+  font-weight: 400;
+  transition: all 0.3s ease;
+}
+
+.slash-char {
+  display: inline-block;
+  color: #9C4DF4;
+  font-weight: 700;
+  margin: 0 1px;
+  transition: all 0.3s ease;
+}
+
+a:hover .code-bracket {
+  transform: scale(1.4);
+  opacity: 1;
+}
+
+a:hover .slash-char {
+  transform: scale(1.2);
+  color: #7E3DCF;
+  opacity: 1;
+}
+
+.logo-text::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+a:hover .logo-text::after {
+  width: 100%;
+}
+
+
+
+
+
+
+
+
+

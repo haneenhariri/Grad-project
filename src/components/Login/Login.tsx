@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import { showToast } from "../../utils/toast";
 import Spinner from "../Spinner/Spinner";
 import Label from "../../Ui/Label/Label";
+import Input from "../../Ui/Input/Input";
 
 export default function Login({ btn }: logbtn) {
   const { t } = useTranslation();
@@ -70,25 +71,21 @@ export default function Login({ btn }: logbtn) {
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col mb-6">
         <Label label="Email"/>
-        <input
-          {...register("email")}
-          className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
-            errors.email ? "border border-red-500" : ""
-          }`}
+        <Input 
+          rest={register("email")} 
+          error={errors.email?.message} 
+          type={"email"} 
           placeholder={t("EmailPlace")}
-          type="email"
         />
         {errors.email && (
           <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
         )}
         <Label label="Password"/>
-        <input
-          {...register("password")}
-          className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
-            errors.password ? "border border-red-500" : ""
-          }`}
+        <Input 
+          rest={register("password")} 
+          error={errors.password?.message} 
+          type={"password"} 
           placeholder={t("PasswordPlace")}
-          type="password"
         />
         {errors.password && (
           <p className="text-red-500 text-sm mb-2">

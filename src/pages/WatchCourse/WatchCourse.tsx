@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { watchSingleCourse } from "../../services/courses";
 import { updateLessonProgress, getCourseProgress } from "../../services/courseProgress"; // تغيير المسار هنا
 import Spinner from "../../components/Spinner/Spinner";
 import { showToast } from "../../utils/toast";
 import Comment from "../../components/Comment/Comment";
 import Head from "./Head";
+import Button from "../../Ui/Button/Button";
 
 export default function WatchCourse() {
   const { id } = useParams();
@@ -14,6 +15,8 @@ export default function WatchCourse() {
   const [loading, setLoading] = useState(true);
   const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
   const [completedPercentage, setCompletedPercentage] = useState(0);
+  const navigate = useNavigate();
+
   // إضافة سجل تصحيح الأخطاء للتحقق من قيمة id
   useEffect(() => {
     console.log("Course ID from params:", id);
@@ -274,6 +277,12 @@ export default function WatchCourse() {
                   </div>
                 </div>
               ))}
+              {completedLessons.size === course?.lessons.length && (
+                <>
+                <p className='text-sm text-green-600 mt-2'>You have completed all lessons!</p>
+                <Button text="Start Quiz" Bg=" w-full bg-green-600 text-white mt-4" onClick={() => navigate(`/quiz/${course.id}`)}/>
+                </>
+              )}
             </div>
           </div>
         </div>

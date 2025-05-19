@@ -35,20 +35,8 @@ export default function AdminCourse() {
   const [globalFilter, setGlobalFilter] = useState('');
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
+  const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
   // إغلاق القائمة المنسدلة عند النقر خارجها
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const updateCourseStatus = async (id: number, status: "accepted" | "rejected") => {
     try {
@@ -78,7 +66,7 @@ export default function AdminCourse() {
     const fetchCourses = async () => {
       try {
         const [allCoursesResponse, pendingCoursesResponse] = await Promise.all([
-          allCourses(),
+          allCourses(lang),
           pendingCourse()
         ]);
 
@@ -174,7 +162,7 @@ export default function AdminCourse() {
               <div className="absolute z-10 right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md overflow-hidden animate-fadeIn">
                 <button 
                   className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                  onClick={() => navigate(`/Admin/Edit/${courseId}`)}
+                  onClick={() => navigate(`/Admin/detail/${courseId}`)}
                 >
                   <FiEdit2 size={16} className="mr-2 text-blue-500" />
                   <span>Edit Course</span>
@@ -365,7 +353,7 @@ export default function AdminCourse() {
             <div className="flex items-center text-sm text-gray-600">
               <span className="flex items-center gap-1">
                 Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{' '}
-                <strong>{table.getPageCount()}</strong>
+                <p>{table.getPageCount()}</p>
               </span>
             </div>
             

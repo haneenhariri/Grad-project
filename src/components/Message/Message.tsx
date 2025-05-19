@@ -1,331 +1,307 @@
-import { useEffect, useState, useRef, useCallback, useMemo, useReducer } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { getSecureCookie } from "../../utils/cookiesHelper";
-import Pusher from "pusher-js";
+import { format } from 'date-fns';
+import { useTranslation } from "react-i18next";
+import { showToast } from "../../utils/toast";
 import SidebarChat from "../../chat/SidebarChat";
-import { TeachersProps } from "../Teachers/Teachers";
-import { gitUser } from "../../services/message";
-
-// أنواع البيانات
-type Message = {
-  id: number;
-  sender_id: number;
-  received_id: number;
-  content: string;
-  created_at: string;
-  updated_at: string;
-};
-
-type PusherState = {
-  isConnected: boolean;
-  error: string | null;
-  isSubscribed: boolean;
-};
-
-type PusherAction =
-  | { type: 'CONNECTION_STATE_CHANGE'; payload: string }
-  | { type: 'SET_ERROR'; payload: string }
-  | { type: 'RECONNECT_ATTEMPT' }
-  | { type: 'SUBSCRIBED' };
-
-// Reducer لإدارة حالة Pusher
-const pusherReducer = (state: PusherState, action: PusherAction): PusherState => {
-  switch (action.type) {
-    case 'CONNECTION_STATE_CHANGE':
-      return {
-        ...state,
-        isConnected: action.payload === 'connected',
-        error: action.payload === 'disconnected' ? 'فقدان الاتصال بالخادم' : null
-      };
-    case 'SET_ERROR':
-      return { ...state, error: action.payload };
-    case 'RECONNECT_ATTEMPT':
-      return { ...state, error: 'جاري إعادة الاتصال...' };
-    case 'SUBSCRIBED':
-      return { ...state, isSubscribed: true };
-    default:
-      return state;
-  }
-};
+import { MessageProps } from "../../types/interfaces";
+import Spinner from "../Spinner/Spinner";
+import HeadChat from "../../chat/HeadChat";
+import SendMessage from "../../chat/SendMessage";
+import Pusher from "pusher-js";
+import echo from "../../utils/echo";
 
 export default function Message() {
   const { user_id } = useParams<{ user_id: string }>();
-  const myUserId = Number(getSecureCookie("id"));
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [messageContent, setMessageContent] = useState("");
-  const [currentTeacher, setCurrentTeacher] = useState<TeachersProps | null>(null);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const { t } = useTranslation();
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [pusherState, dispatch] = useReducer(pusherReducer, {
-    isConnected: false,
-    error: null,
-    isSubscribed: false
-  });
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  
+  const myUserId = parseInt(getSecureCookie('id') || '0');
+  const otherUserId = parseInt(user_id || '0');
+  const receiver = messages[0]?.received_id === otherUserId 
+    ? messages[0]?.received 
+    : messages[0]?.sender;
 
-  // جلب بيانات المعلم
-  useEffect(() => {
-    const fetchTeacher = async () => {
-      try {
-        const teachers = await gitUser();
-        const teacher = teachers.find((t: TeachersProps) => t.user_id === Number(user_id));
-        setCurrentTeacher(teacher || null);
-      } catch (error) {
-        dispatch({ type: 'SET_ERROR', payload: "خطأ في تحميل بيانات المعلم" });
+  // تنسيق التاريخ
+  const formatDate = useCallback((dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, 'MMMM d, yyyy');
+  }, []);
+
+  // تنسيق الوقت
+  const formatTime = useCallback((dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, 'h:mm a');
+  }, []);
+
+  // إضافة دالة لجلب الرسائل
+  const fetchMessages = useCallback(async () => {
+    if (!otherUserId) return;
+    
+    setLoading(true);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/chat/${otherUserId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${getSecureCookie('token')}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
-    if(user_id)
-    {
-      fetchTeacher()
+      
+      const data = await response.json();
+      console.log('Fetched messages:', data);
+      
+      if (data && data.data) {
+        setMessages(data.data);
+        
+        // التمرير إلى أسفل بعد تحميل الرسائل
+        setTimeout(() => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      showToast(t('Failed to load messages'), 'error');
+    } finally {
+      setLoading(false);
     }
+  }, [otherUserId, t]);
 
-  }, [user_id]);
-
-  // تهيئة Pusher والاشتراك في القناة
+  // إضافة useEffect لجلب الرسائل عند تحميل المكون
   useEffect(() => {
-    if (!user_id || isNaN(Number(user_id))) return;
+    fetchMessages();
+  }, [fetchMessages]);
+useEffect(() => {
+  console.log('Initializing Pusher directly with:', {
+    pusherKey: '387e77ddfcfe5e1abfd9',
+    pusherCluster: 'eu'
+  });
+  
+  const token = getSecureCookie('token');
+  
+  const pusher = new Pusher('387e77ddfcfe5e1abfd9', {
+    cluster: 'eu',
+    authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth',
+    auth: {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+      }
+    }
+  });
+  
+  pusher.connection.bind('state_change', (states) => {
+    console.log('Pusher connection:', states.previous + ' -> ' + states.current);
+  });
+  
+  const channelName = `private-chat.user.${myUserId}`;
+  console.log('Subscribing to channel:', channelName);
+  
+  const channel = pusher.subscribe(channelName);
+  
+  channel.bind('pusher:subscription_succeeded', () => {
+    console.log('Successfully subscribed to channel:', channelName);
+  });
+  
+  channel.bind('pusher:subscription_error', (error) => {
+    console.error('Subscription error:', error);
+  });
+  
+  // استمع إلى الحدث الصحيح (message.sent)
+  channel.bind('message.sent', (data) => {
+    console.log('Received message event:', data);
+    
+    // تأكد من أن البيانات صالحة
+    if (data) {
+      const newMessage = {
+        id: Date.now(),
+        content: data.message,
+        sender_id: data.sender.id,
+        received_id: myUserId,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        sender: data.sender,
+        received: { id: myUserId, name: getSecureCookie('name') }
+      };
+      
+      console.log('Adding new message to state:', newMessage);
+      setMessages(prevMessages => [...prevMessages, newMessage]);
+      
+      // التمرير إلى أسفل بعد استلام رسالة جديدة
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  });
+  
+  return () => {
+    console.log('Cleaning up Pusher connection');
+    channel.unbind_all();
+    pusher.unsubscribe(channelName);
+  };
+}, [myUserId]);
 
-    const pusherAppKey = import.meta.env.VITE_PUSHER_APP_KEY || "51cb977726ad1dd37a3b";
-    const pusherCluster = import.meta.env.VITE_PUSHER_CLUSTER || "mt1";
-    const pusher = new Pusher(pusherAppKey, {
+  // أضف هذا الكود للتحقق من الأحداث الواردة
+  useEffect(() => {
+    // تسجيل جميع الأحداث الواردة من Pusher للتصحيح
+    if (!myUserId) return;
+    
+    const token = getSecureCookie('token');
+    const pusherKey = import.meta.env.VITE_PUSHER_APP_KEY || '387e77ddfcfe5e1abfd9';
+    const pusherCluster = import.meta.env.VITE_PUSHER_APP_CLUSTER || 'eu';
+    
+    console.log('DEBUG: Creating debug Pusher connection');
+    
+    // إنشاء اتصال Pusher للتصحيح
+    const debugPusher = new Pusher(pusherKey, {
       cluster: pusherCluster,
       forceTLS: true,
-      authEndpoint: "http://127.0.0.1:8000/broadcasting/auth",
+      authEndpoint: 'http://127.0.0.1:8000/broadcasting/auth',
       auth: {
         headers: {
-          Authorization: `Bearer ${getSecureCookie("token")}`
+          Authorization: `Bearer ${token}`
         }
-      }
+      },
+      enableLogging: true
     });
-
-    pusher.connection.bind('state_change', (states: any) => {
-      dispatch({ type: 'CONNECTION_STATE_CHANGE', payload: states.current });
+    
+    // الاستماع لجميع الأحداث
+    debugPusher.connection.bind('connected', () => {
+      console.log('DEBUG: Debug Pusher connected');
+      
+      // الاشتراك في القناة الخاصة
+      const channelName = `private-chat.user.${myUserId}`;
+      console.log(`DEBUG: Subscribing to ${channelName}`);
+      
+      const channel = debugPusher.subscribe(channelName);
+      
+      // تسجيل جميع الأحداث
+      channel.bind_global((eventName, data) => {
+        console.log(`DEBUG: Event received: ${eventName}`, data);
+      });
     });
-
-    const channelName = `chat.${Math.min(myUserId, Number(user_id))}.${Math.max(myUserId, Number(user_id))}`;
-    const channel = pusher.subscribe(channelName);
-
-    channel.bind('pusher:subscription_succeeded', () => {
-      dispatch({ type: 'SUBSCRIBED' });
-      fetchMessages();
-    });
-
-    channel.bind('new-message', (data: Message) => {
-      setMessages(prev => [...prev, data]);
-    });
-
+    
     return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
-      pusher.disconnect();
+      debugPusher.disconnect();
     };
-  }, [user_id, myUserId]);
+  }, [myUserId]);
 
-  // جلب الرسائل مع Pagination
-  const fetchMessages = async (pageNum = 1) => {
-    try {
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/chat/${user_id}?page=${pageNum}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getSecureCookie("token")}`
-          }
-        }
-      );
-
-      const result = await response.json();
-      if (pageNum === 1) {
-        setMessages(result.data);
-      } else {
-        setMessages(prev => [...result.data, ...prev]);
+  // تجميع الرسائل حسب التاريخ
+  const groupedMessages = useMemo(() => {
+    return messages.reduce((groups, message) => {
+      const date = new Date(message.created_at).toDateString();
+      if (!groups[date]) {
+        groups[date] = [];
       }
-      setHasMore(result.current_page < result.last_page);
-    } catch (err) {
-      dispatch({ type: 'SET_ERROR', payload: "تعذر تحميل الرسائل" });
-    }
-  };
-
-  // إرسال رسالة جديدة مع Optimistic UI
-  const sendMessage = async () => {
-    if (!messageContent.trim() || !user_id) return;
-
-    const optimisticMessage: Message = {
-      id: Date.now(),
-      sender_id: myUserId,
-      received_id: Number(user_id),
-      content: messageContent,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    setMessages(prev => [...prev, optimisticMessage]);
-    setMessageContent("");
-
-    try {
-      await fetch(`http://127.0.0.1:8000/api/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getSecureCookie("token")}`
-        },
-        body: JSON.stringify({
-          sender_id: myUserId,
-          received_id: user_id,
-          content: messageContent
-        })
-      });
-
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticMessage.id));
-    } catch (err) {
-      dispatch({ type: 'SET_ERROR', payload: "فشل إرسال الرسالة" });
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticMessage.id));
-    }
-  };
-
-
-
-  // تحميل المزيد من الرسائل عند التمرير لأعلى
-  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop } = e.currentTarget;
-    if (scrollTop === 0 && hasMore) {
-      setPage(prev => {
-        const newPage = prev + 1;
-        fetchMessages(newPage);
-        return newPage;
-      });
-    }
-  }, [hasMore]);
-
-  // تنسيق وقت الرسالة
-  const formatMessageTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  // فرز الرسائل حسب الوقت
-  const sortedMessages = useMemo(() => {
-    return [...messages].sort((a, b) => 
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    );
+      groups[date].push(message);
+      return groups;
+    }, {} as Record<string, MessageProps[]>);
   }, [messages]);
 
-  // إرسال بالضغط على Enter
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  if (pusherState.error) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen p-4 text-center">
-        <div className="bg-red-50 p-6 rounded-lg max-w-md w-full">
-          <h3 className="text-red-600 text-lg font-medium mb-3">حدث خطأ</h3>
-          <p className="mb-4">{pusherState.error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
-          >
-            إعادة المحاولة
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleMessageSent = useCallback((newMessage: MessageProps) => {
+    console.log('Message sent callback:', newMessage);
+    setMessages(prevMessages => [...prevMessages, newMessage]);
+    
+    // التمرير إلى أسفل
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  }, []);
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <SidebarChat />
-      
-      <div className="flex flex-col flex-1 border-l">
+    <div className="flex">
+      <SidebarChat/>
+      <div className="flex w-full flex-col h-[calc(100vh-100px)] bg-white border shadow-md overflow-hidden">
         {/* رأس المحادثة */}
-        <div className="p-4 border-b flex items-center gap-3 bg-white">
-          {currentTeacher && (
+        {receiver?.profile_picture ? (
+          <HeadChat 
+            image={`http://127.0.0.1:8000/storage/${receiver?.profile_picture}`} 
+            name={receiver.name}
+          />
+        ) : (
+          <HeadChat image={''} name={receiver?.name} />
+        )}
+        
+        {/* محتوى المحادثة */}
+        <div 
+          ref={messagesContainerRef}
+          className="flex-1 p-4 overflow-y-auto"
+        >
+          {loading ? (
+            <Spinner/>
+          ) : (
             <>
-              <img 
-                src={`http://127.0.0.1:8000/storage/${currentTeacher.profile_picture}`}
-                className="w-10 h-10 rounded-full object-cover"
-                alt={currentTeacher.name}
-              />
-              <div>
-                <h2 className="font-semibold">{currentTeacher.name}</h2>
-                <div className="flex items-center text-sm text-gray-500">
-                  <span className={`inline-block w-2 h-2 rounded-full mr-1 ${
-                    pusherState.isConnected ? 'bg-green-500' : 'bg-gray-400'
-                  }`}></span>
-                  {pusherState.isConnected ? 'متصل الآن' : 'غير متصل'}
+              {Object.entries(groupedMessages).map(([date, dateMessages]) => (
+                <div key={date} className="mb-6">
+                  <div className="flex justify-center mb-4">
+                    <div className="bg-violet-100 text-violet-800 text-xs px-3 py-1 rounded-full">
+                      {formatDate(date)}
+                    </div>
+                  </div>
+                  
+                  {dateMessages.map((message, index) => {
+                    const isMyMessage = message.sender_id === myUserId;
+                    const showAvatar = index === 0 || 
+                      dateMessages[index - 1].sender_id !== message.sender_id;
+                    const otherUser = isMyMessage ? message.received : message.sender;
+                    
+                    return (
+                      <div 
+                        key={message.id} 
+                        className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'} mb-4`}
+                      >
+                        <div className={`flex ${isMyMessage ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
+                          {!isMyMessage && showAvatar && (
+                            <div className="flex-shrink-0">
+                              {otherUser?.profile_picture ? (
+                                <img 
+                                  src={`http://127.0.0.1:8000/storage/${otherUser.profile_picture}`}
+                                  className="w-8 h-8 rounded-full object-cover"
+                                  alt={otherUser.name}
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center">
+                                  <span className="text-gray-600 text-xs font-semibold">
+                                    {otherUser?.name?.charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          <div 
+                            className={`p-3 rounded-lg max-w-xs lg:max-w-md ${
+                              isMyMessage 
+                                ? 'bg-violet-900 text-white rounded-tr-none' 
+                                : 'bg-gray-100 rounded-tl-none'
+                            }`}
+                          >
+                            <p className="text-sm">{message.content}</p>
+                            <p className={`text-xs mt-1 text-right ${
+                              isMyMessage ? 'text-orange-100' : 'text-gray-500'
+                            }`}>
+                              {formatTime(message.created_at)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              </div>
+              ))}
+              <div ref={messagesEndRef} />
             </>
           )}
         </div>
-
-        {/* منطقة الرسائل */}
-        <div 
-          className="flex-1 overflow-y-auto p-4 space-y-3"
-          onScroll={handleScroll}
-        >
-          {sortedMessages.length === 0 ? (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              لا توجد رسائل بعد. ابدأ المحادثة الآن!
-            </div>
-          ) : (
-            sortedMessages.map(msg => {
-              const isMyMessage = msg.sender_id === myUserId;
-              return (
-                <div 
-                  key={msg.id} 
-                  className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div className={`flex max-w-xs lg:max-w-md ${isMyMessage ? 'flex-row-reverse' : 'flex-row'} items-end gap-2`}>
-                    {!isMyMessage && currentTeacher && (
-                      <img 
-                        src={`http://127.0.0.1:8000/storage/${currentTeacher.profile_picture}`}
-                        className="w-8 h-8 rounded-full object-cover"
-                        alt="Profile"
-                      />
-                    )}
-                    <div className={`p-3 rounded-lg ${isMyMessage ? 'bg-violet-950 text-white' : 'bg-gray-100'}`}>
-                      <p className="text-sm">{msg.content}</p>
-                      <p className={`text-xs mt-1 ${isMyMessage ? 'text-violet-200' : 'text-gray-500'}`}>
-                        {formatMessageTime(msg.created_at)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* منطقة الإدخال */}
-        <div className="p-4 border-t bg-white">
-          <form 
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}
-            className="flex gap-2"
-          >
-            <input
-              type="text"
-              value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500"
-              placeholder="اكتب رسالتك..."
-            />
-            <button
-              type="submit"
-              disabled={!messageContent.trim()}
-              className="bg-violet-950 text-white px-4 py-2 rounded-lg hover:bg-violet-900 disabled:opacity-50"
-            >
-              إرسال
-            </button>
-          </form>
-        </div>
+        <SendMessage receiverId={otherUserId} onMessageSent={handleMessageSent} />
       </div>
     </div>
   );

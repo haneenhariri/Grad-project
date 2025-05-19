@@ -62,7 +62,7 @@ export default function ProfileSettings() {
 
   return (
     <>
-      <div className="py-10 flex lg:flex-row flex-col border gap-5 rounded-md p-5 border-violet-400">
+      <div className=" flex  flex-col  gap-5 rounded-md p-5 ">
         <div className="lg:w-1/2 w-full">
           <h2 className="md:text-2xl text-lg font-semibold mb-6">Account settings</h2>
           <form onSubmit={handleSubmit}>

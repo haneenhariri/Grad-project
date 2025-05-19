@@ -12,6 +12,7 @@ import {
   getFilteredRowModel,
 } from '@tanstack/react-table';
 import Search from "../components/Search/Search";
+import Button from "../Ui/Button/Button";
 interface PaymentHistory {
   student: string;
   instructor: string ;
@@ -107,8 +108,9 @@ export default function Payments() {
 
   return (
     <>
-      <div className="flex mb-6">
+      <div className="flex justify-between mb-6">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
+        <Button text="Charge Account" Bg="bg-btn" textColor="text-white" onClick={() => navigate('/Admin/ChargeAccount')}/>
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">

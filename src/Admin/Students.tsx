@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "../Ui/Button/Button";
 import axiosInstance from "../services/axiosInstance";
 import Search from "../components/Search/Search";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
+import {  FiEdit2, FiMoreVertical, FiTrash2 } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -17,6 +19,9 @@ export default function Students() {
   const [students, setStudents] = useState<Student[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -43,8 +48,45 @@ export default function Students() {
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: props => {
+        const courseId = props.row.original.id;
+        const rowIndex = props.row.index;
+        return (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+              onClick={() => setOpenDropdown(openDropdown === rowIndex ? null : rowIndex)}
+              aria-label="Actions"
+            >
+              <FiMoreVertical size={18} />
+            </button>
+            {openDropdown === rowIndex && (
+              <div className="absolute z-10 right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md overflow-hidden animate-fadeIn">
+                <button 
+                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => navigate(`/Admin/detail/${courseId}`)}
+                >
+                  <FiEdit2 size={16} className="mr-2 text-blue-500" />
+                  <span>Edit Course</span>
+                </button>
+                <button
+                  className="flex items-center w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 transition-colors"
+                  /* onClick={() => handleDeleteStudent(courseId)} */
+                >
+                  <FiTrash2 size={16} className="mr-2 text-red-500" />
+                  <span>Delete Course</span>
+                </button>
 
-  ], []);
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+  ], [openDropdown , navigate]);
   const table = useReactTable({
     data: students,
     columns,
@@ -67,9 +109,14 @@ export default function Students() {
 
   return (
     <>
-      <div className="flex gap-4   justify-end mb-4">
+      <div className="flex gap-4   justify-between items-center mb-4">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
-        <Button  Bg="bg-btn text-white" text="Add Student"/>
+          <Button 
+            Bg="bg-btn hover:bg-violet-800 transition-colors" 
+            text="Add Student" 
+            textColor="text-white" 
+            onClick={() => navigate('')} 
+          />      
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">

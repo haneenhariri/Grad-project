@@ -11,7 +11,7 @@ import { AxiosError } from "axios";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 export default function Courses() {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const lang = useSelector((state: RootState) => state.language.lang);
   const [courses, setCourses] = useState<CourseTypeProps[]>([]); 
   const [loading, setLoading] = useState(true);

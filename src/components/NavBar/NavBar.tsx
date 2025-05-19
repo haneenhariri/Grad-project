@@ -4,7 +4,6 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthSide from "./AuthSide";
 import menu from "../../assets/nav/icon/toggle.svg";
-import shop from "../../assets/nav/icon/ShoppingCartSimple.png";
 import heart from "../../assets/nav/icon/Heart.png";
 import SideBar from "../SideBar/SideBar";
 import Logo from "../../Ui/Logo/Logo";
@@ -57,7 +56,6 @@ export default function NavBar() {
       <div className=" flex items-center gap-2">
       <div className="mx-4 flex justify-center items-center gap-6">
         <button onClick={() => handleWishlist()}> <img src={heart} alt="whish list" className=" w-6 h-6"/></button>
-        <img src={shop} alt="ShoppingCartSimple" className=" w-6 h-6"/>
       </div>
       {isAuthenticated ? (
         <AuthSide /> 

@@ -1,0 +1,25 @@
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- خلفية اللوغو -->
+  <rect width="44" height="44" rx="10" fill="#9C4DF4"/>
+  
+  <!-- قوس البرمجة الأيسر < -->
+  <path d="M8 22L12 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8 22L12 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- قوس البرمجة الأيمن > -->
+  <path d="M36 22L32 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 22L32 28" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- السلاش المائل / -->
+  <path d="M14 28L20 16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- حرف O -->
+  <circle cx="24" cy="22" r="3" stroke="white" stroke-width="2"/>
+  
+  <!-- حرف r -->
+  <path d="M28 22V25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 22C28 20.8954 28.8954 20 30 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- نقطة مضيئة -->
+  <circle cx="22" cy="22" r="1.5" fill="white"/>
+</svg>
