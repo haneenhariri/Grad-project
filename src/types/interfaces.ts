@@ -1,14 +1,59 @@
 
-
+export interface PusherMessageEvent {
+  message: string;
+  sender: {
+    id: number;
+    name: string;
+    profile_picture: string;
+  };
+  received: {
+    id: number;
+    name: string;
+    profile_picture: string;
+  };
+  timestamp: string;
+}
 export interface logbtn {
   btn: string;
 }
-
+export interface LocalizedText {
+  en?: string;
+  ar?: string;
+  [key: string]: string | undefined;
+}
 export interface NavProps
 {
     pathLink : string;
     title : string;
     icon : string ;
+}
+export interface CourseProgress {
+  total_lessons: number;
+  completed_lessons: number;
+  overall_progress: number;
+}
+
+export interface CourseData {
+  id: number;
+  title: { en: string; ar: string };
+  cover: string;
+  created_at?: string;
+  updated_at?: string;
+  rating?: number | null;
+}
+
+export interface EnrolledCourse {
+  course: CourseData;
+  progress: CourseProgress;
+}
+export interface userCourseProp
+{
+  cover: string;
+  title: string;
+  overall_progress:number;
+  completed_lessons: number;
+  total_lessons: number;
+  id : number;
 }
 export interface form 
 {
@@ -115,23 +160,28 @@ export interface BenfCard
     p : string;
 }
 
-export interface CouCard 
-{
+export interface CouCard {
   mainCategoryName: string;
-  linkPath?:string
-    btn?:string;
-    Bg?:string
-    instructor?: string;
-    duration?: number;
-    rating: number | null;
-    title: string;
-    price?: number;
-    cover?: string;
-    id: number;
-    level:string;
-    description?: string
-    
+  linkPath?: string;
+  btn?: string;
+  Bg?: string;
+  instructor?: string;
+  duration?: number;
+  rating: number | null;
+  title: string;
+  price?: number;
+  cover?: string;
+  id: number;
+  level: string;
+  description?: string;
 }
+
+// إضافة واجهة جديدة للبوب أب
+export interface PopupPosition {
+  position?: 'top' | 'bottom';
+  alignment?: 'left' | 'right';
+}
+
 export interface myCourseProp
 {
   id: number;
@@ -258,13 +308,13 @@ export interface MessageProps {
   received:
   {
     id: number;
-    name: string;
+    name?: string;
     profile_picture?: string;
   };
   sender :
   {
     id: number;
-    name: string;
+    name?: string;
     profile_picture?: string;
   };
 }

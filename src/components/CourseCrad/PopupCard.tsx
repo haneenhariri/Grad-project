@@ -1,4 +1,4 @@
-import { useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next";
 import star from '../../assets/icons/Star (3).png';
 import chart from '../../assets/bar-chart (1).png';
 import clock from '../../assets/icons/Clock (1).png';
@@ -7,56 +7,155 @@ import { useNavigate } from "react-router-dom";
 import { CouCard } from "../../types/interfaces";
 import { addWishCourse } from "../../services/wishlist";
 import { showToast } from "../../utils/toast";
+import { useRef, useEffect } from "react";
 
-export default function PopupCard({mainCategoryName ,title,price ,id,instructor, duration, rating ,level } :CouCard) {
-  const {t} = useTranslation();
+interface PopupCardProps extends CouCard {
+  position: {
+    top: boolean;
+    right: boolean;
+  };
+  onClose: () => void;
+}
+
+export default function PopupCard({
+  mainCategoryName,
+  title,
+  id,
+  instructor,
+  duration,
+  rating,
+  level,
+  position,
+  onClose
+}: PopupCardProps) {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const handelAddToWishList = async(id : number) => 
-  {
-    try{
-      const added = await addWishCourse(id);
-      console.log(added);
-      showToast("added" , 'success');
-    }catch(err: any){
-      console.log(err);
+  const popupRef = useRef<HTMLDivElement>(null);
+  
+  // تطبيق التأثير المرئي عند الظهور
+  useEffect(() => {
+    const popup = popupRef.current;
+    if (popup) {
+      // تأخير قصير لتطبيق التأثير المرئي
+      setTimeout(() => {
+        popup.style.opacity = '1';
+        popup.style.transform = 'translateY(0)';
+      }, 10);
     }
-  }
+    
+    // تعيين z-index عالي للبوب أب الحالي
+    if (popup) {
+      popup.style.zIndex = '50';
+    }
+  }, []);
+  
+  const handleAddToWishList = (e: React.MouseEvent) => {
+    e.stopPropagation(); // منع انتشار الحدث للكارد الأصلي
+    try {
+      addWishCourse(id).then(() => {
+        showToast("Added to wishlist", 'success');
+      });
+    } catch (error: unknown) {
+      console.log(error)
+      showToast( "Failed to add to wishlist", 'error');
+    }
+  };
+  
+  const handleCourseDetail = (e: React.MouseEvent) => {
+    e.stopPropagation(); // منع انتشار الحدث للكارد الأصلي
+    navigate(`/oneCourse/${id}`);
+  };
+  
+  // تحديد موضع البوب أب
+  const getPositionStyle = () => {
+    const { top, right } = position;
+    
+    const positionStyle: React.CSSProperties = {
+      position: 'absolute',
+      zIndex: 50,
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+      width: '300px',
+      maxWidth: '90vw',
+      opacity: 0,
+      transform: 'translateY(10px)',
+      transition: 'opacity 0.3s ease, transform 0.3s ease'
+    };
+    
+    // تحديد الموضع العمودي
+    if (top) {
+      positionStyle.bottom = '10%';
+      positionStyle.marginBottom = '10px';
+      positionStyle.transform = 'translateY(-10px)';
+    } else {
+      positionStyle.top = '10%';
+      positionStyle.marginTop = '10px';
+    }
+    
+    // تحديد الموضع الأفقي
+    if (right) {
+      positionStyle.right = '0';
+    } else {
+      positionStyle.left = '0';
+    }
+    
+    return positionStyle;
+  };
+
   return (
-    <div className={`absolute top-14 w-[300px] bg-white shadow-md lg:p-5 text-sm rounded p-2 opacity-0 group-hover:opacity-100 transition duration-300 z-10`}>
+    <div
+      ref={popupRef}
+      onClick={(e) => e.stopPropagation()} // منع انتشار الحدث للكارد الأصلي
+      className="bg-white rounded p-4"
+      style={getPositionStyle()}
+    >
+      <button 
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 bg-white rounded-full w-6 h-6 flex items-center justify-center"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+      >
+        ✕
+      </button>
+      
       <div className="py-1 px-1.5 w-max mb-2.5 flex items-center bg-violet-600/10 text-xs rounded">
         {mainCategoryName}
       </div>
       <h3 className="font-bold md:text-xl mb-2.5 rtl:text-lg text-base">{title}</h3>
-      <div className=" mb-2.5">
-          <p className=" text-base font-semibold text-gray-600">{t("CoursesSection.CourseBy")}<span className=" font-bold text-violet-700 text-lg">{instructor}</span></p>
+      <div className="mb-2.5">
+        <p className="text-base font-semibold text-gray-600">
+          {t("CoursesSection.CourseBy")}
+          <span className="font-bold text-violet-700 text-lg"> {instructor}</span>
+        </p>
       </div>
-      <div  className=" flex mb-2.5 items-center">
-      <img src={star} alt="star" className="w-4.5 h-4.5" />
-        <p className=" text-base font-semibold text-gray-600">{t("CoursesSection.Rating")}</p>
-        <div className="flex mx-2 items-center gap-1 justify-center">
-        <span className="text-sm">{rating}</span>
-        </div>
+      <div className="flex mb-2.5 items-center gap-2">
+        <img src={star} alt="star" className="w-4.5 h-4.5" />
+        <p className="text-base font-semibold text-gray-600">{t("CoursesSection.Rating")}: {rating}</p>
       </div>
-      <div className=" flex mb-2.5 items-center gap-4">
-        <div className=" flex items-center gap-1">
-          <img src={chart} alt="level"  className="w-4.5 h-4.5"/>
-          <p>{level}</p>
-        </div>
-        <div className=" flex items-center gap-1">
-          <img src={clock} alt="level"  className="w-4.5 h-4.5"/>
-          <p>{duration} {t("weeks")}</p>
-        </div>
+      <div className="flex mb-2.5 items-center gap-2">
+        <img src={clock} alt="duration" className="w-4.5 h-4.5" />
+        <p className="text-base font-semibold text-gray-600">{t("CoursesSection.Duration")}: {duration} {t("weeks")}</p>
       </div>
-      <div className=" flex items-center gap-2">
-      <p className=" text-base font-semibold text-gray-600">{t("CoursesSection.Price")}:</p>
-      <span className="text-violet-600 text-lg font-semibold">{price}$</span>
+      <div className="flex mb-2.5 items-center gap-2">
+        <img src={chart} alt="level" className="w-4.5 h-4.5" />
+        <p className="text-base font-semibold text-gray-600">{t("CoursesSection.Level")}: {level}</p>
+      </div>
+      <div className="mt-4">
+        <Button 
+          text="Add to Fav" 
+          onClick={handleAddToWishList} 
+          textColor="text-white w-full !text-lg !rounded-none" 
+          Bg="bg-violet-950" 
+        />
       </div>
       <div className="my-2.5">
-        <Button text="Add to Fav" onClick={()=> handelAddToWishList(id)} textColor="text-white w-full !text-lg !rounded-none" Bg="bg-violet-950" />
+        <Button 
+          text="Course Detail" 
+          textColor="text-white w-full !text-lg !rounded-none" 
+          Bg="bg-violet-950" 
+          onClick={handleCourseDetail} 
+        />
       </div>
-      <div className="my-2.5">
-        <Button text="Course Detail" textColor="text-white w-full !text-lg !rounded-none" Bg="bg-violet-950" onClick={() => navigate(`/oneCourse/${id}`)} />
-      </div>
-  </div>
-  )
+    </div>
+  );
 }

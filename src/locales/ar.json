@@ -3,14 +3,14 @@
     {
         "Home": "الرئيسية",
         "Courses": "الدورات",
-        "About": "من نحن",
+        "About": "عن المنصة",
         "Contact": "اتصل بنا",
         "Become an Instructor": "كن مدربًا",
         "DashBoard": "لوحة التحكم",
-        "Create New Course" : "اضافة دورة جديدة",
-        "Earning" : "الايرادات",
-        "My Courses" : "دوراتي",
-        "Settings" : "الأعدادات"
+        "Create New Course": "إنشاء دورة جديدة",
+        "Earning": "الأرباح",
+        "My Courses": "دوراتي",
+        "Settings": "الإعدادات"
     },
     "signUp":
     {
@@ -26,7 +26,7 @@
     },
     "Logo":
     {
-        "logo" : "عُربة"
+        "logo" : "عربة"
     },
     "btn":
     {
@@ -49,7 +49,9 @@
         "Submit Review" : "ارسال التقييم",
         "Add Course" : "اضافة دورة",
         "Add Instructor" : "اضافة مدرس",
-        "Back" : "رجوع"
+        "Back" : "رجوع",
+        "getStarted": "ابدأ الآن",
+        "backToHome" :"العودة إلى الرئيسية"
     },
     "hero":
     {
@@ -85,6 +87,19 @@
         "Price" : "السعر",
         "Recommended Courses" : "الدورات الموصى بها"
     },
+    "Wishlist" : "قائمة المفضلة",
+    "Purchase History" : "سجل المشتريات",
+    "Teachers" : "المدربون",
+    "Search in your courses..." : "ابحث في دوراتك...",
+    "Let's start learning" : "لنبدأ التعلم",
+    "Enrolled Courses" : "الدورات المسجلة",
+    "Completed Courses" : "الدورات المكتملة",
+    "Total Lessons Watched" : "إجمالي الدروس المشاهدة",
+    "Average Progress" : "متوسط التقدم",
+    "Progress" : "التقدم",
+    "Review Course" : "تقييم الدورة",
+    "Continue Learning" : "متابعة التعلم",
+    "lessons completed" : "دروس مكتملة",
     "Message" : "الرسائل",
     "All Courses" : "كامل الكورسات " ,
     "Suggestion" : "  المقترحة : ",
@@ -134,7 +149,6 @@
     "Courses" : "دورة",
     "MainText" : "أطلق العنان لإبداعك",
     "titleHero" : "تعلم مع الخبراء في أي وقت وفي أي مكان",
-    "search" : "بحث",
     "searchText" : "ماذا تريد أن تتعلم؟",
     "Testimonials" : "آراء الطلاب",
     "CourseTitle" : "دوراتنا التدريبة ",
@@ -164,5 +178,87 @@
     "CourseDuration": "مدة الدورة",
     "CoursePrice" : "سعر الدورة ",
     "Description" : "وصف الكورس",
-    "Administrator" : "المسؤول"
+    "Administrator" : "المسؤول",
+    "instructor": {
+        "becomeInstructor": "كن مدربًا",
+        "becomeInstructorDesc": "كن مدربًا وابدأ التدريس مع 26 ألف مدرب معتمد. أنشئ قصة نجاح مع 67.1 ألف طالب",
+        "instructorImage": "صورة مدرب",
+        "joinTeam": "انضم إلى فريق التدريس",
+        "shareKnowledge": "شارك معرفتك وخبرتك مع الطلاب حول العالم. املأ النموذج أدناه للتقديم كمدرب.",
+        "personalInfo": "المعلومات الشخصية",
+        "professionalInfo": "المعلومات المهنية",
+        "applicationSubmitted": "تم تقديم الطلب!",
+        "applicationSuccess": "تم تقديم طلبك بنجاح وسيتم مراجعته قريبًا. سنتواصل معك عبر البريد الإلكتروني بالنتائج.",
+        "backToHome": "العودة إلى الرئيسية"
+    },
+    "form": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "education": "التعليم",
+        "specialization": "التخصص",
+        "summary": "ملخص",
+        "cv": "السيرة الذاتية",
+        "uploadCV": "رفع السيرة الذاتية",
+        "dragDrop": "اسحب وأفلت السيرة الذاتية هنا، أو انقر للتصفح",
+        "fileTypes": "أنواع الملفات المدعومة: PDF، DOC، DOCX (الحد الأقصى 5 ميجابايت)",
+        "nameRequired": "الاسم مطلوب",
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "البريد الإلكتروني غير صالح",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordLength": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+        "educationRequired": "التعليم مطلوب",
+        "specializationRequired": "التخصص مطلوب",
+        "summaryRequired": "الملخص مطلوب",
+        "cvRequired": "السيرة الذاتية مطلوبة",
+        "generalError": "حدث خطأ أثناء تقديم طلبك.",
+        "termsAgreement": "بتقديم هذا الطلب، أوافق على",
+        "termsAndConditions": "الشروط والأحكام",
+        "and": "و",
+        "privacyPolicy": "سياسة الخصوصية",
+        "infoConfirmation": "أؤكد أن جميع المعلومات المقدمة دقيقة وكاملة."
+    },
+    "payment": {
+        "purchaseHistory": "سجل المشتريات",
+        "noPurchaseHistory": "لا يوجد سجل مشتريات",
+        "noPurchaseDescription": "لم تقم بشراء أي دورات بعد. تصفح كتالوج الدورات لدينا للعثور على الدورات التي تهمك.",
+        "courses": "دورات",
+        "courseBy": "المدرب",
+        "unknownInstructor": "مدرب غير معروف",
+        "viewCourse": "عرض الدورة",
+        "appWallet": "محفظة التطبيق"
+    },
+    "dashboard": {
+        "wishlist": "المفضلة",
+        "teachers": "المدربون",
+        "searchCourses": "البحث في دوراتك...",
+        "enrolledCourses": "الدورات المسجلة",
+        "completedCourses": "الدورات المكتملة",
+        "totalLessonsWatched": "إجمالي الدروس المشاهدة",
+        "averageProgress": "متوسط التقدم",
+        "startLearning": "لنبدأ التعلم",
+        "reviewCourse": "تقييم الدورة",
+        "progress": "التقدم",
+        "continueLearning": "متابعة التعلم",
+        "lessonsCompleted": "الدروس المكتملة"
+    },
+    "search": {
+        "searchCourses": "البحث عن الدورات...",
+        "searchText": "ماذا تريد أن تتعلم؟",
+        "search": "بحث"
+    },
+    "common": {
+        "loading": "جاري التحميل...",
+        "error": "حدث خطأ",
+        "retry": "إعادة المحاولة",
+        "noResults": "لم يتم العثور على نتائج",
+        "showMore": "عرض المزيد",
+        "showLess": "عرض أقل",
+        "filter": "تصفية",
+        "sortBy": "ترتيب حسب",
+        "trending": "الرائج",
+        "mostPopular": "الأكثر شعبية",
+        "suggestion": "اقتراح",
+        "message": "رسالة"
+    }
 }

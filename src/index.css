@@ -11,11 +11,17 @@
       @apply  bg-bg-primary-color font-tajawal ;
     }
   }
-
+  
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* لتحسين الأداء */
+}
 *
 {
-  margin: 0;
-  padding: 0;
+
   box-sizing: border-box;
 }
 

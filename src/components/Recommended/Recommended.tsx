@@ -42,7 +42,7 @@ export default function Recommended() {
       <div className=" w-full text-violet-900 flex items-center justify-between">
         <SectionsTitle  title="CoursesSection.Recommended Courses"/>
       </div>
-      <div className="gap-5 grid grid-cols-4">
+      <div className="gap-5 grid lg:grid-cols-4">
         {recommended?.slice(0,8).map((e,i) => (
              <div className="relative group min-h-[333px]  rounded-md" key={i}>
                 <img src={`http://127.0.0.1:8000/storage/${e.cover}`} alt={e.title} className="w-full h-44" />

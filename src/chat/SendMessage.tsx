@@ -1,81 +1,53 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { showToast } from '../utils/toast';
-import { MessageProps } from '../types/interfaces';
-import { getSecureCookie } from '../utils/cookiesHelper';
-import { sendMessageUser } from '../services/message';
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface SendMessageProps {
   receiverId: number;
-  onMessageSent: (message: MessageProps) => void;
+  onSend: (content: string) => Promise<void>;
 }
 
-export default function SendMessage({ receiverId, onMessageSent }: SendMessageProps) {
+export default function SendMessage({ receiverId, onSend }: SendMessageProps) {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const { t } = useTranslation();
-  const myUserId = parseInt(getSecureCookie('id') || '0');
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!message.trim()) return;
+    if (!message.trim() || !receiverId) return;
     
-    setSending(true);
     try {
-      const response = await sendMessageUser(receiverId, message);
-      console.log('Message sent successfully:', response);
-      
-      // إنشاء كائن الرسالة الجديدة
-      const newMessage: MessageProps = {
-        id: Date.now(), // سيتم استبداله بالمعرف الفعلي من الخادم إذا كان متاحًا
-        content: message,
-        sender_id: myUserId,
-        received_id: receiverId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        sender: {
-          id: myUserId,
-          name: getSecureCookie('name') || '',
-          profile_picture: getSecureCookie('profile_picture') || ''
-        },
-        received: {
-          id: receiverId,
-          name: '', // سيتم ملؤها لاحقًا إذا كانت متاحة
-          profile_picture: ''
-        }
-      };
-      
-      // استدعاء الدالة المرجعية لتحديث واجهة المستخدم
-      onMessageSent(newMessage);
-      
-      // مسح حقل الإدخال
+      setSending(true);
+      await onSend(message);
       setMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
-      showToast(t('Failed to send message'), 'error');
     } finally {
       setSending(false);
     }
   };
-  
+
   return (
-    <form onSubmit={handleSubmit} className="border-t p-4 bg-white">
+    <form onSubmit={handleSubmit} className="p-3 border-t border-gray-200">
       <div className="flex items-center">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t('Type a message...')}
-          className="flex-1 border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-violet-500"
+          className="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#f3c2f894]"
           disabled={sending}
         />
         <button
           type="submit"
-          className="bg-violet-900 text-white rounded-r-lg px-4 py-2 hover:bg-violet-800 transition-colors disabled:bg-violet-300"
+          className="bg-[#f2b3fa94] border-gray-300  border px-4  py-2 rounded-r-lg hover:bg-[#f2b3fa94] focus:ring-2  "
           disabled={sending || !message.trim()}
         >
-          {sending ? t('Sending...') : t('Send')}
+          {sending ? (
+            <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          ) : (
+            <span>{t('Send')}</span>
+          )}
         </button>
       </div>
     </form>

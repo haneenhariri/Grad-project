@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface InfoCardProps {
   title: string;
@@ -9,6 +10,7 @@ export interface InfoCardProps {
 }
 
 export default function InfoCard({title, value, icon, bgColor, iconBgColor}: InfoCardProps) {
+  const {t} = useTranslation();
   return (
     <div className={`p-4 shadow-md ${bgColor} transition-all duration-300 hover:shadow-lg`}>
       <div className="flex items-center gap-6">
@@ -17,7 +19,7 @@ export default function InfoCard({title, value, icon, bgColor, iconBgColor}: Inf
         </div>
         <div>
           <h2 className="text-3xl font-bold">{value}</h2>
-          <p className="text-sm opacity-80">{title}</p>
+          <p className="text-sm opacity-80">{t(title)}</p>
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ export default {
       },
       fontFamily : 
       {
-        tajawal: ['Tajawal', ...defaultTheme.fontFamily.sans], 
+        tajawal: ['Tajawal', 'sans-serif'], 
         lemonada: ['"Lemonada"', 'cursive'],
       },
       colors: {

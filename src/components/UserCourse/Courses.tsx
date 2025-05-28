@@ -3,48 +3,27 @@ import { getAllCoursesProgress } from "../../services/courseProgress";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Spinner from "../../components/Spinner/Spinner";
-
-interface CourseProgress {
-  total_lessons: number;
-  completed_lessons: number;
-  overall_progress: number;
-}
-
-interface CourseData {
-  id: number;
-  title: { en: string; ar: string };
-  description: { en: string; ar: string };
-  duration: number;
-  level: string;
-  cover: string;
-  price: number;
-  instructor_id: number;
-  pivot: any;
-}
-
-interface EnrolledCourse {
-  course: CourseData;
-  progress: CourseProgress;
-}
+import UserCourseCard from "./UserCourseCard";
+import { EnrolledCourse, LocalizedText } from "../../types/interfaces";
+import Sort from "../../pages/CoursesPage/Sort";
 
 export default function MyCourses() {
   const { i18n, t } = useTranslation();
   const currentLang = i18n.language || 'en';
-  
+  const [selectedOption, setSelectedOption] = useState("All Courses");
   const [courses, setCourses] = useState<EnrolledCourse[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<EnrolledCourse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  // دالة مساعدة للتعامل مع النصوص متعددة اللغات
-  const getLocalizedText = (textObj: any, fallback: string = ""): string => {
+  const getLocalizedText = (textObj: LocalizedText | string | undefined, fallback: string = ""): string => {
     if (!textObj) return fallback;
     
-    // إذا كان النص كائنًا يحتوي على مفاتيح لغات
     if (typeof textObj === 'object' && (textObj.en || textObj.ar)) {
       return textObj[currentLang] || textObj.en || textObj.ar || fallback;
     }
     
-    // إذا كان النص نصًا عاديًا
     return String(textObj);
   };
 
@@ -53,12 +32,12 @@ export default function MyCourses() {
       try {
         setLoading(true);
         
-        // جلب الكورسات مع بيانات التقدم
         const response = await getAllCoursesProgress();
         console.log("API Response:", response);
         
         if (response && Array.isArray(response)) {
           setCourses(response);
+          setFilteredCourses(response);
         } else {
           console.error("Unexpected response format:", response);
           setError("Unexpected data format received from server");
@@ -74,6 +53,40 @@ export default function MyCourses() {
     getCourses();
   }, []);
 
+  useEffect(() => {
+    // Apply search filter and sorting
+    let result = [...courses];
+
+    // Apply search filter
+    if (searchQuery) {
+      result = result.filter(item => 
+        getLocalizedText(item.course.title, "").toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Apply sorting
+    if (selectedOption === "Most Popular") {
+      result.sort((a, b) => (b.course.rating || 0) - (a.course.rating || 0));
+    } else if (selectedOption === "Trending") {
+      // Sort by newest courses (assuming there's a created_at field)
+      result.sort((a, b) => {
+        const dateA = a.course.created_at ? new Date(a.course.created_at).getTime() : 0;
+        const dateB = b.course.created_at ? new Date(b.course.created_at).getTime() : 0;
+        return dateB - dateA;
+      });
+    }
+
+    setFilteredCourses(result);
+  }, [courses, searchQuery, selectedOption]);
+
+  const handleSort = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(e.target.value);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchQuery(value);
+  };
+
   if (loading) {
     return <div className="py-10 p-5 text-center"><Spinner /></div>;
   }
@@ -83,74 +96,55 @@ export default function MyCourses() {
   }
 
   return (
-    <div className="py-10 p-5 border border-violet-400 rounded-b">  
-      {courses.length === 0 ? (
+    <div className="">  
+      <div>
+        <h2 className="text-2xl font-semibold mb-6">{t("Courses")} ({courses.length})</h2>
+        <div className="flex justify-between mb-10">
+          <Sort selectedOption={selectedOption} onClick={handleSort} />
+          <div className="relative">
+            <input
+              type="text"
+              placeholder={t('Search in your courses...')}
+              className="w-full p-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      {filteredCourses.length === 0 ? (
         <div className="text-center py-10">
-          <p className="text-gray-500 mb-4">{t('You have not enrolled in any courses yet')}</p>
-          <Link to="/courses" className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700">
-            {t('Browse Courses')}
-          </Link>
+          {courses.length === 0 ? (
+            <>
+              <p className="text-gray-500 mb-4">{t('You have not enrolled in any courses yet')}</p>
+              <Link to="/courses" className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700">
+                {t('Browse Courses')}
+              </Link>
+            </>
+          ) : (
+            <p className="text-gray-500">{t('No courses match your search')}</p>
+          )}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {courses.map((enrolledCourse, index) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredCourses.map((enrolledCourse, index) => {
             const course = enrolledCourse.course;
             const progress = enrolledCourse.progress;
-            
             return (
-              <div key={index} className="p-5 bg-gray-300/15 rounded-lg flex flex-col">
-                {course.cover && (
-                  <img 
-                    src={`http://127.0.0.1:8000/storage/${course.cover}`} 
-                    alt={getLocalizedText(course.title, "Course")} 
-                    className="w-full h-48 object-cover rounded-t-lg" 
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "https://via.placeholder.com/300x200?text=Course+Image";
-                    }}
-                  />
-                )}
-                
-                <div className="flex justify-between items-center mt-4 mb-2">
-                  <div className="flex gap-2">
-                    <span className="p-1 bg-violet-600/10 border-violet-950 border text-xs rounded-md">
-                      {course.duration} {t('weeks')}
-                    </span>
-                    <span className="p-1 bg-green-600/10 border-green-950 border text-xs rounded-md">
-                      {course.level}
-                    </span>
-                  </div>
-                </div>
-                
-                <h3 className="font-bold text-xl mb-2">{getLocalizedText(course.title, "Course")}</h3>
-                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                  {getLocalizedText(course.description, "")}
-                </p>
-                
-                {/* Progress Bar */}
-                <div className="mt-auto">
-                  <div className="flex justify-between text-sm mb-1">
-                    <span>{t('Progress')}</span>
-                    <span>{Math.round(progress.overall_progress)}%</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div 
-                      className="bg-violet-600 h-2.5 rounded-full" 
-                      style={{ width: `${progress.overall_progress}%` }}
-                    ></div>
-                  </div>
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>{progress.completed_lessons} / {progress.total_lessons} {t('lessons completed')}</span>
-                  </div>
-                </div>
-                
-                <Link 
-                  to={`/watch/${course.id}`} 
-                  className="mt-4 px-4 py-2 bg-violet-600 text-white text-center rounded-md hover:bg-violet-700 transition-colors"
-                >
-                  {progress.overall_progress === 100 ? t('Review Course') : t('Continue Learning')}
-                </Link>
-              </div>
+              <UserCourseCard
+                key={index}
+                cover={course.cover}
+                title={getLocalizedText(course.title, "Course")}
+                overall_progress={progress.overall_progress}
+                completed_lessons={progress.completed_lessons}
+                total_lessons={progress.total_lessons}
+                id={course.id}
+              />
             );
           })}
         </div>

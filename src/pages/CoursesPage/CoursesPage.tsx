@@ -27,7 +27,7 @@ export default function CoursesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = isFilterVisible ? 8 : 8;
   const {t} = useTranslation();
-  
+  const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 1024);
     window.addEventListener("resize", handleResize);
@@ -36,7 +36,7 @@ export default function CoursesPage() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const data = await allCourses();
+        const data = await allCourses(lang);
         setCourses(data);
         setResults(data);  
       } catch (error: any) {
@@ -48,7 +48,7 @@ export default function CoursesPage() {
     };
 
     fetchCourses();
-  }, []);
+  }, [lang]);
 
   useEffect(() => {
     let filtered = [...courses];

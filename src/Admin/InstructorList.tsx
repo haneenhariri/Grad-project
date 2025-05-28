@@ -5,6 +5,7 @@ import { getSecureCookie } from "../utils/cookiesHelper";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import Search from "../components/Search/Search";
 import Button from "../Ui/Button/Button";
+import { FiMoreVertical, FiEye, FiTrash2 } from "react-icons/fi";
 
 interface Instructor {
   id: number;
@@ -24,28 +25,34 @@ export default function InstructorList() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // إغلاق القائمة المنسدلة عند النقر خارجها
+  const modalRef = useRef<HTMLDivElement>(null);
+  
+
+
+  // إغلاق النافذة المنبثقة عند الضغط على Escape
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setOpenDropdown(null);
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedInstructor) {
+        setSelectedInstructor(null);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscKey);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscKey);
     };
-  }, []);
-  const handelDeleteUser = async (id :number) => {
-    try{
+  }, [selectedInstructor]);
+
+  const handelDeleteUser = async (id: number) => {
+    try {
       await deleteTeacher(id);
       setInstructors((prev) => prev.filter((instructor) => instructor.id !== id));
       setOpenDropdown(null);
-    }catch (error) {
+    } catch (error) {
       console.error(error);
     }
   }
+
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
@@ -72,6 +79,7 @@ export default function InstructorList() {
 
     fetchInstructors();
   }, []);
+
   const columnHelper = createColumnHelper<Instructor>();
   const columns = useMemo(() => [
     columnHelper.accessor('name', {
@@ -127,20 +135,26 @@ export default function InstructorList() {
               onClick={() => setOpenDropdown(openDropdown === rowIndex ? null : rowIndex)}
               aria-label="Actions"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 16v6" />
-                <path d="M12 2v6" />
-                <path d="M16.24 7.76l-1.41 1.41" />
-                <path d="M7.76 7.76l1.41 1.41" />
-              </svg>
+              <FiMoreVertical size={18} />
             </button>
             {openDropdown === rowIndex && (
               <div className="absolute z-10 right-0 mt-2 w-44 bg-white border border-gray-200 shadow-lg rounded-md">
-                <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => setSelectedInstructor(props.row.original)}>
-                  View
+                <button 
+                  className="flex items-center w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" 
+                  onClick={() => {
+                    setSelectedInstructor(props.row.original);
+                    setOpenDropdown(null);
+                  }}
+                >
+                  <FiEye size={16} className="mr-2 text-blue-500" />
+                  <span>View</span>
                 </button>
-                <button className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100" onClick={() => handelDeleteUser(instructorId)}>
-                  Delete
+                <button 
+                  className="flex items-center w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100" 
+                  onClick={() => handelDeleteUser(instructorId)}
+                >
+                  <FiTrash2 size={16} className="mr-2" />
+                  <span>Delete</span>
                 </button>
               </div>
             )}
@@ -149,6 +163,7 @@ export default function InstructorList() {
       },
     })
   ], [openDropdown]);
+
   const table = useReactTable({
     data: instructors,
     columns,
@@ -167,8 +182,8 @@ export default function InstructorList() {
         pageSize: 10,
       },
     },
+  });
 
-  })
   const token = getSecureCookie("token");
 
   const updateInstructorStatus = async (id: number, status: "accepted" | "rejected") => {
@@ -186,9 +201,23 @@ export default function InstructorList() {
       console.error("Failed to update status:", error);
     }
   };
+
+  // منع التمرير عندما تكون النافذة المنبثقة مفتوحة
+  useEffect(() => {
+    if (selectedInstructor) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [selectedInstructor]);
+
   return (
     <>
-      <div className=" flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
         <Button text="Add Instructor" Bg="bg-btn" textColor="text-white"/>
       </div>
@@ -253,8 +282,7 @@ export default function InstructorList() {
                     ))}
                   </tr>
                 ))
-              ):
-              (
+              ) : (
                 <tr>
                   <td colSpan={columns.length}
                       className="px-6 py-10 text-center text-gray-500">
@@ -266,20 +294,89 @@ export default function InstructorList() {
           </table>
         </div>
       </div>
+
+      {/* Modal for instructor details */}
       {selectedInstructor && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-xl font-semibold mb-4">Instructor Details</h2>
-            <p><strong>Name:</strong> {selectedInstructor.name}</p>
-            <p><strong>Email:</strong> {selectedInstructor.email}</p>
-            <p><strong>Education:</strong> {selectedInstructor.education}</p>
-            <p><strong>Specialization:</strong> {selectedInstructor.specialization}</p>
-            <p><strong>Summary:</strong> {selectedInstructor.summery}</p>
-            <p><strong>CV:</strong> <a href={`/${selectedInstructor.cv}`} target="_blank" rel="noopener noreferrer" className="text-blue-600">View</a></p>
-            <div className="mt-4 flex justify-between">
-              <button className="px-4 py-2 bg-green-600 text-white rounded-md" onClick={() => updateInstructorStatus(selectedInstructor.id, "accepted")}>Accept</button>
-              <button className="px-4 py-2 bg-red-600 text-white rounded-md" onClick={() => updateInstructorStatus(selectedInstructor.id, "rejected")}>Reject</button>
-              <button className="px-4 py-2 bg-gray-400 text-white rounded-md" onClick={() => setSelectedInstructor(null)}>Close</button>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div 
+            ref={modalRef}
+            className="bg-white p-6 rounded-lg shadow-lg w-96 max-w-[90%] max-h-[90vh] overflow-y-auto animate-fadeIn"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-semibold mb-4 text-primary">Instructor Details</h2>
+            
+            <div className="space-y-3 mb-6">
+              <p className="flex justify-between">
+                <strong className="text-gray-700">Name:</strong> 
+                <span className="text-gray-900">{selectedInstructor.name}</span>
+              </p>
+              <p className="flex justify-between">
+                <strong className="text-gray-700">Email:</strong> 
+                <span className="text-gray-900">{selectedInstructor.email}</span>
+              </p>
+              <p className="flex justify-between">
+                <strong className="text-gray-700">Education:</strong> 
+                <span className="text-gray-900">{selectedInstructor.education}</span>
+              </p>
+              <p className="flex justify-between">
+                <strong className="text-gray-700">Specialization:</strong> 
+                <span className="text-gray-900">{selectedInstructor.specialization}</span>
+              </p>
+              
+              <div>
+                <strong className="text-gray-700">Summary:</strong>
+                <p className="mt-1 text-gray-900 bg-gray-50 p-3 rounded-md text-sm">
+                  {selectedInstructor.summery}
+                </p>
+              </div>
+              
+              <p>
+                <strong className="text-gray-700">CV:</strong> 
+                <a 
+                  href={`http://127.0.0.1:8000/storage/${selectedInstructor.cv}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="ml-2 text-blue-600 hover:underline"
+                >
+                  View CV
+                </a>
+              </p>
+              
+              <p className="flex justify-between">
+                <strong className="text-gray-700">Status:</strong> 
+                <span 
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    selectedInstructor.status === "accepted"
+                      ? "text-green-700 bg-green-100"
+                      : selectedInstructor.status === "pending"
+                      ? "text-yellow-700 bg-yellow-100"
+                      : "text-red-700 bg-red-100"
+                  }`}
+                >
+                  {selectedInstructor.status}
+                </span>
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-3 mt-6">
+              <button 
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                onClick={() => updateInstructorStatus(selectedInstructor.id, "accepted")}
+              >
+                Accept
+              </button>
+              <button 
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                onClick={() => updateInstructorStatus(selectedInstructor.id, "rejected")}
+              >
+                Reject
+              </button>
+              <button 
+                className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
+                onClick={() => setSelectedInstructor(null)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

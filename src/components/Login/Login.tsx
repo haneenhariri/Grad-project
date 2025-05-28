@@ -77,9 +77,6 @@ export default function Login({ btn }: logbtn) {
           type={"email"} 
           placeholder={t("EmailPlace")}
         />
-        {errors.email && (
-          <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
-        )}
         <Label label="Password"/>
         <Input 
           rest={register("password")} 
@@ -87,11 +84,6 @@ export default function Login({ btn }: logbtn) {
           type={"password"} 
           placeholder={t("PasswordPlace")}
         />
-        {errors.password && (
-          <p className="text-red-500 text-sm mb-2">
-            {errors.password.message}
-          </p>
-        )}
         <NavLink className="block text-right md:text-base text-sm font-normal text-gray-700 mb-5" to={'/auth/forgot'}> {t("ForgotPassword")}</NavLink>
         <button
           type="submit"

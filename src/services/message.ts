@@ -13,7 +13,17 @@ export const gitUser = async () =>
     return response.data.data;
 }
 
-export const sendMessageUser = async ( receiverId: number, content: string) => {
+export const getMessages = async (userId: number) => {
+    try {
+      const response = await axiosInstance.get(`/chat/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      throw error;
+    }
+  }
+
+export const sendMessageUser = async (receiverId: number, content: string) => {
     try {
       const response = await axiosInstance.post('/messages', {
         received_id: receiverId,

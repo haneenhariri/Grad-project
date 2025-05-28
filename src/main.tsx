@@ -14,11 +14,13 @@ import  AdminEditeCourse  from './Admin/EditeCourse/EditeCourse.tsx';
 import Spinner from './components/Spinner/Spinner.tsx';
 import Teachers from './components/Teachers/Teachers.tsx';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
-import Message from './components/Message/Message.tsx';
 import ProtectedCourseRoute from './hooks/ProtectedCourseRoute';
 import ChargeAccount from './Admin/Payments/ChargeAccount.tsx';
 import Quiz from './pages/Quiz/Quiz.tsx';
 import Dash from './Admin/Dash/Dash.tsx';
+import StdDash from './pages/UserDash/StdDash.tsx';
+import ChatApp from './chat/ChatApp.tsx';
+import Log from './Admin/log/log.tsx';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -41,7 +43,7 @@ const InstructorList = lazy(() => import(/* webpackChunkName: "instructor-list" 
 const Students = lazy(() => import(/* webpackChunkName: "students" */ './Admin/Students.tsx'));
 const Payments = lazy(() => import(/* webpackChunkName: "payments" */ './Admin/Payments.tsx'));
 const AdminSettings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './Admin/AdminSettings.tsx'));
-const Wishlist = lazy(()=> import(/* webpackChunkName: Wishlist */ './pages/Wishlist/Wishlist.tsx'));
+const Wishlist = lazy(()=> import(/* webpackChunkName: Wishlist */ './pages/UserDash/Wishlist.tsx'));
 const PurchaseHistory = lazy( () => import( /* webpackChunkName: PurchaseHistory */ './components/PurchaseHistory/PurchaseHistory.tsx'))
 const routes = createBrowserRouter([
   {
@@ -60,7 +62,6 @@ const routes = createBrowserRouter([
       },
       { path: '/quiz/:id', element: <Quiz /> },
       { path: '/auth/:formType', element: <Auth /> },
-      {path: '/wishlist' , element:( <Wishlist/>)},
       {
         path: 'User',
         element: (
@@ -69,11 +70,13 @@ const routes = createBrowserRouter([
           </RoleProtectedRoute>
         ),
         children: [
-          { index: true, element: <ProfileSettings /> },
+          { index: true, element: <StdDash /> },
+          {path: 'dash', element: <StdDash/>},
           { path: 'settings', element: <ProfileSettings /> },
           { path: 'usercourse', element: <Courses /> },
           { path: 'Teachers', element: <Teachers /> },
-          { path: 'Message/:user_id', element: <Message /> },
+          { path: 'Message/:user_id', element: <ChatApp/>},
+          {path: 'wishlist' , element:( <Wishlist/>)},
           { path: 'purchaseHistory', element: <PurchaseHistory/> },
         ],
       },
@@ -100,6 +103,7 @@ const routes = createBrowserRouter([
       { path: 'instructorlist', element: <InstructorList /> },
       { path: 'Students', element: <Students /> },
       { path: 'detail/:id', element: <AdminEditeCourse /> },
+      { path: 'log', element: <Log /> },
     ],
   },
   {
@@ -116,7 +120,7 @@ const routes = createBrowserRouter([
       { path: 'Create', element: <CreatCourse /> },
       { path: 'Earning', element: <Earning /> },
       { path: 'edit/:id', element: <EditeCourse /> },
-      { path: 'Message/:user_id', element: <Message /> },
+      { path: 'Message/:user_id', element: <ChatApp /> },
       { path: 'MyCourses', element: <MyCourse /> },
       { path: 'detail/:id', element: <EditeCourse /> },
     ],
@@ -138,6 +142,8 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+
 
 
 

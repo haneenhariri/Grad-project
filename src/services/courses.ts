@@ -1,4 +1,5 @@
 import { CouCard } from "../types/interfaces";
+import { handleError } from "../utils/errorHandling";
 import axiosInstance from "./axiosInstance"
 interface LessonFile {
     file: File;
@@ -26,12 +27,14 @@ export  interface courseDataProps {
 
 const language = localStorage.getItem('language');
 
-export const allCourses = async (lang: 'ar' | 'en') =>
-{
-    const respons = await axiosInstance.get(`/courses?lang=${lang}`);
-    console.log(respons.data.data)
-    return respons.data.data;
-}
+export const allCourses = async (lang: 'ar' | 'en'): Promise<courseDataProps[]> => {
+  try {
+    const response = await axiosInstance.get(`/courses?lang=${lang}`);
+    return response.data.data;
+  } catch (error: unknown) {
+    throw new Error(handleError(error, 'Failed to fetch courses'));
+  }
+};
 
 export const singleCourse = async (id: number) => {
       const response = await axiosInstance.get(`/courses?lang=${language}`); 

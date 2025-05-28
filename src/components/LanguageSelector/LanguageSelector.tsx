@@ -26,10 +26,10 @@ export default function LanguageSelector() {
         <select
             value={language}
             onChange={handleChange}
-            className="bg-transparent text-gray-400 font-medium text-sm border-0"
+            className="bg-transparent text-white bg-black  font-medium text-sm border-0"
         >
-            <option value="en">English</option>
-            <option value="ar">العربية</option>
+            <option className=" text-black" value="en">English</option>
+            <option  className=" text-black" value="ar">العربية</option>
         </select>
     );
 }

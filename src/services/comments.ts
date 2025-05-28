@@ -1,43 +1,45 @@
 import axios, { AxiosError } from "axios";
 import axiosInstance from "./axiosInstance";
+import { handleError } from "../utils/errorHandling";
 
-export interface commentProps {
+export interface CommentProps {
   lesson_id: number;
   content: string;
   parentCommentId?: number; 
 }
-const API_URL = "http://127.0.0.1:8000/api";
-const googleApiKey = "AIzaSyDQ7S--6X5jLVEQ3qrrrLcqn3_AnKah8BA";
 
-export const addComment = async (commentData: commentProps) => {
+// Use environment variables for API URLs and keys
+const API_URL =  "http://127.0.0.1:8000/api";
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+
+/**
+ * Add a new comment to a lesson
+ */
+export const addComment = async (commentData: CommentProps): Promise<CommentProps> => {
   try {
     const response = await axiosInstance.post(`${API_URL}/comments`, commentData);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      throw error.response?.data || { message: "add failed" };
-    }
-    throw { message: "An unexpected error occurred" }; 
+    throw new Error(handleError(error, "Failed to add comment"));
   }
 }
 
-// إضافة دالة addReply للرد على التعليقات
-export const addReply = async (commentData: commentProps) => {
+/**
+ * Add a reply to an existing comment
+ */
+export const addReply = async (commentData: CommentProps): Promise<CommentProps> => {
   try {
-    // تحويل parentCommentId إلى comment_id كما يتوقع الخادم
+    // Transform parentCommentId to comment_id as expected by the server
     const apiData = {
       lesson_id: commentData.lesson_id,
       content: commentData.content,
-      comment_id: commentData.parentCommentId // تغيير اسم المعلمة ليتوافق مع الخادم
+      comment_id: commentData.parentCommentId
     };
     
     const response = await axiosInstance.post(`${API_URL}/comments`, apiData);
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      throw error.response?.data || { message: "reply failed" };
-    }
-    throw { message: "An unexpected error occurred" }; 
+    throw new Error(handleError(error, "Failed to add reply"));
   }
 }
 
@@ -54,7 +56,9 @@ export const deleteComment = async (commentId: number) => {
   }
 }
 
-// إضافة دالة لتعديل التعليق
+/**
+ * Update an existing comment
+ */
 export const updateComment = async (commentId: number, content: string) => {
   try {
     const response = await axiosInstance.put(`${API_URL}/comments/${commentId}`, {
@@ -62,18 +66,22 @@ export const updateComment = async (commentId: number, content: string) => {
     });
     return response.data;
   } catch (error: unknown) {
-    if (error instanceof AxiosError) {
-      throw error.response?.data || { message: "update failed" };
-    }
-    throw { message: "An unexpected error occurred" }; 
+    throw new Error(handleError(error, "Failed to update comment"));
   }
 }
 
-// تحليل المشاعر للتعليق
-export const analyzeComment = async (text: string) => {
+/**
+ * Analyze sentiment of a comment text
+ */
+export const analyzeComment = async (text: string): Promise<string | null> => {
+  if (!GOOGLE_API_KEY) {
+    console.error("Google API key is not defined");
+    return null;
+  }
+  
   try {
     const response = await axios.post(
-      `https://language.googleapis.com/v1/documents:analyzeSentiment?key=${googleApiKey}`,
+      `https://language.googleapis.com/v1/documents:analyzeSentiment?key=${GOOGLE_API_KEY}`,
       {
         document: {
           type: "PLAIN_TEXT",
@@ -82,7 +90,7 @@ export const analyzeComment = async (text: string) => {
       }
     );
     return response.data;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error analyzing sentiment:", error);
     return null;
   }

@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import Label from "../../Ui/Label/Label";
+import Input from "../../Ui/Input/Input";
 
 export default function SignUp({ btn }: logbtn) {
     const { t } = useTranslation();
@@ -29,7 +30,7 @@ export default function SignUp({ btn }: logbtn) {
         .min(8, t("PasswordTooShort"))
         .required(t("RequiredField")),
         password_confirmation: Yup.string()
-        .oneOf([Yup.ref('password')], "PasswordsMatch") 
+        .oneOf([Yup.ref('password')], t("PasswordsMatch")) 
         .required(t("RequiredField")),
     });
     const {
@@ -65,39 +66,13 @@ export default function SignUp({ btn }: logbtn) {
     return (
         <form className="md:mb-6" onSubmit={handleSubmit(onSubmit)}>
             <Label label="Name"/>
-            <input
-                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
-                placeholder={t("NamePlace")}
-                type="text"
-                {...register("name")}
-            />
-            {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name.message}</p>}
+            <Input placeholder={t("NamePlace")} type="text"  rest ={register("name")} error={errors.name?.message}/>
             <Label label="Email"/>
-            <input
-                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
-                placeholder={t("EmailPlace")}
-                type="email"
-                {...register("email")}
-
-            />
-            {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>}
+            <Input placeholder={t("EmailPlace")} type="email"  rest ={register("email")} error={errors.email?.message}/>
             <Label label="Password"/>
-            <input
-                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
-                placeholder={t("PasswordPlace")}
-                type="password"
-                {...register("password")}
-            />
-            {errors.password && <p className="text-red-500 text-sm mb-2">{errors.password.message}</p>}
+            <Input placeholder={t("PasswordPlace")} type="password"  rest ={register("password")} error={errors.password?.message}/>
             <Label label="Confirm"/>
-            <input
-                className="w-full mb-5 lg:p-5 p-2.5 bg-White/95 rounded-md"
-                placeholder={t("Confirm")}
-                {...register("password_confirmation")}
-                type="password"
-                 />
-            {errors.password_confirmation && <p className="text-red-500 text-sm mb-2">{errors.password_confirmation.message}</p>}
-            {mutation.isError && <p className="text-red-500">Signup Failed!</p>}
+            <Input placeholder={t("Confirm")} type="password"  rest ={register("password_confirmation")} error={errors.password_confirmation?.message}/>
             <p className="text-sm font-normal text-gray-700 mb-5">
                 <input type="checkbox" /> {t("agree")}
             </p>

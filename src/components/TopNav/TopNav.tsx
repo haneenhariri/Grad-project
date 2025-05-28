@@ -29,7 +29,7 @@ export default function TopNav() {
                 className={({ isActive }) =>
                   isActive
                     ? "p-2.5 text-white font-normal border-t-2 border-btn  h-full transition-all text-base desktop:text-lg duration-300"
-                    : "p-2.5 font-normal text-gray-400 h-full text-base desktop:text-lg"
+                    : "p-2.5 font-normal text-white h-full text-base desktop:text-lg"
                 }
                 to={e.path}
               >

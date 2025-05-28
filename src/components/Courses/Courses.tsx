@@ -66,7 +66,7 @@ export default function Courses() {
         ))}
         </div>
       )}
-      <div className=" flex lg:mt-32 mt-10 justify-center items-center gap-2">
+      <div className=" flex mt-10 justify-center items-center gap-2">
         <p>{t("CoursesSection.more")}</p>
         <NavLink to={'/courses'} className='flex justify-center  items-center gap-2'>        
         <p className=" text-violet-700">{t("CoursesSection.Browse")}</p>

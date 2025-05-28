@@ -36,6 +36,9 @@ export default function AdminSide() {
             <NavLink className={({ isActive }) => isActive ? 'bg-violet-600 text-white w-full p-2.5 flex gap-2.5' : 'text-gray-400 w-full p-2.5 flex gap-2.5'} to={'/Admin/settings'} >
             <img src={stng} alt="" />
                 Settings</NavLink>
+            <NavLink className={({ isActive }) => isActive ? 'bg-violet-600 text-white w-full p-2.5 flex gap-2.5' : 'text-gray-400 w-full p-2.5 flex gap-2.5'} to={'/Admin/log'} >
+            <img src={stng} alt="" />
+               Active Log</NavLink>
         </div>
     </div>
   )

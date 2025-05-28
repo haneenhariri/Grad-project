@@ -34,8 +34,8 @@ export default function ProfileHeader() {
     }
   }, []);
   return (
-    <div className=" bg-white overflow-hidden border border-violet-400  rounded-md  mb-10 ">
-      <div className=" flex justify-between my-4 items-center  rounded-t-md  p-5 ">
+    <div className=" bg-white overflow-hidden shadow-sm rounded-md  mb-10 ">
+      <div className=" flex justify-between my-6 items-center  rounded-t-md  p-5 ">
         <div className="flex gap-5 items-center">
         <div
             className="flex items-center justify-center w-12 h-12 rounded-full bg-violet-950 text-white text-lg overflow-hidden">
@@ -49,7 +49,7 @@ export default function ProfileHeader() {
         </div>
       </div>
       {/* tabs */}
-      <div className="flex items-center gap-6  justify-around border-t px-5 border-violet-400 ">
+      <div className="flex items-center gap-6  justify-around border px-5 border-[#eea2f794] ">
         {stdTabs.map((e,i) => 
         (
          <Tabs key={i} path={e.path} text={e.text}/>

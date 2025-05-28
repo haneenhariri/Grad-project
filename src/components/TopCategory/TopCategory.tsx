@@ -6,7 +6,7 @@ export default function TopCategory() {
   return (
     <section className="flex flex-col  justify-center items-center lg:py-20">
       <SectionsTitle title={'topCategory.title'}/>
-      <div className=" grid grid-cols-3 gap-7.5 w-full">
+      <div className=" grid lg:grid-cols-3 gap-7.5 w-full">
         {categoryData.map( (item , index)=> (
             <CategoryCard key={index} 
             img={item.img}

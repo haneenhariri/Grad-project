@@ -15,12 +15,11 @@ export const  addWishCourse = async (id : number) =>
         }
 }
 
-export const getWishList = async() =>
+export const getWishList = async(lang: 'ar' | 'en') =>
 {
     try{
-        const response = await axiosInstance.get('/favorites');
-        console.log(response.data);
-        return response.data;
+        const response = await axiosInstance.get(`/favorites?lang=${lang}`);
+        return response.data.data;
     }catch (error : unknown) {
         if (error instanceof AxiosError) {
         throw error.response?.data || { message: "add failed" };

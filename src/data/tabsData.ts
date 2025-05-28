@@ -1,12 +1,16 @@
 const user_id = 2;
 export const stdTabs = [
     {
+        path:'/User/dash',
+        text:'navigation.DashBoard',
+    },
+    {
         path:'/User/settings',
-        text:'Settings',
+        text:'navigation.Settings',
     },
     {
         path:'/User/usercourse',
-        text:'My Courses',
+        text:'navigation.My Courses',
     },
     {
         path:'/User/Teachers',
@@ -15,6 +19,10 @@ export const stdTabs = [
     {
         path:`/User/Message/${user_id}`,
         text:'Message',
+    },
+    {
+        path:`/User/wishlist`,
+        text:'Wishlist',
     },
     {
         path:`/User/purchaseHistory`,

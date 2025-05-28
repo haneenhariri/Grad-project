@@ -32,7 +32,7 @@ export default function NavBar() {
       navigate("/auth/login");
       return;
     }else{
-      navigate('/wishlist')
+      navigate('/User/wishlist')
     }
   }
   useEffect(() => {

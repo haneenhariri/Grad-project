@@ -6,7 +6,7 @@ import { BsCurrencyDollar } from 'react-icons/bs';
 import InfoCard from "./InfoCard";
 import Revenue from "./Revenue";
 
-interface DashboardStats {
+export interface DashboardStats {
   total_students: number;
   total_instructors: number;
   total_courses: number;
