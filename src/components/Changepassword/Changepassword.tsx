@@ -4,8 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { changePass } from "../../services/changePassword";
 import { AxiosError } from "axios";
 import { showToast } from "../../utils/toast";
+import { useTranslation } from "react-i18next";
+import Label from "../../Ui/Label/Label";
+import Input from "../../Ui/Input/Input";
 
 export default function Changepassword() {
+  const {t} = useTranslation();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -40,44 +44,17 @@ export default function Changepassword() {
   return (
     <form className=" flex flex-col justify-between " onSubmit={handlePasswordReset}>
       <div>
-      <h2 className="md:text-2xl text-lg font-semibold mb-6">Change password</h2>
-      <label htmlFor="currentPassword " className="mb-1.5  lg:text-base text-sm">Current Password</label>
-      <div className="flex justify-between gap-5 mb-5">
-        <input
-          id="currentPassword"
-          type="password"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}
-          className="w-full rounded-md border p-2 border-violet-400 bg-transparent placeholder:text-sm"
-          placeholder="Password"
-        />
-      </div>
-      <label htmlFor="newPassword" className="mb-1.5  lg:text-base text-sm">New Password</label>
-      <div className="flex justify-between gap-5 mb-5">
-        <input
-          id="newPassword"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className="w-full border rounded-md p-2 border-violet-400 bg-transparent placeholder:text-sm"
-          placeholder="Password"
-        />
-      </div>
-      <label htmlFor="confirmPassword" className="mb-1.5  lg:text-base text-sm">Confirm Password</label>
-      <div className="flex justify-between gap-5 mb-5">
-        <input
-          id="confirmPassword"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-          placeholder="Confirm new password"
-        />
-      </div>
+      <h2 className="md:text-2xl text-lg font-semibold mb-6">{t("Change password")}</h2>
+      <Label label="Current Password"/>
+      <Input  type="password" placeholder={t("Current Password")}  value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
+      <Label label="New Password" />
+      <Input type="password" placeholder={t("New Password")} value={newPassword} onChange={(e) => setNewPassword(e.target.value)}/>
+      <Label  label="Confirm New Password"/>
+      <Input type="password" placeholder={t("Confirm New Password")} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
       <div className="">
-      <Button Bg="bg-btn" textColor="text-white" text="Change Password"  />
+      <Button Bg="bg-btn" textColor="text-white" text="Change password"  />
       </div>
     </form>
   );

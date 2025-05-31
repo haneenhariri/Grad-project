@@ -31,7 +31,6 @@ export default function Input({
     setShowPassword(!showPassword);
   };
 
-  // تحديد نوع الإدخال للحقول من نوع كلمة المرور
   const inputType = type === "password" 
     ? (showPassword ? "text" : "password") 
     : type;
@@ -61,12 +60,11 @@ export default function Input({
           {...rest}
         />
         
-        {/* أيقونة العين لحقول كلمة المرور */}
         {type === "password" && (
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            className="absolute inset-y-0 rtl:left-0 ltr:right-0 ltr:pr-3 rtl:pl-3 flex items-center text-gray-400 hover:text-gray-600"
           >
             {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
           </button>
@@ -74,7 +72,7 @@ export default function Input({
         
         {/* أيقونة مخصصة */}
         {icon && !type.includes("password") && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 rtl:left-0 ltr:right-0 pr-3 flex items-center pointer-events-none">
             {icon}
           </div>
         )}

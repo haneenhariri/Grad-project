@@ -1,7 +1,3 @@
-import basic from '../../assets/AddCourse/Stack (1).png';
-import Adv from '../../assets/AddCourse/ClipboardText.png';
-import Cur from '../../assets/AddCourse/MonitorPlay.png';
-import Pub from '../../assets/AddCourse/PlayCircle (1).png';
 import up from '../../assets/AddCourse/UploadSimple.png';
 import img from '../../assets/Image (28).png';
 import Button from '../../Ui/Button/Button';
@@ -12,9 +8,13 @@ import { getSecureCookie } from '../../utils/cookiesHelper';
 import { showToast } from '../../utils/toast';
 import { Category, Lesson, SubCategory } from '../../types/interfaces';
 import Spinner from '../../components/Spinner/Spinner';
+import Head from '../../instructorDash/EditeCourse/Head';
+import Label from '../../Ui/Label/Label';
+import { Trans, useTranslation } from 'react-i18next';
  
 
 export default function CreateCourse() {
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [categories, setCategories] = useState<Category[]>([]);
   const [category_id, setCategory_id] = useState("");
@@ -243,25 +243,7 @@ export default function CreateCourse() {
   return (
     <form onSubmit={send} className="bg-white rounded-md">
       {/* Header */}
-      <div className="flex items-center border-b">
-        <div className={`${step === 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-          <img  src={basic} alt="Basic Information" />
-          <span>Basic Information</span>
-        </div>
-        <div className={`${step === 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-          <img src={Adv} alt="Advance Information" />
-          <span>Advance Information</span>
-        </div>
-        <div className={`${step === 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-          <img src={Cur} alt="Curriculum" />
-          <span>Curriculum</span>
-        </div>
-        <div className={`${step === 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-          <img src={Pub} alt="Publish Course" />
-          <span>Publish Course</span>
-        </div>
-      </div>
-
+      <Head step={step}/>
       <div className='p-5 flex border-b justify-between'>
         {step === 1 && <h2 className='text-2xl font-semibold'>Basic Information</h2>}
         {step === 2 && <h2 className='text-2xl font-semibold'>Advance Information</h2>}
@@ -278,9 +260,7 @@ export default function CreateCourse() {
         <div className='p-5'>
           <div className='flex justify-between gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="titleEn">
-                Title [en]
-              </label>
+              <Label label="Title [en]"/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder='Course title in English'
@@ -292,9 +272,7 @@ export default function CreateCourse() {
               />
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="titleAr">
-                Title [ar]
-              </label>
+              <Label label="Title [ar]"/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder='Course title in Arabic'
@@ -309,9 +287,7 @@ export default function CreateCourse() {
 
           <div className='flex gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="category">
-                Course Category:
-              </label>
+              <Label label='Category'/>
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="category"
@@ -328,9 +304,7 @@ export default function CreateCourse() {
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="subCategory">
-                Course Sub-category
-              </label>
+              <Label label='SubCategory'/>
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="subCategory"
@@ -348,9 +322,7 @@ export default function CreateCourse() {
 
           <div className='flex gap-2'>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="level">
-                Course Level
-              </label>
+              <Label label='level' />
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="level"
@@ -365,9 +337,7 @@ export default function CreateCourse() {
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="level">
-                Course Language
-              </label>
+              <Label label='CourseLanguage' />
               <select
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 id="level"
@@ -375,15 +345,13 @@ export default function CreateCourse() {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">english</option>
-                <option value="arabic">arabic</option>
+                 <option value="">{t("SelectCourseLanguage")}</option>
+                 <option value="english">{t("english")}</option>
+                 <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="duration">
-                Duration
-              </label>
+              <Label label='Duration' />
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder='Course duration (e.g., 2 hours)'
@@ -395,9 +363,7 @@ export default function CreateCourse() {
               />
             </div>
             <div className='w-1/2'>
-              <label className="mb-2.5 font-medium text-base block" htmlFor="price">
-                Price
-              </label>
+             <Label label='CoursesSection.Price'/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
                 placeholder='Course price'
@@ -420,9 +386,7 @@ export default function CreateCourse() {
       {step === 2 && (
         <div>
           <div className='p-5 border-b'>
-            <label className="mb-2.5 font-medium text-base block">
-              Course Thumbnail
-            </label>
+            <Label label='Course Thumbnail'/>
             <div className='flex gap-5'>
               <div className="mb-5">
                 <div
@@ -446,14 +410,17 @@ export default function CreateCourse() {
               </div>
               <div>
                 <p className='w-2/3 text-base text-gray-700'>
-                  Upload your course thumbnail here. <span className='text-black font-bold text-lg'>Important guidelines:</span> 
-                  1200x800 pixels or 12:8 Ratio. Supported format: <span className='text-black font-bold text-lg'>.jpg, .jpeg, or .png</span>
+                  <Trans i18nKey="uploadThumbnailText"
+                    components={{
+                    bold1: <span className="text-black font-bold text-lg" />,
+                    bold2: <span className="text-black font-bold text-lg" />
+                  }}/>
                 </p>
                 <div 
                   className='flex mt-5 gap-2 text-violet-500 font-semibold bg-[#FFEEE8] w-max p-2.5 cursor-pointer'
                   onClick={() => document.getElementById("cover")?.click()}
                 >
-                  <p>Upload image</p>
+                  <p>{t("Upload Photo")}</p>
                   <img src={up} alt="Upload" />
                 </div>
               </div>

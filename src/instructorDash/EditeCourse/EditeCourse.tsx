@@ -1,8 +1,4 @@
 
-import basic from '../../assets/AddCourse/Stack (1).png';
-import Adv from '../../assets/AddCourse/ClipboardText.png';
-import Cur from '../../assets/AddCourse/MonitorPlay.png';
-import Pub from '../../assets/AddCourse/PlayCircle (1).png';
 import up from '../../assets/AddCourse/UploadSimple.png';
 import img from '../../assets/Image (28).png';
 import Button from '../../Ui/Button/Button';
@@ -14,8 +10,13 @@ import { useParams } from 'react-router-dom';
 import { Category, Lesson, myCourseProp, SubCategory } from '../../types/interfaces';
 import { allCategories, fetchSingleCourse } from '../../services/courses';
 import Label from '../../Ui/Label/Label';
+import Head from './Head';
+import { Trans, useTranslation } from 'react-i18next';
+import axiosInstance from '../../services/axiosInstance';
+
 
 export default function EditCourse() {
+  const {t} = useTranslation();
   const [step, setStep] = useState(1);
   const { id } = useParams<{ id: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -37,7 +38,6 @@ export default function EditCourse() {
   const [courseLanguage,setCourseLanguage] = useState('');
   const [course, setCourse] = useState<myCourseProp | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]); // تأكد من أن القيمة الافتراضية مصفوفة فارغة
-  console.log(course);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -98,16 +98,24 @@ export default function EditCourse() {
       setLessons(updatedLessons);
     };
   
-    const removeFile = (lessonIndex: number, fileIndex: number) => {
+    const removeFile = async(lessonIndex: number, fileIndex: number) => {
       const updatedLessons = [...lessons];
       updatedLessons[lessonIndex].files.splice(fileIndex, 1);
+      const response = await axiosInstance.delete(`/files/${fileIndex}`);
+      showToast(`deleted successfully` , 'success');
+      console.log(response.status);
       setLessons(updatedLessons);
     };
-    const removeLesson = (lessonIndex: number) => {
-      const updatedLessons = [...lessons];
-      updatedLessons.splice(lessonIndex, 1);
-      setLessons(updatedLessons);
-    };
+
+    const removeLesson = async (lessonIndex: number) =>
+    {
+        const updatedLessons = [...lessons];
+        updatedLessons.splice(lessonIndex, 1);
+        const response = await axiosInstance.delete(`/lessons/${lessonIndex}`);
+        showToast(`deleted successfully` , 'success');
+        console.log(response.status);
+        setLessons(updatedLessons);
+    }
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       const selectedId = e.target.value;
       console.log("Selected category ID:", selectedId);
@@ -136,7 +144,7 @@ export default function EditCourse() {
           const courseData = response.data || response;
           console.log("Course Data:", courseData);
           
-          setCourse(courseData);
+          setCourse(response.data);
           
           if (courseData && courseData.category) {
             console.log("Category Info:", {
@@ -236,8 +244,6 @@ export default function EditCourse() {
       
       try {
         const formData = new FormData();
-        
-        // إضافة المعلومات الأساسية
         formData.append("_method", "PUT");
         formData.append("duration", duration);
         formData.append("level", level);
@@ -249,13 +255,9 @@ export default function EditCourse() {
         formData.append("category_id", category_id);
         formData.append("lang", "ar");
         if ( cover && typeof cover !== 'string') {
-          // إذا تم تغيير الصورة، نرسل الصورة الجديدة
           formData.append("cover", cover);
         } 
          
-        console.log("Sending request to:", `http://127.0.0.1:8000/api/courses/${id}?_method=PUT`);
-
-        // إرسال طلب تحديث معلومات الكورس
         const response = await axios({
           method: 'post',
           url: `http://127.0.0.1:8000/api/courses/${id}?_method=PUT`,
@@ -266,13 +268,8 @@ export default function EditCourse() {
           }
         });
 
-        console.log("API Response:", response.data);
         showToast("Course information updated successfully!", 'success');
-        
-        // بعد نجاح تحديث معلومات الكورس، يمكن تحديث الدروس
-        await updateLessons();
-        
-        // الانتقال إلى الخطوة التالية
+      
         setStep(step + 1);
         
       } catch (error: any) {
@@ -293,19 +290,9 @@ export default function EditCourse() {
         }
       }
     }
-
-    // دالة لتحديث معلومات الدروس
     async function updateLessons() {
       try {
-        // تحديث كل درس على حدة
         for (const lesson of lessons) {
-          // تخطي الدروس التي ليس لها معرف (الدروس الجديدة)
-          if (!lesson.id) {
-            console.log("Skipping new lesson:", lesson);
-            continue;
-          }
-          
-          // إعداد بيانات الدرس
           const lessonData = {
             "title[en]": lesson.titleEn,
             "title[ar]": lesson.titleAr,
@@ -313,7 +300,6 @@ export default function EditCourse() {
             "description[ar]": lesson.descriptionAr
           };
           
-          // إرسال طلب تحديث معلومات الدرس
           const response = await axios.put(
             `http://127.0.0.1:8000/api/lessons/${lesson.id}`,
             lessonData,
@@ -324,18 +310,16 @@ export default function EditCourse() {
               },
             }
           );
-          
-          console.log(`Lesson ${lesson.id} updated:`, response.data);
-        }
-        
+          }
         showToast("All lessons updated successfully!", 'success');
+        setStep(step + 1);
       } catch (error) {
         console.error("Error updating lessons:", error);
         showToast("Error updating lessons", 'error');
+        
       }
     }
 
-    // دالة لإضافة ملف جديد للدرس
     async function addFileToLesson(lessonId: number, file: File, fileType: string) {
       try {
         const formData = new FormData();
@@ -363,7 +347,6 @@ export default function EditCourse() {
       }
     }
 
-    // دالة لحذف ملف من الدرس
     async function deleteFileFromLesson(fileId: number) {
       try {
         const response = await axios.delete(
@@ -387,29 +370,12 @@ export default function EditCourse() {
   return (
     <div className="bg-white rounded-md">
     {/* head */}
-    <div className="flex items-center border-b">
-      <div className={`${step == 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={basic} alt="Basic Information" />
-        <span>Basic Information</span>
-      </div>
-      <div className={`${step == 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Adv} alt="Advance Information" />
-        <span>Advance Information</span>
-      </div>
-      <div className={`${step == 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Cur} alt="Curriculum" />
-        <span>Curriculum</span>
-      </div>
-      <div className={`${step == 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-        <img src={Pub} alt="Publish Course" />
-        <span>Publish Course</span>
-      </div>
-    </div>
+    <Head step={step}/>
     <div className='p-5 flex border-b justify-between'>
-      {step === 1 && (<h2 className='text-2xl font-semibold'>Basic Information</h2>)}
-      {step === 2 && (<h2 className='text-2xl font-semibold'>Advance Information</h2>)}
-      {step === 3 && (<h2 className='text-2xl font-semibold'>Course Curriculum</h2>)}
-      {step === 4 && (<h2 className='text-2xl font-semibold'>Publish Course</h2>)}
+      {step === 1 && (<h2 className='text-2xl font-semibold'>{t("Basic Information")}</h2>)}
+      {step === 2 && (<h2 className='text-2xl font-semibold'>{t("Advance Information")}</h2>)}
+      {step === 3 && (<h2 className='text-2xl font-semibold'>{t("Curriculum")}</h2>)}
+      {step === 4 && (<h2 className='text-2xl font-semibold'>{t("Quiz")}</h2>)}
       <div className='flex gap-5'>
         <Button type='button' text='Save & Preview' onClick={handlePrev} textColor='text-violet-950' />
       </div>
@@ -556,10 +522,7 @@ export default function EditCourse() {
       {step === 2 && (
         <div>
           <div className='p-5 border-b'>
-            <label className="mb-2.5 font-medium text-base block">
-              Course Thumbnail <span className="text-red-500">*</span>
-              <span className="text-sm text-gray-500 ml-2">(Required)</span>
-            </label>
+            <Label label='Course Thumbnail'/>
             <div className='flex gap-5'>
               <div className="mb-5">
                 <div
@@ -586,19 +549,22 @@ export default function EditCourse() {
               </div>
               <div>
                 <p className='w-2/3 text-base text-gray-700'>
-                  Upload your course thumbnail here. <span className='text-black font-bold text-lg'>Important guidelines:</span> 
-                  1200x800 pixels or 12:8 Ratio. Supported format: <span className='text-black font-bold text-lg'>.jpg, .jpeg, or .png</span>
+                  <Trans i18nKey="uploadThumbnailText"
+                    components={{
+                      bold1: <span className="text-black font-bold text-lg" />,
+                      bold2: <span className="text-black font-bold text-lg" />
+                    }}/>
                 </p>
                 <div 
                   className='flex mt-5 gap-2 text-violet-500 font-semibold bg-[#FFEEE8] w-max p-2.5 cursor-pointer'
                   onClick={() => document.getElementById("cover")?.click()}
                 >
-                  <p>{preview ? "Change image" : "Upload image"}</p>
+                  <p>{t( preview ? "Change image" : "Upload image" )}</p>
                   <img src={up} alt="Upload" />
                 </div>
                 {preview && (
                   <p className="mt-2 text-green-500">
-                    Current cover image will be used. Click "Change image" to upload a new one.
+                    {t("Current cover")}
                   </p>
                 )}
               </div>
@@ -606,9 +572,7 @@ export default function EditCourse() {
           </div>
 
           <div className='p-5 border-b'>
-            <label className="mb-2.5 font-medium text-base block" htmlFor="descriptionEn">
-              Course Description [En]
-            </label>
+            <Label label='Description [En]'/>
             <textarea
               id="descriptionEn"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -617,9 +581,7 @@ export default function EditCourse() {
               onChange={(e) => setDescriptionEn(e.target.value)}
               required
             />
-            <label className="mb-2.5 font-medium text-base block" htmlFor="descriptionAr">
-              Course Description [Ar]
-            </label>
+            <Label label="Description [ar]" />
             <textarea
               id="descriptionAr"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -630,7 +592,7 @@ export default function EditCourse() {
             />
             <div className='mt-5 flex justify-between'>
               <Button type='button' text='Back' textColor='border-gray border text-violet-950' onClick={handlePrev} />
-              <Button type='submit' text='Update Course info' onClick={ (e) => updateCourseInfo(e)}   textColor='text-white' Bg='bg-violet-950' />
+              <Button type='submit' text='Update Course info' onClick={updateCourseInfo}   textColor='text-white' Bg='bg-violet-950' />
             </div>
           </div>
         </div>
@@ -638,14 +600,11 @@ export default function EditCourse() {
       </form>
       {/* Step 3: Curriculum */}
       {step === 3 && (
-        <div className='p-5'>
+        <form  onSubmit={updateLessons} className='p-5'>
           <div className='flex flex-col gap-5'>
             {lessons.map((lesson, lessonIndex) => (
               <div key={lessonIndex} className='bg-gray-100 p-4 rounded-md mb-4'>
                 {/* عرض معرف الدرس للتصحيح */}
-                {lesson.id && (
-                  <div className="text-xs text-gray-500 mb-2">Lesson ID: {lesson.id}</div>
-                )}
                 
                 <div className="flex gap-2 mb-3">
                   <div className="w-1/2">
@@ -788,13 +747,6 @@ export default function EditCourse() {
                       )}
                     </div>
                   ))}
-                  <button
-                    type='button'
-                    onClick={() => addFile(lessonIndex)}
-                    className='bg-blue-500 text-white p-2 rounded-md text-sm'
-                  >
-                    Add File
-                  </button>
                 </div>
                 
                 <div className="flex gap-2">
@@ -851,7 +803,7 @@ export default function EditCourse() {
                   
                   <button
                     type='button'
-                    onClick={() => removeLesson(lessonIndex)}
+                    onClick={() => removeLesson(lesson.id)}
                     className='bg-red-500 text-white p-2 rounded-md text-sm'
                     disabled={lessons.length <= 1}
                   >
@@ -868,59 +820,15 @@ export default function EditCourse() {
               Add Lesson
             </button>
           </div>
-
           <div className='mt-5 flex justify-between'>
             <Button type='button' text='Back' textColor='border-gray border text-violet-950' onClick={handlePrev} />
-            <Button type='button' text='Save & Next' textColor='text-white'  onClick={handleNext} Bg='bg-violet-950' />
+            <Button type='button' text='Save & Next' textColor='text-white'  onClick={updateLessons} Bg='bg-violet-950' />
           </div>
-        </div>
+        </form>
       )}
       {/* Step 4: Publish Course */}
       {step === 4 && (
-        <div className='p-5 min-h-screen flex flex-col items-center justify-center'>
-          <div className='bg-gray-100 p-8 rounded-lg max-w-2xl w-full'>
-            <h2 className='text-2xl font-bold mb-6 text-center'>Review Your Course</h2>
-            
-            <div className='space-y-4 mb-8'>
-              <div>
-                <h3 className='font-semibold'>Course Title:</h3>
-                <p>English: {titleEn}</p>
-                <p>Arabic: {titleAr}</p>
-              </div>
-
-              <div>
-                <h3 className='font-semibold'>Category:</h3>
-                <p>
-                  {categories.find(c => String(c.id) === category_id)?.name || 'Not selected'} / 
-                  {subCategories.find(s => String(s.id) === subCategory_id)?.name || 'Not selected'}
-                </p>
-              </div>
-
-              <div>
-                <h3 className='font-semibold'>Details:</h3>
-                <p>Level: {level}</p>
-                <p>Duration: {duration}</p>
-                <p>Price: {price}</p>
-              </div>
-
-              <div>
-                <h3 className='font-semibold'>Lessons:</h3>
-                <ul className='list-disc pl-5'>
-                  {lessons.map((lesson, index) => (
-                    <li key={index}>
-                      {lesson.titleEn} ({lesson.files.length} files)
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className='flex justify-between'>
-              <Button type='button' text='Back' textColor='border-gray border text-violet-950' onClick={handlePrev} />
-              <Button type='submit' text='Publish Course' onClick={() => updateLessons()} textColor='text-white' Bg='bg-violet-950' />
-            </div>
-          </div>
-        </div>
+         <div></div>
       )}
   </div>
   );

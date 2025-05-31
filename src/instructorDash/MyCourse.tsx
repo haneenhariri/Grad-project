@@ -3,11 +3,13 @@ import { fetchMyCourses } from '../services/profileStd';
 import { deleteCourse } from '../services/courses';
 import {  useNavigate } from 'react-router-dom';
 import { myCourseProp } from '../types/interfaces';
+import { useTranslation } from 'react-i18next';
 
 
 
 export default function MyCourse() {
   const navigate = useNavigate();
+  const {t} = useTranslation();
   const [courses, setCourses] = useState<myCourseProp[]>([]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
@@ -52,13 +54,13 @@ export default function MyCourse() {
                     {openDropdown === index && (
                       <div className="absolute z-10 right-0 mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md">
                         <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/detail/${course.id}`)}>
-                          Edit
+                          {t("Edit")}
                         </button>
                         <button
                           className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
                           onClick={() => handleDeleteCourse(course.id)}
                         >
-                          Delete
+                         {t("Delete")}
                         </button>
                       </div>
                     )}

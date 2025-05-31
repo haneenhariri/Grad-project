@@ -1,3 +1,4 @@
+import { profileDataProps } from "../types/interfaces";
 import axiosInstance from "./axiosInstance";
 
 export const imgProfile = async () => {
@@ -27,7 +28,7 @@ export const fetchMyCourses = async() =>
     }
 }
 
-export const EditProfile = async (profileData: any) => {
+export const EditProfile = async (profileData: profileDataProps) => {
   try {
     const formData = new FormData();
 
@@ -51,23 +52,19 @@ export const EditProfile = async (profileData: any) => {
 };
 
 
-export const EditProfileInst = async (profileData: any) => {
+export const EditProfileInst = async (profileData: profileDataProps) => {
   try {
     const formData = new FormData();
     
     if (profileData.name) formData.append('name', profileData.name);
     if (profileData.email) formData.append('email', profileData.email);
-    if (profileData.profile_picture) formData.append('profile_picture', profileData.profile_picture);
+    if (profileData.profile_picture instanceof File) {
+      formData.append('profile_picture', profileData.profile_picture);}
     if (profileData.education) formData.append('education', profileData.education);
     if (profileData.specialization) formData.append('specialization', profileData.specialization);
     if (profileData.summery) formData.append('summery', profileData.summery);
-    if (profileData._method) formData.append('_method', profileData._method);
     
-    const response = await axiosInstance.post('/instructor/profile', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await axiosInstance.post('/profile', formData);
     
     return response.data;
   } catch (error) {

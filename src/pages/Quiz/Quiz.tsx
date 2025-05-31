@@ -5,6 +5,7 @@ import Editor from "@monaco-editor/react";
 import { useTranslation } from "react-i18next";
 
 interface QuizQuestion {
+  id : number;
   course_id: number;
   question: string;
   options: string[] | null;

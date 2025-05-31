@@ -3,6 +3,9 @@ import Button from "../Ui/Button/Button";
 import Changepassword from "../components/Changepassword/Changepassword";
 import { useMutation } from "@tanstack/react-query";
 import { EditProfileInst } from "../services/profileStd";
+import { useTranslation } from "react-i18next";
+import Label from "../Ui/Label/Label";
+import Input from "../Ui/Input/Input";
 export default function InstractSettings() {
   const [image, setImage] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | null>(null);
@@ -11,13 +14,13 @@ export default function InstractSettings() {
   const [education, setEducation] = useState<string>("");
   const [specialization, setSpecialization] = useState<string>("");
   const [summery, setSummery] = useState<string>("");
-
+  const {t} = useTranslation();
   const mutation = useMutation({
     mutationFn: EditProfileInst,
     onSuccess: (data) => {
       console.log("Profile updated successfully", data);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       console.error("Error updating profile", error);
     },
   });
@@ -34,7 +37,6 @@ export default function InstractSettings() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     mutation.mutate({
-      _method : "PUT",
       name: name,
       email: email,
       profile_picture: image, 
@@ -45,100 +47,86 @@ export default function InstractSettings() {
   };
 
   return (
-    <section className="  p-5 bg-white rounded-md   my-10  ">
-     <>
-       <div className="py-10 flex lg:flex-row flex-col border gap-5 rounded-md p-5 border-violet-400">
-         <div className="lg:w-1/2 w-full">
-           <h2 className="text-2xl font-semibold mb-6">Account settings</h2>
+       <div className="  bg-white rounded-md gap-5 shadow-sm p-5 ">
+         <div className=" w-full">
+           <h2 className="text-2xl font-semibold mb-6">{t("navigation.Settings")}</h2>
            <form onSubmit={handleSubmit}>
-             <div>
-               <label className="mb-1.5">Full name</label>
-               <div className="flex justify-between gap-5 mb-5">
-                 <input
-                   type="text"
-                   className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-                   placeholder="Enter your name"
-                   value={name}   
-                   onChange={(e) => setName(e.target.value)}
-                 />
-               </div>
-               <label>Email</label>
-               <div className="flex justify-between gap-5 mb-8">
-                 <input
-                   type="text"
-                   className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-                   placeholder="Enter your email"
-                   value={email}
-                   onChange={(e) => setEmail(e.target.value)}
-                 />
-               </div>
-               <label>Education</label>
-               <div className="flex justify-between gap-5 mb-8">
-                 <input
-                   type="text"
-                   className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-                   placeholder="Enter your education"
-                   value={education}
-                   onChange={(e) => setEducation(e.target.value)}
-                 />
-               </div>
-               <label>Specialization</label>
-               <div className="flex justify-between gap-5 mb-8">
-                 <input
-                   type="text"
-                   className="w-full border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-                   placeholder="Enter your specialization"
-                   value={specialization}
-                   onChange={(e) => setSpecialization(e.target.value)}
-                 />
-               </div>
-               <label>Summery</label>
-               <div className="flex justify-between gap-5 mb-8">
+            <div className="  ">
+                <div className="flex gap-6">
+                    <div className="w-10/12">
+                          <Label label="Name"/>
+                          <Input
+                          type="text"
+                          name="name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder={t("NamePlace")}
+                        />
+                        <Label label="Email"/>
+                        <Input 
+                          type="email"
+                          name="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder={t("EmailPlace")}
+                        />
+                        <Label label="form.education"/>
+                        <Input 
+                          type="text"
+                          value={education}
+                          placeholder={t("form.education")}
+                          onChange={(e) => setEducation(e.target.value)}
+                        />
+                    </div>
+                    <div className="flex rounded-md mb-4 relative  p-3 border  flex-col justify-evenly items-center">
+                        <label htmlFor="imageUpload" className="cursor-pointer">
+                          <div className="w-40 h-40 overflow-hidden rounded-md border-2 border-gray-300">
+                            {preview ? (
+                              <img
+                                src={preview}
+                                alt="Profile Preview"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex items-center text-sm justify-center w-full h-full bg-gray-100 text-gray-500">
+                                {t("Upload Photo")}
+                              </div>
+                            )}
+                      </div>
+                      </label>
+                      <input
+                        id="imageUpload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                      <p className="text-xs text-center text-gray-500 mt-2">
+                        {t("imageSize")}
+                      </p>
+                    </div>
+                </div>
+               <Label label="form.specialization"/>
+               <Input
+                type="text" placeholder= {t("form.specialization")}                   
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)} />
+               <Label label="form.summary"/>
                  <textarea
                    className="w-full h-28 border p-2 rounded-md border-violet-400 bg-transparent placeholder:text-sm"
-                   placeholder="Enter your summery"
+                   placeholder={t("form.summary")}   
                    value={summery}
                    onChange={(e) => setSummery(e.target.value)}
                  />
-               </div>
-             </div>
-             <div className="flex rounded-md mb-6 relative md:w-1/2 p-3 border border-violet-400 flex-col justify-evenly items-center">
-               <label htmlFor="imageUpload" className="cursor-pointer">
-                 <div className="w-40 h-40 overflow-hidden rounded-md border-2 border-gray-300">
-                   {preview ? (
-                     <img
-                       src={preview}
-                       alt="Profile Preview"
-                       className="w-full h-full object-cover"
-                     />
-                   ) : (
-                     <div className="flex items-center text-sm justify-center w-full h-full bg-gray-100 text-gray-500">
-                       Upload Photo
-                     </div>
-                   )}
-                 </div>
-               </label>
-               <input
-                 id="imageUpload"
-                 type="file"
-                 accept="image/*"
-                 className="hidden"
-                 onChange={handleImageUpload}
-               />
-               <p className="text-xs text-center text-gray-500 mt-2">
-                 Image size should be under 1MB and image ratio needs to be 1:1
-               </p>
-             </div>
-             <Button Bg="bg-btn" textColor="text-white" text="Save changes" />
+            </div>
+             <Button Bg="bg-btn" textColor="text-white my-4" text="Save changes" />
            </form>
          </div>
-         <div className="border"></div>
+         <div className="border mb-4"></div>
          <div className="lg:w-1/2 w-full">
            <Changepassword />
          </div>
        </div>
-     </>
-    </section>
 
   )
 }

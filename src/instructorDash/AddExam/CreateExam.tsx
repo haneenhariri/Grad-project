@@ -10,7 +10,7 @@ interface CreateExamProps {
 }
 
 interface QuizQuestion {
-  course_id: number;
+  course_id: number | undefined;
   question: string;
   options: string[] | null;
   correct_answer: string | null;

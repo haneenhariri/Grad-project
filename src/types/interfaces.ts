@@ -13,6 +13,15 @@ export interface PusherMessageEvent {
   };
   timestamp: string;
 }
+export interface profileDataProps
+{
+  name : string;
+  email : string;
+  profile_picture : File | undefined;
+  specialization?: string;
+  education?: string;
+  summery?: string;
+}
 export interface logbtn {
   btn: string;
 }

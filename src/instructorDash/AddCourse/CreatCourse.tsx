@@ -1,7 +1,3 @@
-import basic from '../../assets/AddCourse/Stack (1).png';
-import Adv from '../../assets/AddCourse/ClipboardText.png';
-import Cur from '../../assets/AddCourse/MonitorPlay.png';
-import Pub from '../../assets/AddCourse/PlayCircle (1).png';
 import up from '../../assets/AddCourse/UploadSimple.png';
 import img from '../../assets/Image (28).png';
 import Button from '../../Ui/Button/Button';
@@ -13,8 +9,9 @@ import { showToast } from '../../utils/toast';
 import { Category, Lesson, SubCategory } from '../../types/interfaces';
 import Spinner from '../../components/Spinner/Spinner';
 import Label from '../../Ui/Label/Label';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import CreateExam from '../AddExam/CreateExam';
+import Head from '../EditeCourse/Head';
  
 
 export default function CreateCourse() {
@@ -251,28 +248,11 @@ export default function CreateCourse() {
     return <Spinner/>
   }
   return (
-    <div className="mt-[108px] min-h-screen bg-White/99 pb-10">
+    <div className=" min-h-screen bg-White/99 pb-10">
       {step < 4 ? (
         <form onSubmit={send} className="container mx-auto">
           {/* Header */}
-          <div className="flex items-center border-b">
-            <div className={`${step === 1 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-              <img  src={basic} alt="Basic Information" />
-              <span>{t("Basic Information")}</span>
-            </div>
-            <div className={`${step === 2 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-              <img src={Adv} alt="Advance Information" />
-              <span>{t("Advance Information")}</span>
-            </div>
-            <div className={`${step === 3 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-              <img src={Cur} alt="Curriculum" />
-              <span>{t("Curriculum")}</span>
-            </div>
-            <div className={`${step === 4 ? "text-violet-600 border-b border-violet-600 font-bold p-5 w-1/4 gap-2 flex items-center" : "p-5 w-1/4 gap-2 flex items-center"}`}>
-              <img src={Cur} alt="Curriculum" />
-              <span>{t("Quiz")}</span>
-            </div>
-          </div>
+          <Head step={step}/>
           <div className='p-4 flex border-b items-center justify-between'>
             {step === 1 && <h2 className='text-2xl font-semibold'>{t("Basic Information")}</h2>}
             {step === 2 && <h2 className='text-2xl font-semibold'>{t("Advance Information")}</h2>}
@@ -410,9 +390,7 @@ export default function CreateCourse() {
           {step === 2 && (
             <div>
               <div className='p-5 border-b'>
-                <label className="mb-2.5 font-medium text-base block">
-                  Course Thumbnail
-                </label>
+                <Label label='Course Thumbnail'/>
                 <div className='flex gap-5'>
                   <div className="mb-5">
                     <div
@@ -436,14 +414,17 @@ export default function CreateCourse() {
                   </div>
                   <div>
                     <p className='w-2/3 text-base text-gray-700'>
-                      Upload your course thumbnail here. <span className='text-black font-bold text-lg'>Important guidelines:</span> 
-                      1200x800 pixels or 12:8 Ratio. Supported format: <span className='text-black font-bold text-lg'>.jpg, .jpeg, or .png</span>
+                      <Trans i18nKey="uploadThumbnailText"
+                        components={{
+                        bold1: <span className="text-black font-bold text-lg" />,
+                        bold2: <span className="text-black font-bold text-lg" />
+                      }}/>
                     </p>
                     <div 
                       className='flex mt-5 gap-2 text-violet-500 font-semibold bg-[#FFEEE8] w-max p-2.5 cursor-pointer'
                       onClick={() => document.getElementById("cover")?.click()}
                     >
-                      <p>Upload image</p>
+                      <p>{t("Upload Photo")}</p>
                       <img src={up} alt="Upload" />
                     </div>
                   </div>
@@ -451,9 +432,7 @@ export default function CreateCourse() {
               </div>
 
               <div className='p-5 border-b'>
-                <label className="mb-2.5 font-medium text-base block" htmlFor="descriptionEn">
-                  Course Description [En]
-                </label>
+                <Label label='Description [En]'/>
                 <textarea
                   id="descriptionEn"
                   className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -462,10 +441,7 @@ export default function CreateCourse() {
                   onChange={(e) => setDescriptionEn(e.target.value)}
                   required
                 />
-
-                <label className="mb-2.5 font-medium text-base block" htmlFor="descriptionAr">
-                  Course Description [Ar]
-                </label>
+                <Label label="Description [ar]" />
                 <textarea
                   id="descriptionAr"
                   className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"

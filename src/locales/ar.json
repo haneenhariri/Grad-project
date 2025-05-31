@@ -10,7 +10,8 @@
         "Create New Course": "إنشاء دورة جديدة",
         "Earning": "الأرباح",
         "My Courses": "دوراتي",
-        "Settings": "الإعدادات"
+        "Settings": "الإعدادات",
+        "Message" : "الرسائل"
     },
     "signUp":
     {
@@ -30,6 +31,7 @@
     },
     "btn":
     {
+        "Update Course info" : "تحديث معلومات الكورس",
         "VisitCourses" : "عرض الدورات",
         "View All" : "عرض المزيد" ,
         "Next" : "التالي",
@@ -51,7 +53,9 @@
         "Add Instructor" : "اضافة مدرس",
         "Back" : "رجوع",
         "getStarted": "ابدأ الآن",
-        "backToHome" :"العودة إلى الرئيسية"
+        "backToHome" :"العودة إلى الرئيسية",
+        "Save changes" : "حفظ التغييرات",
+        "Change password" : "تغيير كلمة المرور"
     },
     "hero":
     {
@@ -87,6 +91,15 @@
         "Price" : "السعر",
         "Recommended Courses" : "الدورات الموصى بها"
     },
+    "Current cover" :"سيتم استخدام صورة الغلاف الحالية. انقر على تغيير الصورة لتحميل صورة جديدة.",
+    "Change image" : "تغيير الصورة ",
+    "uploadThumbnailText": "قم بتحميل صورة مصغّرة للدورة التدريبية هنا. <bold1>إرشادات مهمة:</bold1> الأبعاد 1200x800 بكسل أو نسبة 12:8. الصيغ المدعومة: <bold2>.jpg، .jpeg، أو .png</bold2>",
+    "Course Thumbnail" :"صورة مصغرة للدورة",
+    "Delete" : "حذف",
+    "Edit" : "تعديل",
+    "Current Password" : "كلمة المرور الحالية " ,
+    "Change password" : "تغيير كلمة المرور",
+    "Upload Photo" : "تحميل صورة",
     "Wishlist" : "قائمة المفضلة",
     "Purchase History" : "سجل المشتريات",
     "Teachers" : "المدربون",
@@ -124,6 +137,8 @@
     "Curriculum" : "  محتوى الدورة",
     "Publish Course" : "نشر الدورة",
     "Title [en]" : "العنوان [en]",
+    "Description [En]" : " وصف الكورس [en]",
+    "Description [ar]" : " وصف الكورس [ar]",
     "TitleP[en]" : "عنوان الدورة بالغة الانكليزية",
     "TitleP[ar]" : "عنوان الدورة بالغة العربية ",
     "Title [ar]" : "العنوان [ar]",
@@ -260,5 +275,9 @@
         "mostPopular": "الأكثر شعبية",
         "suggestion": "اقتراح",
         "message": "رسالة"
-    }
+    },
+    "Quiz" : " الاختبار",
+    "Type a message..." : "اكتب رسالة...",
+    "Send" : "ارسال",
+    "imageSize" : "يجب أن يكون حجم الصورة أقل من 1 ميجا بايت ويجب أن تكون نسبة الصورة 1:1"
 }

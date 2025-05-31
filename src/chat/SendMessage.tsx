@@ -35,12 +35,12 @@ export default function SendMessage({ receiverId, onSend }: SendMessageProps) {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder={t('Type a message...')}
-          className="flex-1 p-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-[#f3c2f894]"
+          className="flex-1 p-2 border border-gray-300  ltr:rounded-l-lg rtl:rounded-r-lg focus:outline-none focus:ring-2 focus:ring-[#f3c2f894]"
           disabled={sending}
         />
         <button
           type="submit"
-          className="bg-[#f2b3fa94] border-gray-300  border px-4  py-2 rounded-r-lg hover:bg-[#f2b3fa94] focus:ring-2  "
+          className="bg-[#f2b3fa94] border-gray-300  border px-4  py-2 ltr:rounded-r-lg rtl:rounded-l-lg hover:bg-[#f2b3fa94] focus:ring-2  "
           disabled={sending || !message.trim()}
         >
           {sending ? (
