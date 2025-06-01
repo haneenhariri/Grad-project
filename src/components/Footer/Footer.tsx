@@ -22,9 +22,9 @@ export default function Footer() {
   }
 
   return (
-    <footer className="footer-container pt-40">
+    <footer className="footer-container rounded-none mb-0 bg-[length:100%] pt-40">
       {/* قسم الإحصائيات والدعوة للانضمام */}
-      <div className="stats-section px-4 lg:px-10 desktop:px-40 py-16 flex flex-col lg:flex-row items-center gap-10">
+      <div className="stats-section bg-btn border-b border-b-btn px-4 lg:px-10 desktop:px-40 py-16 flex flex-col lg:flex-row items-center gap-10">
         <div className="lg:w-5/12 rtl:lg:w-1/3 w-full text-center lg:text-left">
           <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold text-white mb-8">
             {t("subFooter")}
@@ -62,7 +62,7 @@ export default function Footer() {
       </div>
 
       {/* قسم معلومات الفوتر */}
-      <div className="footer-content px-4 lg:px-10 desktop:px-40 py-16 flex gap-y-10 lg:flex-row flex-col justify-between">
+      <div className="footer-content bg-btn px-4 lg:px-10 desktop:px-40 py-16 flex gap-y-10 lg:flex-row flex-col justify-between">
         <div className="lg:w-5/12 flex-wrap w-full">
           <div className="flex items-center mb-7.5 gap-1">
             <Logo textColor="text-white"/>
@@ -109,7 +109,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="footer-copyright py-6 px-4 lg:px-10 desktop:px-40 text-center text-gray-300 text-sm">
+      <div className="footer-copyright bg-[#8c45db] py-6 px-4 lg:px-10 desktop:px-40 text-center text-gray-300 text-sm">
         <p>© {new Date().getFullYear()} {t("Logo.logo")}. {t("All rights reserved")}</p>
       </div>
     </footer>
