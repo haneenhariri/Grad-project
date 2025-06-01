@@ -28,7 +28,7 @@ export const instractSide  =
         img : my
     },
     {
-        pathLink : '/instruct/Message/4',
+        pathLink : '/instruct/Message/1',
         title : 'Message' ,
         img : message
     },

@@ -9,8 +9,8 @@ export default function DashSide() {
           <Logo/>
         </div>
         <div className=" flex flex-col items-center gap-2.5 py-4 text-sm">
-            {instractSide.map((e) =>(
-                <NavLinkDash  pathLink={e.pathLink} title={e.title} icon={e.img}/>
+            {instractSide.map((e,i) =>(
+                <NavLinkDash key={i} pathLink={e.pathLink} title={e.title} icon={e.img}/>
             ))}
         </div>
     </div>

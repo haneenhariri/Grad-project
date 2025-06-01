@@ -5,6 +5,7 @@ import { MdAttachMoney, MdPending, MdStar } from 'react-icons/md';
 import { BsCurrencyDollar } from 'react-icons/bs';
 import InfoCard from "./InfoCard";
 import Revenue from "./Revenue";
+import Spinner from "../../components/Spinner/Spinner";
 
 export interface DashboardStats {
   total_students: number;
@@ -36,7 +37,7 @@ export default function Dash() {
   }, []);
 
   if (loading) {
-    return <div className="flex h-64 items-center justify-center">Loading dashboard data...</div>;
+    return <Spinner/>
   }
 
   if (!stats) {

@@ -7,9 +7,9 @@ export const allPayment = async() =>
     return response.data;
 }
 
-export const userPayment = async() =>
+export const userPayment = async(lang: 'ar' | 'en') =>
 {
-    const response = await  axiosInstance.get('/payments');
+    const response = await  axiosInstance.get(`/payments?lang=${lang}`);
     console.log(response.data);
     return response.data;
 }

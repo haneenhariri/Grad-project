@@ -5,6 +5,8 @@ import Spinner from "../Spinner/Spinner";
 import star from '../../assets/icons/Star (3).png';
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaGraduationCap, FaMoneyBillWave, FaWallet } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
 interface Payment {
   id: number;
@@ -20,6 +22,7 @@ interface Payment {
 
 export default function PurchaseHistory() {
   const { t } = useTranslation();
+  const lang = useSelector((state: RootState) => state.language.lang);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedPayment, setExpandedPayment] = useState<number | null>(null);
@@ -44,7 +47,7 @@ export default function PurchaseHistory() {
     const fetchPayments = async () => {
       try {
         setLoading(true);
-        const response = await userPayment();
+        const response = await userPayment(lang);
         if (response && response.data) {
           setPayments(response.data);
         }
@@ -56,7 +59,7 @@ export default function PurchaseHistory() {
     };
     
     fetchPayments();
-  }, []);
+  }, [lang]);
   
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -123,7 +126,7 @@ export default function PurchaseHistory() {
                     <span className="inline-flex items-center justify-center w-5 h-5 bg-violet-100 text-violet-600 rounded-full">
                       <FaMoneyBillWave size={12} />
                     </span>
-                    <span>${totalAmount} USD</span>
+                    <span>${totalAmount}</span>
                   </div>
                   
                   <div className="flex items-center gap-1">
@@ -150,8 +153,8 @@ export default function PurchaseHistory() {
                 {datePayments.map((payment) => (
                   <div key={payment.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
                     <div className="flex gap-4">
-                      <div className="w-1/3 flex ">
-                        <img src={`http://127.0.0.1:8000/storage/${payment.course_cover}`} className=" w-44" alt="" />
+                      <div className="col-span-6 flex gap-4 ">
+                        <img src={`http://127.0.0.1:8000/storage/${payment.course_cover}`} className="w-40 h-32 object-cover rounded" alt="" />
                         <div>
                         <div className="flex items-center gap-2 mb-1">
                           
@@ -162,7 +165,7 @@ export default function PurchaseHistory() {
                           <span className="text-xs text-gray-500">(451 {t("Reviews")})</span>
                         </div>
                         <h4 className="font-medium line-clamp-2">{payment.course}</h4>
-                        <p className="text-sm text-gray-500 mt-1">{t("Course by")}: {payment.instructor}</p>
+                        <p className="text-sm text-gray-500 mt-1">{t("Created by:")}: {payment.instructor}</p>
                         </div>
 
                       </div>

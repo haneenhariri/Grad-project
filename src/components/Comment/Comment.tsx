@@ -8,6 +8,8 @@ import { CommentData } from "../../types/interfaces";
 import { FiEdit2, FiTrash2 } from "react-icons/fi"; // استيراد أيقونات التعديل والحذف
 import { getSecureCookie } from "../../utils/cookiesHelper";
 import { deleteComment, updateComment } from "../../services/comments"; // استيراد دالة updateComment
+import { useTranslation } from "react-i18next";
+import Spinner from "../Spinner/Spinner";
 
 export default function Comment({ lesson_id }: { lesson_id: number }) {
   const { comments, loading, error } = useAppSelector((state) => state.comments);
@@ -15,7 +17,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
   const [showReplyForm, setShowReplyForm] = useState<{ [key: number]: boolean }>({});
   const [editingComment, setEditingComment] = useState<number | null>(null);
   const [editContent, setEditContent] = useState<string>("");
-  
+  const {t} = useTranslation();
   // الحصول على معرف المستخدم الحالي من الكوكيز - تعديل هنا لاستخدام "id" بدلاً من "user_id"
   const currentUserId = parseInt(getSecureCookie("id") || "0");
 
@@ -190,13 +192,13 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
                     onClick={handleCancelEdit}
                     className="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                   >
-                    إلغاء
+                    {t("cancel")}
                   </button>
                   <button 
                     onClick={handleSaveEdit}
                     className="px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
-                    حفظ
+                    {t("Save")}
                   </button>
                 </div>
               </div>
@@ -208,7 +210,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
               onClick={() => toggleReplyForm(reply.id)}
               className="text-gray-500 text-xs font-medium hover:text-violet-600 flex items-center gap-1"
             >
-              REPLY
+              {t("REPLY")}
             </button>
             
             {showReplyForm[reply.id] && (
@@ -331,13 +333,13 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
                     onClick={handleCancelEdit}
                     className="px-3 py-1 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                   >
-                    إلغاء
+                    {t("cancel")}
                   </button>
                   <button 
                     onClick={handleSaveEdit}
                     className="px-3 py-1 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700"
                   >
-                    حفظ
+                    {t("Save")}
                   </button>
                 </div>
               </div>
@@ -349,7 +351,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
               onClick={() => toggleReplyForm(comment.id)}
               className="text-gray-500 text-xs font-medium hover:text-violet-600 flex items-center gap-1"
             >
-              REPLY
+              {t("REPLY")}
             </button>
             
             {showReplyForm[comment.id] && (
@@ -382,7 +384,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
           <div className="mx-auto text-gray-300 text-4xl mb-3 w-16 h-16 flex items-center justify-center border-2 border-gray-200 rounded-full">
             <span className="text-2xl">💬</span>
           </div>
-          <p className="text-gray-500">No comments yet. Be the first to comment!</p>
+          <p className="text-gray-500">{t("No comments yet. Be the first to comment!")}</p>
         </div>
       );
     }
@@ -401,14 +403,13 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
 
   return (
     <div className="rounded-lg ">
-      <h2 className="text-xl font-semibold mb-6">Comments</h2>
-      
-      
+      <h2 className="text-xl font-semibold mb-6">{t("Comments")}</h2>
       {loading ? (
         <div className="py-10 text-center">
-          <p className="text-gray-500">Loading comments...</p>
+          <Spinner/>
         </div>
       ) : error ? (
+        
         <div className="py-10 text-center">
           <p className="text-red-500">Error loading comments: {error}</p>
         </div>

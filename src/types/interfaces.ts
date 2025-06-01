@@ -15,9 +15,9 @@ export interface PusherMessageEvent {
 }
 export interface profileDataProps
 {
-  name : string;
-  email : string;
-  profile_picture : File | undefined;
+  name?: string;
+  email?: string;
+  profile_picture?: File | undefined;
   specialization?: string;
   education?: string;
   summery?: string;

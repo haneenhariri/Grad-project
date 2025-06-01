@@ -7,8 +7,10 @@ import { showToast } from "../../utils/toast";
 import Comment from "../../components/Comment/Comment";
 import Head from "./Head";
 import Button from "../../Ui/Button/Button";
+import { useTranslation } from "react-i18next";
 
 export default function WatchCourse() {
+  const  { t } = useTranslation()
   const { id } = useParams();
   const [course, setCourse] = useState<any>(null);
   const [selectedLesson, setSelectedLesson] = useState<any>(null);
@@ -16,7 +18,7 @@ export default function WatchCourse() {
   const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
   const [completedPercentage, setCompletedPercentage] = useState(0);
   const navigate = useNavigate();
-
+  const language = localStorage.getItem('language') as 'ar' | 'en' || 'en';
   // إضافة سجل تصحيح الأخطاء للتحقق من قيمة id
   useEffect(() => {
     console.log("Course ID from params:", id);
@@ -107,14 +109,10 @@ export default function WatchCourse() {
     }
   };
 
-
-
-
-
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const data = await watchSingleCourse(Number(id));
+        const data = await watchSingleCourse(Number(id) , language);
         setCourse(data);
         if (data.lessons.length > 0) {
           setSelectedLesson(data.lessons[0]); 
@@ -128,7 +126,7 @@ export default function WatchCourse() {
       }
     };
     fetchCourse();
-  }, [id]);
+  }, [language , id]);
 
   if (loading) return <Spinner />;
 
@@ -175,7 +173,7 @@ export default function WatchCourse() {
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      View PDF Document
+                      {t("View PDF Document")}
                     </a>
                   </div>
                 )}
@@ -187,7 +185,7 @@ export default function WatchCourse() {
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline flex items-center"
                     >
-                      Download File ({file.origin_name})
+                      {t("Download File")} ({file.origin_name})
                     </a>
                   </div>
                 )} 
@@ -196,20 +194,15 @@ export default function WatchCourse() {
           })
         ) : (
           <div className="text-center text-gray-500">
-            No files available for this lesson
+            {t("No files available for this lesson")}
           </div>
         )}
         <div className="">
           <h2 className="text-xl font-semibold mb-2">{selectedLesson.title}</h2>
-          <h2 className="text-xl font-semibold mb-2">Lectures Description</h2>
+          <h2 className="text-xl font-semibold mb-2">{t("Lectures Description")}</h2>
           <p  id="Description" className="text-gray-700  mb-4">{selectedLesson.description}</p>
           {!completedLessons.has(selectedLesson.id) && (
-            <button 
-              onClick={() => markLessonAsCompleted(selectedLesson.id)}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-            >
-              Mark as Completed
-            </button>
+            <Button text="Mark as Completed" Bg="bg-green-600 text-white hover:bg-green-700 transition-colors" onClick={() => markLessonAsCompleted(selectedLesson.id) }/>
           )}
         </div>
       </div>
@@ -217,17 +210,13 @@ export default function WatchCourse() {
   };
 
   return (
-    <>
+    <section className="mb-">
      <Head title={course?.title}/>
       <div className="px-4 lg:px-10 desktop:px-40 py-8">
       <div className="flex flex-col md:flex-row gap-6">
         <div className='w-full md:w-10/12'>
           {renderSelectedLesson()}
-          
-          {/* قسم التعليقات */}
-          <div id="Comments">
           <Comment lesson_id={selectedLesson?.id || 0} />
-          </div>
         </div>
         
         <div className='w-full md:w-5/12'>
@@ -262,24 +251,23 @@ export default function WatchCourse() {
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className='font-medium'>{lesson.title}</h3>
-                      <p className='text-sm text-gray-500'>{lesson.files?.length || 0} files</p>
+                      <p className='text-sm text-gray-500'>{lesson.files?.length || 0} {t("files")}</p>
                     </div>
                     {completedLessons.has(lesson.id) ? (
                       <span className='text-sm text-green-600 flex items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                         </svg>
-                        Completed
+                        {t("Completed")}
                       </span>
                     ) : (
-                      <span className='text-sm text-gray-400'>Not completed</span>
+                      <span className='text-sm text-gray-400'>{t("Not completed")}</span>
                     )}
                   </div>
                 </div>
               ))}
               {completedLessons.size === course?.lessons.length && (
                 <>
-                <p className='text-sm text-green-600 mt-2'>You have completed all lessons!</p>
                 <Button text="Start Quiz" Bg=" w-full bg-green-600 text-white mt-4" onClick={() => navigate(`/quiz/${course.id}`)}/>
                 </>
               )}
@@ -288,7 +276,7 @@ export default function WatchCourse() {
         </div>
       </div>
     </div>
-    </>
+    </section>
 
   );
 }

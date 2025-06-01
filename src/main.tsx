@@ -21,6 +21,7 @@ import Dash from './Admin/Dash/Dash.tsx';
 import StdDash from './pages/UserDash/StdDash.tsx';
 import ChatApp from './chat/ChatApp.tsx';
 import Log from './Admin/log/log.tsx';
+import TestResults from './pages/UserDash/TestResults.tsx';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -78,6 +79,7 @@ const routes = createBrowserRouter([
           { path: 'Message/:user_id', element: <ChatApp/>},
           {path: 'wishlist' , element:( <Wishlist/>)},
           { path: 'purchaseHistory', element: <PurchaseHistory/> },
+          { path: 'TestResults', element: <TestResults/> },
         ],
       },
       { path: '/Instructor', element: <InstructorPage /> },

@@ -52,21 +52,14 @@ export const EditProfile = async (profileData: profileDataProps) => {
 };
 
 
-export const EditProfileInst = async (profileData: profileDataProps) => {
+export const EditProfileInst = async (formData: profileDataProps) => {
   try {
-    const formData = new FormData();
-    
-    if (profileData.name) formData.append('name', profileData.name);
-    if (profileData.email) formData.append('email', profileData.email);
-    if (profileData.profile_picture instanceof File) {
-      formData.append('profile_picture', profileData.profile_picture);}
-    if (profileData.education) formData.append('education', profileData.education);
-    if (profileData.specialization) formData.append('specialization', profileData.specialization);
-    if (profileData.summery) formData.append('summery', profileData.summery);
-    
-    const response = await axiosInstance.post('/profile', formData);
-    
-    return response.data;
+    const response = await axiosInstance.post("/profile", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
   } catch (error) {
     console.error("Error updating instructor profile:", error);
     throw error;

@@ -1,9 +1,15 @@
 import axiosInstance from "./axiosInstance"
 
 const URL = "/admin/dashboard"
+const URLINST = "/instructor/dashboard"
 export const generalStats = async () => 
 {
     const response = await axiosInstance.get(`${URL}/general-stats`);
+    return response.data.data;
+}
+export const generalStatsInstracror = async () => 
+{
+    const response = await axiosInstance.get(`${URLINST}/general-stats`);
     return response.data.data;
 }
 

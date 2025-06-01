@@ -26,6 +26,17 @@ export const getWishList = async(lang: 'ar' | 'en') =>
     }throw { message: "An unexpected error occurred" }; 
     }
 }
+export const getResults = async() =>
+{
+    try
+    {
+        const response = await axiosInstance.get(`/student/dashboard/exam-results`);
+        return response.data.data;
+    }catch(error)
+    {
+        console.log(error);
+    }
+}
 export const getRecommended = async(lang: 'ar' | 'en') =>
 {
     try{

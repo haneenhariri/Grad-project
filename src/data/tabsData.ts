@@ -28,6 +28,10 @@ export const stdTabs = [
         path:`/User/purchaseHistory`,
         text:'Purchase History',
     },
+    {
+        path:`/User/TestResults`,
+        text:'navigation.Test results',
+    },
 ]
 
 export const courseTabs =

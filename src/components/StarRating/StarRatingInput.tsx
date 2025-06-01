@@ -34,13 +34,10 @@ const StarRatingInput: React.FC<StarRatingProps> = ({
   // تحديد وصف التقييم بناءً على القيمة
   const getRatingText = (rating: number): string => {
     if (rating >= 4.5) return t('Amazing');
-    if (rating >= 4.0) return t('Good/Amazing');
-    if (rating >= 3.5) return t('Good');
-    if (rating >= 3.0) return t('Average/Good');
-    if (rating >= 2.5) return t('Average');
-    if (rating >= 2.0) return t('Poor/Average');
-    if (rating >= 1.5) return t('Poor');
-    if (rating >= 1.0) return t('Very Poor/Poor');
+    if (rating >= 4.0) return t('Good');
+    if (rating >= 3.0) return t('Average');
+    if (rating >= 2.0) return t('Poor');
+    if (rating >= 1.0) return t('Very Poor');
     return rating === 0 ? t('Rate this course') : t('Very Poor');
   };
 

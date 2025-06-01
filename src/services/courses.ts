@@ -25,7 +25,6 @@ export  interface courseDataProps {
     rating: string;
   }
 
-const language = localStorage.getItem('language');
 
 export const allCourses = async (lang: 'ar' | 'en'): Promise<courseDataProps[]> => {
   try {
@@ -36,13 +35,13 @@ export const allCourses = async (lang: 'ar' | 'en'): Promise<courseDataProps[]> 
   }
 };
 
-export const singleCourse = async (id: number) => {
+export const singleCourse = async (id: number , language: 'ar' | 'en' ) => {
       const response = await axiosInstance.get(`/courses?lang=${language}`); 
       const selectedCourse = response.data.data.find((course: CouCard) => course.id === id);
       return selectedCourse;
 };
 
-export const  watchSingleCourse = async (id: number) => 
+export const  watchSingleCourse = async (id: number , language : 'ar' | 'en') => 
 {
     const response = await axiosInstance.get(`/courses/${id}?lang=${language}`);
     console.log(response.data)

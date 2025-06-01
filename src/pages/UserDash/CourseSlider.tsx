@@ -66,7 +66,7 @@ export default function CourseSlider() {
         <div className="text-center py-10">
           <p className="text-gray-500 mb-4">{t('You have completed all your courses')}</p>
           <Link to="/courses" className="px-4 py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700">
-            {t('Browse Courses')}
+            {t('btn.Browse all courses')}
           </Link>
         </div>
       ) : (

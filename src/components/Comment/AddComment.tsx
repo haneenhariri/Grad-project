@@ -4,13 +4,14 @@ import { useAppDispatch } from "../../hooks/hooks";
 import { addNewComment } from "../../redux/commentsSlice/commentsSlice";
 import { AddCommentProps } from "../../types/interfaces";
 import TextareaAutosize from 'react-textarea-autosize';
+import { useTranslation } from "react-i18next";
 
 export default function AddComment({ lesson_id, parentCommentId = null, onCommentAdded }: AddCommentProps) {
   const [comment, setComment] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
-
+  const {t} = useTranslation();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -44,9 +45,13 @@ export default function AddComment({ lesson_id, parentCommentId = null, onCommen
 
       setComment('');
       onCommentAdded();
-    } catch (err: any) {
-      setError(err?.message || 'حدث خطأ أثناء الإرسال');
-    } finally {
+    } catch (err) {
+  if (err instanceof Error) {
+    setError(err.message);
+  } else {
+    setError('حدث خطأ أثناء الإرسال');
+  }
+}finally {
       setLoading(false);
     }
   };
@@ -63,7 +68,7 @@ export default function AddComment({ lesson_id, parentCommentId = null, onCommen
             setError(''); 
           }}          
           className="w-10/12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-transparent"
-          placeholder="Write your comment..."
+          placeholder={t("Write your comment...")}
         />
         <div className="flex w-1/6 justify-between items-center">
           {error && <p className="text-red-500 text-sm">{error}</p>}
@@ -72,7 +77,7 @@ export default function AddComment({ lesson_id, parentCommentId = null, onCommen
             disabled={loading}
             className="ml-auto w-full h-full px-5 py-2 bg-btn text-white text-lg font-medium rounded-md hover:bg-violet-950 transition-colors disabled:opacity-50"
           >
-            {loading ? "Posting..." : "Post"}
+          {loading ? t("btn.Posting...") : t("btn.Post")}
           </button>
         </div>
       </form>

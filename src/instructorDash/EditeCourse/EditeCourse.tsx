@@ -13,6 +13,7 @@ import Label from '../../Ui/Label/Label';
 import Head from './Head';
 import { Trans, useTranslation } from 'react-i18next';
 import axiosInstance from '../../services/axiosInstance';
+import EditExam from './EditExam';
 
 
 export default function EditCourse() {
@@ -38,6 +39,43 @@ export default function EditCourse() {
   const [courseLanguage,setCourseLanguage] = useState('');
   const [course, setCourse] = useState<myCourseProp | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]); // تأكد من أن القيمة الافتراضية مصفوفة فارغة
+async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
+  try {
+    const formData = new FormData();
+    formData.append("title[en]", lesson.titleEn);
+    formData.append("title[ar]", lesson.titleAr);
+    formData.append("description[en]", lesson.descriptionEn);
+    formData.append("description[ar]", lesson.descriptionAr);
+    formData.append("course_id", id); // يجب أن تكون ID الدورة متاحة
+
+    const response = await axios.post(
+      `http://127.0.0.1:8000/api/lessons`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    const newLessonId = response.data.id;
+    showToast("Lesson added successfully", "success");
+
+    // لو فيه ملفات، ارفعهم بعد حفظ الدرس
+    for (const file of lesson.files) {
+      if (file.path instanceof File) {
+        await addFileToLesson(newLessonId, file.path, file.type);
+      }
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating lesson:", error);
+    showToast("Error creating lesson", "error");
+    throw error;
+  }
+}
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -323,11 +361,12 @@ export default function EditCourse() {
     async function addFileToLesson(lessonId: number, file: File, fileType: string) {
       try {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("lesson_id", lessonId.toString());
+        formData.append("path", file);
         formData.append("type", fileType);
         
         const response = await axios.post(
-          `http://127.0.0.1:8000/api/lessons/${lessonId}/files`,
+          `http://127.0.0.1:8000/api/files`,
           formData,
           {
             headers: {
@@ -714,30 +753,6 @@ export default function EditCourse() {
                           </select>
                           <button
                             type='button'
-                            onClick={() => {
-                              if (file.path && lesson.id) {
-                                addFileToLesson(lesson.id, file.path as unknown as File, file.type)
-                                  .then((response) => {
-                                    // تحديث قائمة الملفات بعد الإضافة
-                                    const updatedLessons = [...lessons];
-                                    updatedLessons[lessonIndex].files[fileIndex] = {
-                                      ...file,
-                                      id: response.id,
-                                      path: response.path
-                                    };
-                                    setLessons(updatedLessons);
-                                  });
-                              } else {
-                                showToast("Please select a file first", 'error');
-                              }
-                            }}
-                            className='bg-green-500 text-white p-2 rounded-md'
-                            disabled={!file.path}
-                          >
-                            Upload
-                          </button>
-                          <button
-                            type='button'
                             onClick={() => removeFile(lessonIndex, fileIndex)}
                             className='text-red-500 hover:text-red-700 p-2'
                           >
@@ -759,48 +774,81 @@ export default function EditCourse() {
                   </button>
                   
                   {/* زر لحفظ تغييرات الدرس */}
-                  {lesson.id && (
-                    <button
-                      type='button'
-                      onClick={async () => {
-                        try {
-                          console.log(`Saving lesson ${lesson.id}...`);
-                          
-                          const lessonData = new URLSearchParams();
-                          lessonData.append("title[en]", lesson.titleEn);
-                          lessonData.append("title[ar]", lesson.titleAr);
-                          lessonData.append("description[en]", lesson.descriptionEn);
-                          lessonData.append("description[ar]", lesson.descriptionAr);
-                          
-                          console.log("Lesson data:", Object.fromEntries(lessonData));
-                          
-                          const response = await axios({
-                            method: 'put',
-                            url: `http://127.0.0.1:8000/api/lessons/${lesson.id}?lang=ar`,
-                            data: lessonData,
-                            headers: {
-                              'Authorization': `Bearer ${token}`,
-                              'Content-Type': 'application/x-www-form-urlencoded',
-                            }
-                          });
-                          
-                          console.log("API Response:", response.data);
-                          showToast(`Lesson ${lessonIndex + 1} updated successfully!`, 'success');
-                        } catch (error: any) {
-                          console.error("Error updating lesson:", error);
-                          if (error.response) {
-                            console.error("Response data:", error.response.data);
-                            console.error("Response status:", error.response.status);
-                          }
-                          showToast(`Error updating lesson: ${error.message}`, 'error');
-                        }
-                      }}
-                      className='bg-green-500 text-white p-2 rounded-md text-sm'
-                    >
-                      Save Lesson
-                    </button>
-                  )}
-                  
+                 <button
+  type='button'
+onClick={async () => {
+  try {
+    let lessonId = lesson.id;
+
+    if (lessonId) {
+      // تعديل الدرس (PUT)
+      const lessonData = new URLSearchParams();
+      lessonData.append("title[en]", lesson.titleEn);
+      lessonData.append("title[ar]", lesson.titleAr);
+      lessonData.append("description[en]", lesson.descriptionEn);
+      lessonData.append("description[ar]", lesson.descriptionAr);
+
+      await axios.put(
+        `http://127.0.0.1:8000/api/lessons/${lessonId}?lang=ar`,
+        lessonData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+
+      showToast(`Lesson ${lessonIndex + 1} updated successfully!`, "success");
+    } else {
+      // إنشاء درس جديد
+      const newLesson = await createNewLesson({
+        titleEn: lesson.titleEn,
+        titleAr: lesson.titleAr,
+        descriptionEn: lesson.descriptionEn,
+        descriptionAr: lesson.descriptionAr,
+        files: lesson.files,
+      });
+
+      lessonId = newLesson.id;
+
+      // تحديث ID الدرس الجديد في state
+      const updatedLessons = [...lessons];
+      updatedLessons[lessonIndex] = {
+        ...updatedLessons[lessonIndex],
+        id: lessonId,
+      };
+      setLessons(updatedLessons);
+    }
+
+    // رفع الملفات الجديدة (التي ليس لها id)
+    for (let i = 0; i < lesson.files.length; i++) {
+      const file = lesson.files[i];
+      if (!file.id && file.path instanceof File) {
+        const response = await addFileToLesson(lessonId, file.path, file.type);
+
+        // تحديث الملف بعد الرفع
+        const updatedLessons = [...lessons];
+        updatedLessons[lessonIndex].files[i] = {
+          ...file,
+          id: response.id,
+          path: response.path,
+        };
+        setLessons(updatedLessons);
+      }
+    }
+
+  } catch (error: any) {
+    showToast("Error saving lesson", "error");
+    console.error(error);
+  }
+}}
+
+  className='bg-green-500 text-white p-2 rounded-md text-sm'
+>
+  Save Lesson
+</button>
+
                   <button
                     type='button'
                     onClick={() => removeLesson(lesson.id)}
@@ -828,7 +876,7 @@ export default function EditCourse() {
       )}
       {/* Step 4: Publish Course */}
       {step === 4 && (
-         <div></div>
+        <EditExam courseId={Number(id)} />
       )}
   </div>
   );

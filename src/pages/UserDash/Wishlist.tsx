@@ -83,7 +83,7 @@ export default function Wishlist() {
         <div className="bg-white rounded-md shadow-sm overflow-hidden">
           {/* Header */}
           <div className="grid grid-cols-12 bg-[#f1cff594] p-4 font-semibold text-gray-700">
-            <div className="col-span-6">{t("COURSE")}</div>
+            <div className="col-span-6">{t("navigation.Courses")}</div>
             <div className="col-span-2 text-center">{t("PRICES")}</div>
             <div className="col-span-4 text-center">{t("ACTION")}</div>
           </div>
@@ -106,7 +106,7 @@ export default function Wishlist() {
                   {renderStars(course.rating)}
                   <h3 className="font-medium text-gray-800 line-clamp-2 mt-1">{course.title}</h3>
                   </div>
-                  <p className="text-sm text-gray-500">{t("Course by")}: {course.instructor_name}</p>
+                  <p className="text-sm text-gray-500">{t("Created by:")}{course.instructor_name}</p>
                 </div>
               </div>
               
@@ -121,7 +121,7 @@ export default function Wishlist() {
                   onClick={() => handleBuyNow(course.id)}
                   className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded transition-colors"
                 >
-                  {t("Buy Now")}
+                  {t("btn.Course Detail")}
                 </button>
                 <button 
                   onClick={(e) => handleRemoveFromWishlist(course.id, e)}

@@ -36,15 +36,21 @@ export default function InstractSettings() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutation.mutate({
-      name: name,
-      email: email,
-      profile_picture: image, 
-      education: education,
-      specialization: specialization,
-      summery:summery,
-    });
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("education", education);
+    formData.append("specialization", specialization);
+    formData.append("summery", summery);
+    if (image) {
+      formData.append("profile_picture", image);
+    }
+
+    mutation.mutate(formData);
   };
+
+
 
   return (
        <div className="  bg-white rounded-md gap-5 shadow-sm p-5 ">
