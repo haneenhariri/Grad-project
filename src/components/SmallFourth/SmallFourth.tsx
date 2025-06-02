@@ -8,7 +8,7 @@ interface SmallFourthProp
 }
 export default function SmallFourth({pic,alt,title,desribtion,color} : SmallFourthProp) {
   return (
-    <div className="bg-white flex justify-center items-center flex-col py-5 px-1 w-1/4		 mr-4">
+    <div className="bg-white flex justify-center items-center flex-col py-5 px-1 w-full sm:w-[49%] lg:w-1/4 lg:mr-4">
         <div className=  {` w-16 h-16 flex justify-center items-center mb-6  ${color} ` }  >
           <img src={pic} alt={alt} className="w-8 " />
         </div>

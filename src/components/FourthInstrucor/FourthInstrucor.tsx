@@ -6,9 +6,9 @@ import pic4 from "../../../src/assets/instructor/icons/Handshake.png"
 
 export default function FourthInstrucor() {
   return (
-    <section className="px-4 lg:px-20 desktop:px-40 bg-purple-100  py-20  flex flex-col justify-between items-center ">
-        <h3 className="text-3xl	text-center w-1/3 mb-10"> How you'll become successful instructor </h3>
-        <div className="flex justify-between">
+    <section className="px-4 lg:px-20 desktop:px-40 bg-purpl-100  py-20  flex flex-col justify-between items-center ">
+        <h3 className="text-3xl	text-center lg:w-1/3 mb-10"> How you'll become successful instructor </h3>
+        <div className="flex gap-3 flex-wrap lg:flex-nowrap justify-between">
             <SmallFourth 
             pic={pic1} 
             alt={"NewspaperClipping"}

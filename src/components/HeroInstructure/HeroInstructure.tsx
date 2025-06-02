@@ -11,16 +11,16 @@ export default function HeroInstructure() {
     navigate('/InstructorForm')
   }
   return (
-    <section className="mt-[108px] flex justify-between items-center px-4 lg:px-10 desktop:px-40 h-full">
+    <section className="text-center pt-8 lg:text-start mt-[108px] flex justify-between items-center px-4 lg:px-10 desktop:px-40 h-full">
         {/* left div */}
-      <div className="w-1/2">
+      <div className="lg:w-1/2">
         <h3 className="text-5xl mb-8">{t("instructor.becomeInstructor")}</h3>
         <p className="text-xl text-gray-500 leading-8 mb-10">{t("instructor.becomeInstructorDesc")}</p>
         <Button text={t("getStarted")} Bg='bg-btn w-1/3' textColor='text-white' onClick={handelNav} />
  
       </div>
       {/* right left */}
-      <img src={HeroPic} alt={t("instructor.instructorImage")} className="w-5/12"/>
+      <img src={HeroPic} alt={t("instructor.instructorImage")} className="w-5/12 hidden lg:block"/>
 
     </section>
   )
