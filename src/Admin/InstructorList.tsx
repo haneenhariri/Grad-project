@@ -4,7 +4,6 @@ import axios from "axios";
 import { getSecureCookie } from "../utils/cookiesHelper";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import Search from "../components/Search/Search";
-import Button from "../Ui/Button/Button";
 import { FiMoreVertical, FiEye, FiTrash2 } from "react-icons/fi";
 
 interface Instructor {
@@ -219,7 +218,6 @@ export default function InstructorList() {
     <>
       <div className="flex justify-between items-center mb-6">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
-        <Button text="Add Instructor" Bg="bg-btn" textColor="text-white"/>
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
@@ -300,7 +298,7 @@ export default function InstructorList() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div 
             ref={modalRef}
-            className="bg-white p-6 rounded-lg shadow-lg w-96 max-w-[90%] max-h-[90vh] overflow-y-auto animate-fadeIn"
+            className="bg-white p-6 rounded-lg shadow-lg  max-w-[90%] max-h-[90vh] overflow-y-auto animate-fadeIn"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-xl font-semibold mb-4 text-primary">Instructor Details</h2>

@@ -4,6 +4,11 @@ import axios from "axios";
 import { getSecureCookie } from "../../utils/cookiesHelper";
 import { showToast } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import Label from "../../Ui/Label/Label";
+import Spinner from "../../components/Spinner/Spinner";
+import Input from "../../Ui/Input/Input";
+import axiosInstance from "../../services/axiosInstance";
 
 interface User {
   id: number;
@@ -12,6 +17,7 @@ interface User {
 }
 
 export default function ChargeAccount() {
+  const { t } = useTranslation()
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [amount, setAmount] = useState<number>(0);
@@ -19,7 +25,6 @@ export default function ChargeAccount() {
   const [fetchingUsers, setFetchingUsers] = useState<boolean>(true);
   const navigate = useNavigate();
   
-  // جلب قائمة المستخدمين
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -59,28 +64,21 @@ export default function ChargeAccount() {
     
     try {
       setLoading(true);
-      const token = getSecureCookie("token");
       
       const formData = new FormData();
       formData.append("user_id", selectedUser.toString());
       formData.append("amount", amount.toString());
       
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/accounts/charge",
+      const response = await axiosInstance.post(
+        "/accounts/charge",
         formData,
-        {
-          headers: { 
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "multipart/form-data"
-          }
-        }
       );
       
       if (response.data && response.data.status === "success") {
         showToast("Account charged successfully", "success");
         setSelectedUser(null);
         setAmount(0);
-        navigate("/Admin/Payments");
+       
       } else {
         showToast(response.data.message || "Failed to charge account", "error");
       }
@@ -93,24 +91,20 @@ export default function ChargeAccount() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className=" mx-auto">
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         <div className="bg-gradient-to-r from-violet-600 to-violet-800 p-6">
-          <h1 className="text-2xl font-bold text-white">Charge User Account</h1>
-          <p className="text-violet-100 mt-2">Add funds to a user's account balance</p>
+          <h1 className="text-2xl font-bold text-white">{t("Charge User Account")}</h1>
+          <p className="text-violet-100 mt-2">{t("Add funds to a user's account balance")}</p>
         </div>
-        
         <form onSubmit={handleChargeAccount} className="p-6 space-y-6">
           {/* User Selection */}
           <div>
-            <label htmlFor="user" className="block text-sm font-medium text-gray-700 mb-2">
-              Select User
-            </label>
+            <Label label="Select User"/>
             <div className="relative">
               {fetchingUsers ? (
                 <div className="flex items-center justify-center p-4">
-                  <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-violet-600"></div>
-                  <span className="ml-2 text-gray-600">Loading users...</span>
+                  <Spinner/>
                 </div>
               ) : (
                 <select
@@ -143,28 +137,8 @@ export default function ChargeAccount() {
           
           {/* Amount Input */}
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-2">
-              Amount
-            </label>
-            <div className="mt-1 relative rounded-md shadow-sm">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 sm:text-sm">$</span>
-              </div>
-              <input
-                type="number"
-                name="amount"
-                id="amount"
-                className="focus:ring-violet-500 focus:border-violet-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                placeholder="0.00"
-                min="1"
-                step="1"
-                value={amount || ''}
-                onChange={(e) => setAmount(Number(e.target.value))}
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 sm:text-sm">USD</span>
-              </div>
-            </div>
+            <Label label="Amount"/>
+            <Input type="text" name="amount" placeholder="0.00" value={amount} onChange={(e) => setAmount(Number(e.target.value))}/>
           </div>
           
           {/* Submit Button */}
@@ -174,20 +148,17 @@ export default function ChargeAccount() {
               className="mr-3 px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
               onClick={() => navigate("/Admin/Payments")}
             >
-              Cancel
+              {t("cancel")}
             </button>
             <button
               type="submit"
               className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
-              disabled={loading || !selectedUser || amount <= 0}
+              disabled={loading || !selectedUser }
             >
               {loading ? (
-                <div className="flex items-center">
-                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></div>
-                  Processing...
-                </div>
+                  t("Charge Account...")
               ) : (
-                "Charge Account"
+                t("Charge Account")
               )}
             </button>
           </div>
@@ -204,7 +175,7 @@ export default function ChargeAccount() {
           </div>
           <div className="ml-3">
             <p className="text-sm text-blue-700">
-              Charging an account will immediately add funds to the user's balance. The user will be able to use these funds to purchase courses.
+              {t("ChargingText")}
             </p>
           </div>
         </div>

@@ -8,13 +8,20 @@ import { showToast } from "../../utils/toast";
 import { useTranslation } from "react-i18next";
 import Label from "../../Ui/Label/Label";
 import Input from "../../Ui/Input/Input";
-
+import { useAppDispatch } from "../../hooks/hooks";
+import { fetchProfile } from "../../redux/profileSlice/profileSlice";
+interface profileProps {
+  name?: string;
+  email?: string;
+  profile_picture?: File;
+}
 export default function ProfileSettings() {
   const [image, setImage] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | null>(null);
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const mutation = useMutation({
     mutationFn: EditProfile,
     onSuccess: (data) => {
@@ -24,6 +31,7 @@ export default function ProfileSettings() {
       setEmail("");
       setImage(undefined);
       setPreview(null);
+      dispatch(fetchProfile());
     },
     onError: (error: AxiosError<{ message?: string }>) => {
       console.error("Error updating profile:", error);
@@ -32,6 +40,7 @@ export default function ProfileSettings() {
   });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+
     const file = event.target.files?.[0];
     if (file) {
       console.log("Uploaded file:", file); 
@@ -44,12 +53,11 @@ export default function ProfileSettings() {
     e.preventDefault();
     
     // إنشاء كائن البيانات فقط مع الحقول التي تم تغييرها
-    const profileData: any = {};
+    const profileData: profileProps = {};
     
     if (name) profileData.name = name;
     if (email) profileData.email = email;
     if (image) profileData.profile_picture = image;
-    
     // طباعة البيانات للتحقق
     console.log("Submitting profile data:", profileData);
     

@@ -33,6 +33,8 @@
     },
     "btn":
     {
+        "Charge Account" : "Charge Account",
+        "Charge Account..." : "Charge Account...",
         "Update Course info" : "Update Course info",
         "VisitCourses" : "Visit Courses",
         "View All" :"View All",
@@ -95,6 +97,11 @@
         "Price" : "Price",
         "Recommended Courses":  "Recommended Courses"
     },
+    "ChargingText" : " Charging an account will immediately add funds to the user's balance. The user will be able to use these funds to purchase courses.",
+    "Amount" : "Amount",
+    "Select User" : "Select User" ,
+    "Charge User Account" : "Charge User Account",
+    "Add funds to a user's account balance" : "Add funds to a user's account balance",
     "You have completed all your courses" : "You have completed all your courses",
     "ACTION" : "ACTION",
     "PRICES" : "PRICES",

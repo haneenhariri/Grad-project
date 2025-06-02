@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Logout from "../Logout/Logout";
-import { imgProfile } from "../../services/profileStd";
 import {  useNavigate } from "react-router-dom";
 import { getSecureCookie } from "../../utils/cookiesHelper";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { fetchProfile } from "../../redux/profileSlice/profileSlice";
 
 export default function AuthSide() {
-  const [profileImage, setProfileImage] = useState<string | undefined>(undefined);
-  const [userName, setUserName] = useState<string>("User");
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const role = getSecureCookie('role');
+  const { name, profile_picture } = useAppSelector((state) => state.profile);
   const navTo = () => 
   {
     if(role === 'student') 
@@ -22,48 +23,31 @@ export default function AuthSide() {
       navigate('/Admin/Settings')
     }}
   
-  useEffect(() => {
+   useEffect(() => {
     const token = getSecureCookie("token");
     if (token) {
-      imgProfile()
-        .then((data) => {
-          if (data && data.data) {
-            const user = data.data;
-            console.log(user.profile_picture);
-            if (user.profile_picture) {
-              const imageUrl = `http://127.0.0.1:8000/storage/${user.profile_picture}`;
-              setProfileImage(imageUrl);
-              console.log("Profile Image URL:", imageUrl);
-          }
-           else {
-              setProfileImage(undefined);
-            }
-            if (user.name) {
-              setUserName(user.name);
-            }
-          }
-        })
-        .catch((err) => {
-          console.error("Error fetching profile data", err);
-          setProfileImage(undefined);
-        });
+      dispatch(fetchProfile());
     }
-  }, []);
+  }, [dispatch]);
+  
+  const imageUrl = profile_picture
+    ? `http://127.0.0.1:8000/storage/${profile_picture}`
+    : null;
   return (
     <div className="flex items-center gap-5 ">
           <button
             onClick={navTo}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-violet-950 text-white text-lg overflow-hidden"
           >
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <span>{userName.charAt(0)}</span> 
-            )}
+            {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="Profile"
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span>{name?.charAt(0) || "U"}</span>
+        )}
           </button>
           <Logout />
     </div>

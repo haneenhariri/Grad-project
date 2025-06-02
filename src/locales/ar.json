@@ -32,6 +32,8 @@
     },
     "btn":
     {
+        "Charge Account" : "شحن حساب" ,
+        "Charge Account..." : "...شحن حساب",
         "Update Course info" : "تحديث معلومات الكورس",
         "VisitCourses" : "عرض الدورات",
         "View All" : "عرض المزيد" ,
@@ -94,6 +96,11 @@
         "Price" : "السعر",
         "Recommended Courses" : "الدورات الموصى بها"
     },
+    "ChargingText" : "سيؤدي شحن الحساب إلى إضافة رصيد فوري إلى رصيد المستخدم. سيتمكن المستخدم من استخدام هذه الأموال لشراء الدورات.",
+    "Amount" : "المبلغ",
+    "Select User" : "حدد مستخدم",
+    "Charge User Account" : "شحن حساب مستخدم",
+    "Add funds to a user's account balance" : "إضافة أموال إلى رصيد حساب المستخدم",
     "You have completed all your courses" : "لقد أكملت جميع دوراتك",
     "ACTION" : "العمل",
     "Send message" : "ارسال رسالة",
