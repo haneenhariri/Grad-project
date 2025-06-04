@@ -230,7 +230,6 @@ export default function CreateExam({ courseId }: CreateExamProps) {
                   required
                 />
               </div>
-              
               <div className="mb-4">
                 <label className="block mb-2 font-medium">
                   {t('Points')}
@@ -272,7 +271,7 @@ export default function CreateExam({ courseId }: CreateExamProps) {
                         onClick={() => removeOption(questionIndex, optionIndex)}
                         className="ml-2 text-red-500 hover:text-red-700"
                       >
-                        {t('Remove')}
+                        {t('Delete')}
                       </button>
                     </div>
                   ))}

@@ -248,7 +248,7 @@ export default function CreateCourse() {
     return <Spinner/>
   }
   return (
-    <div className=" min-h-screen bg-White/99 pb-10">
+    <div className=" min-h-[80vh] bg-White/99 pb-10">
       {step < 4 ? (
         <form onSubmit={send} className="container mx-auto">
           {/* Header */}
@@ -466,13 +466,13 @@ export default function CreateCourse() {
                 {lessons.map((lesson, lessonIndex) => (
                   <div key={lessonIndex} className='bg-gray-100 p-4 rounded-md'>
                     <div className='flex justify-between items-center mb-3'>
-                      <h3 className='font-semibold'>Lesson {lessonIndex + 1}</h3>
+                      <h3 className='font-semibold'>{t("Lesson")} {lessonIndex + 1}</h3>
                       <button
                         type='button'
                         onClick={() => removeLesson(lessonIndex)}
                         className='text-red-500 hover:text-red-700'
                       >
-                        Remove Lesson
+                        {t("Remove Lesson")}
                       </button>
                     </div>
 
@@ -539,7 +539,7 @@ export default function CreateCourse() {
                             className='text-red-500 hover:text-red-700 p-2'
                             disabled={lesson.files.length <= 1}
                           >
-                            Remove
+                            {t("Delete")}
                           </button>
                         </div>
                       ))}
@@ -548,7 +548,7 @@ export default function CreateCourse() {
                         onClick={() => addFile(lessonIndex)}
                         className='bg-blue-500 text-white p-2 rounded-md text-sm'
                       >
-                        Add File
+                        {t("Add File")}
                       </button>
                     </div>
                   </div>
@@ -559,12 +559,12 @@ export default function CreateCourse() {
                   onClick={addLesson}
                   className='bg-violet-500 text-white p-2 rounded-md self-start'
                 >
-                  Add Lesson
+                  {t("Add Lesson")}
                 </button>
               </div>
               <div className='mt-5 flex justify-between'>
                 <Button type='button' text='Back' textColor='border-gray border text-violet-950' onClick={handlePrev} />
-                <Button type='submit' text='Submit for review' textColor='text-white font-bold bg-violet-950' />
+                <Button type='submit' text='Submit for review' textColor='text-white  bg-violet-950' />
               </div>
             </div>
           )}

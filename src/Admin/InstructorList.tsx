@@ -5,6 +5,7 @@ import { getSecureCookie } from "../utils/cookiesHelper";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import Search from "../components/Search/Search";
 import { FiMoreVertical, FiEye, FiTrash2 } from "react-icons/fi";
+import axiosInstance from "../services/axiosInstance";
 
 interface Instructor {
   id: number;
@@ -183,13 +184,10 @@ export default function InstructorList() {
     },
   });
 
-  const token = getSecureCookie("token");
 
   const updateInstructorStatus = async (id: number, status: "accepted" | "rejected") => {
     try {
-      await axios.post(`http://127.0.0.1:8000/api/requests/${id}/change-status`, { status }, { 
-        headers: { "Authorization": `Bearer ${token}` } 
-      });
+      await axiosInstance.post(`http://127.0.0.1:8000/api/requests/${id}/change-status`, { status });
 
       setInstructors((prev) =>
         prev.map((instructor) => (instructor.id === id ? { ...instructor, status } : instructor))

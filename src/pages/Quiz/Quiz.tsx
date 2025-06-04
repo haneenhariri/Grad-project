@@ -125,15 +125,18 @@ export default function Quiz() {
 
         {/* Quiz content */}
         <div className="bg-white rounded-b-lg shadow-md p-6 mb-8">
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col  gap-8">
             {/* Question section */}
-            <div className="md:w-1/2">
+            <div className="md:w-1/2 flex flex-col">
+              <div>
               <h3 className="text-xl font-medium mb-6 text-primary">
                 {currentQuizQuestion.question}
               </h3>
               
               <div className="text-sm text-Grey/60 mb-4">
                 {t("Points")}: {currentQuizQuestion.mark}
+              </div>
+
               </div>
 
               {/* Multiple choice options */}
@@ -165,7 +168,7 @@ export default function Quiz() {
 
             {/* Code editor section */}
             {currentQuizQuestion.type === "code" && (
-              <div className="md:w-1/2 h-[400px] border rounded-lg overflow-hidden">
+              <div className="md:w-full h-[500px] border rounded-lg overflow-hidden">
                 <Editor
                   height="100%"
                   defaultLanguage="csharp"

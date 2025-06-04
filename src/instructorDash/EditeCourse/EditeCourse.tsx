@@ -14,6 +14,7 @@ import Head from './Head';
 import { Trans, useTranslation } from 'react-i18next';
 import axiosInstance from '../../services/axiosInstance';
 import EditExam from './EditExam';
+import Input from '../../Ui/Input/Input';
 
 
 export default function EditCourse() {
@@ -358,12 +359,15 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
       }
     }
 
-    async function addFileToLesson(lessonId: number, file: File, fileType: string) {
+    async function addFileToLesson(lessonId: number, file: File, type: string) {
+        if (!file || !(file instanceof File)) {
+          throw new Error("Invalid file provided to addFileToLesson");
+        }
       try {
         const formData = new FormData();
         formData.append("lesson_id", lessonId.toString());
         formData.append("path", file);
-        formData.append("type", fileType);
+        formData.append("type", type);
         
         const response = await axios.post(
           `http://127.0.0.1:8000/api/files`,
@@ -426,30 +430,13 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
           <div className='flex justify-between gap-2'>
             <div className='w-1/2'>
               <Label label="Title [en]"/>
-              <input
-                className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course title in English'
-                type="text"
-                id="titleEn"
-                value={titleEn}
-                onChange={(event) => setTitleEn(event.target.value)}
-                required
-              />
+              <Input placeholder={t("TitleP[en]")} type='text' value={titleEn} onChange={(event) => setTitleEn(event.target.value)} required />
             </div>
             <div className='w-1/2'>
               <Label label="Title [ar]"/>
-              <input
-                className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course title in Arabic'
-                type="text"
-                id="titleAr"
-                value={titleAr}
-                onChange={(event) => setTitleAr(event.target.value)}
-                required
-              />
+              <Input placeholder={t("TitleP[ar]")} type='text' value={titleAr} onChange={(event) => setTitleAr(event.target.value)} required />
             </div>
           </div>
-
           <div className='flex gap-2'>
             <div className='w-1/2'>
               <Label label='Category'/>
@@ -494,7 +481,6 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
               </select>
             </div>
           </div>
-
           <div className='flex gap-2'>
             <div className='w-1/2'>
               <Label label='level' />
@@ -643,11 +629,10 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
           <div className='flex flex-col gap-5'>
             {lessons.map((lesson, lessonIndex) => (
               <div key={lessonIndex} className='bg-gray-100 p-4 rounded-md mb-4'>
-                {/* عرض معرف الدرس للتصحيح */}
-                
+                {/* عرض معرف الدرس للتصحيح */}    
                 <div className="flex gap-2 mb-3">
                   <div className="w-1/2">
-                    <label className="block mb-1">English Title:</label>
+                    <Label label='Title [en]'/>
                     <input
                       type="text"
                       value={lesson.titleEn}
@@ -658,7 +643,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                     />
                   </div>
                   <div className="w-1/2">
-                    <label className="block mb-1">Arabic Title:</label>
+                    <Label label='Title [ar]'/>
                     <input
                       type="text"
                       value={lesson.titleAr}
@@ -669,10 +654,9 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                     />
                   </div>
                 </div>
-                
                 <div className="flex gap-2 mb-3">
                   <div className="w-1/2">
-                    <label className="block mb-1">English Description:</label>
+                    <Label label='Description [En]'/>
                     <textarea
                       value={lesson.descriptionEn}
                       onChange={(e) => handleLessonChange(lessonIndex, "descriptionEn", e.target.value)}
@@ -682,7 +666,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                     />
                   </div>
                   <div className="w-1/2">
-                    <label className="block mb-1">Arabic Description:</label>
+                    <Label label='Description [ar]'/>
                     <textarea
                       value={lesson.descriptionAr}
                       onChange={(e) => handleLessonChange(lessonIndex, "descriptionAr", e.target.value)}
@@ -695,7 +679,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 
                 {/* عرض الملفات */}
                 <div className="mb-3">
-                  <label className="block mb-1">Files:</label>
+                  <label className="block mb-1">{t("Files:")}</label>
                   {lesson.files.map((file, fileIndex) => (
                     <div key={fileIndex} className='flex items-center gap-2 mb-2'>
                       {/* عرض الملفات الموجودة */}
@@ -725,7 +709,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                             }}
                             className='text-red-500 hover:text-red-700 p-2'
                           >
-                            Delete
+                            {t("Delete")}
                           </button>
                         </div>
                       )}
@@ -756,7 +740,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                             onClick={() => removeFile(lessonIndex, fileIndex)}
                             className='text-red-500 hover:text-red-700 p-2'
                           >
-                            Remove
+                             {t("Delete")}
                           </button>
                         </div>
                       )}
@@ -770,84 +754,84 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                     onClick={() => addFile(lessonIndex)}
                     className='bg-blue-500 text-white p-2 rounded-md text-sm'
                   >
-                    Add File
+                   {t("Add File")}
                   </button>
                   
                   {/* زر لحفظ تغييرات الدرس */}
                  <button
-  type='button'
-onClick={async () => {
-  try {
-    let lessonId = lesson.id;
+                      type='button'
+                    onClick={async () => {
+                      try {
+                        let lessonId = lesson.id;
 
-    if (lessonId) {
-      // تعديل الدرس (PUT)
-      const lessonData = new URLSearchParams();
-      lessonData.append("title[en]", lesson.titleEn);
-      lessonData.append("title[ar]", lesson.titleAr);
-      lessonData.append("description[en]", lesson.descriptionEn);
-      lessonData.append("description[ar]", lesson.descriptionAr);
+                        if (lessonId) {
+                          // تعديل الدرس (PUT)
+                          const lessonData = new URLSearchParams();
+                          lessonData.append("title[en]", lesson.titleEn);
+                          lessonData.append("title[ar]", lesson.titleAr);
+                          lessonData.append("description[en]", lesson.descriptionEn);
+                          lessonData.append("description[ar]", lesson.descriptionAr);
 
-      await axios.put(
-        `http://127.0.0.1:8000/api/lessons/${lessonId}?lang=ar`,
-        lessonData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
+                          await axios.put(
+                            `http://127.0.0.1:8000/api/lessons/${lessonId}?lang=ar`,
+                            lessonData,
+                            {
+                              headers: {
+                                Authorization: `Bearer ${token}`,
+                                "Content-Type": "application/x-www-form-urlencoded",
+                              },
+                            }
+                          );
 
-      showToast(`Lesson ${lessonIndex + 1} updated successfully!`, "success");
-    } else {
-      // إنشاء درس جديد
-      const newLesson = await createNewLesson({
-        titleEn: lesson.titleEn,
-        titleAr: lesson.titleAr,
-        descriptionEn: lesson.descriptionEn,
-        descriptionAr: lesson.descriptionAr,
-        files: lesson.files,
-      });
+                          showToast(`Lesson ${lessonIndex + 1} updated successfully!`, "success");
+                        } else {
+                          // إنشاء درس جديد
+                          const newLesson = await createNewLesson({
+                            titleEn: lesson.titleEn,
+                            titleAr: lesson.titleAr,
+                            descriptionEn: lesson.descriptionEn,
+                            descriptionAr: lesson.descriptionAr,
+                            files: lesson.files,
+                          });
 
-      lessonId = newLesson.id;
+                          lessonId = newLesson.id;
 
-      // تحديث ID الدرس الجديد في state
-      const updatedLessons = [...lessons];
-      updatedLessons[lessonIndex] = {
-        ...updatedLessons[lessonIndex],
-        id: lessonId,
-      };
-      setLessons(updatedLessons);
-    }
+                          // تحديث ID الدرس الجديد في state
+                          const updatedLessons = [...lessons];
+                          updatedLessons[lessonIndex] = {
+                            ...updatedLessons[lessonIndex],
+                            id: lessonId,
+                          };
+                          setLessons(updatedLessons);
+                        }
 
-    // رفع الملفات الجديدة (التي ليس لها id)
-    for (let i = 0; i < lesson.files.length; i++) {
-      const file = lesson.files[i];
-      if (!file.id && file.path instanceof File) {
-        const response = await addFileToLesson(lessonId, file.path, file.type);
+                        // رفع الملفات الجديدة (التي ليس لها id)
+                        for (let i = 0; i < lesson.files.length; i++) {
+                          const file = lesson.files[i];
+                          if (!file.id && file.path instanceof File) {
+                            const response = await addFileToLesson(lessonId, file.path, file.type);
 
-        // تحديث الملف بعد الرفع
-        const updatedLessons = [...lessons];
-        updatedLessons[lessonIndex].files[i] = {
-          ...file,
-          id: response.id,
-          path: response.path,
-        };
-        setLessons(updatedLessons);
-      }
-    }
+                            // تحديث الملف بعد الرفع
+                            const updatedLessons = [...lessons];
+                            updatedLessons[lessonIndex].files[i] = {
+                              ...file,
+                              id: response.id,
+                              path: response.path,
+                            };
+                            setLessons(updatedLessons);
+                          }
+                        }
 
-  } catch (error: any) {
-    showToast("Error saving lesson", "error");
-    console.error(error);
-  }
-}}
+                      } catch (error: any) {
+                        showToast("Error saving lesson", "error");
+                        console.error(error);
+                      }
+                    }}
 
-  className='bg-green-500 text-white p-2 rounded-md text-sm'
->
-  Save Lesson
-</button>
+                      className='bg-green-500 text-white p-2 rounded-md text-sm'
+                    >
+                      {t("Save Lesson")}
+                    </button>
 
                   <button
                     type='button'
@@ -855,7 +839,7 @@ onClick={async () => {
                     className='bg-red-500 text-white p-2 rounded-md text-sm'
                     disabled={lessons.length <= 1}
                   >
-                    Remove Lesson
+                    {t("Remove Lesson")}
                   </button>
                 </div>
               </div>
@@ -865,7 +849,7 @@ onClick={async () => {
               onClick={addLesson}
               className='bg-violet-500 text-white p-2 rounded-md self-start'
             >
-              Add Lesson
+              {t("Add Lesson")}
             </button>
           </div>
           <div className='mt-5 flex justify-between'>

@@ -4,8 +4,7 @@ import { deleteCourse } from '../services/courses';
 import {  useNavigate } from 'react-router-dom';
 import { myCourseProp } from '../types/interfaces';
 import { useTranslation } from 'react-i18next';
-
-
+import Button from '../Ui/Button/Button';
 
 export default function MyCourse() {
   const navigate = useNavigate();
@@ -33,6 +32,14 @@ export default function MyCourse() {
       };
       getCourses();
     }, []);
+    if(courses.length === 0){
+      return <div className=' h-[80vh] flex justify-center items-center'>
+          <div className='bg-white shadow-sm gap-6  rounded-sm p-6 w-1/2 h-1/2   flex flex-col justify-center items-center' >
+             <h1 className=' text-3xl font-semibold mb-6'>{t("You don't have any courses yet.")}</h1>
+             <Button text='Create a New Course' Bg=' text-white bg-btn' onClick={() => navigate('/instruct/Create')}/>
+          </div>
+      </div>
+    }
   return (
     <div>
         <div className="grid grid-cols-3 my-5 gap-5">

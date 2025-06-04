@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { generalStatsInstracror } from "../services/dashServe";
+import { generalStatsInstracror, ratingsStats } from "../services/dashServe";
 import Spinner from "../components/Spinner/Spinner";
 import { FaBook, FaUsers } from "react-icons/fa";
 import { MdAttachMoney, MdStar } from "react-icons/md";
@@ -15,11 +15,14 @@ export interface DashInstructProps
 
 export default function InstractorDash() {
     const [stats, setStats] = useState<DashInstructProps | null>(null);
+    const [rating, setRating] = useState<DashInstructProps | null>(null);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
     const fetchStats = async () => {
       try {
         const response = await generalStatsInstracror();
+        const rating = await ratingsStats();
+        setRating(rating);
         setStats(response);
       } catch (error) {
         console.error("Error fetching stats:", error);

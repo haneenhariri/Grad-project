@@ -14,10 +14,7 @@ export default function MessageList({ messages, myUserId }: MessageListProps) {
     console.log('MessageList received messages:', messages);
   }, [messages]);
   
-  // التمرير إلى آخر رسالة عند إضافة رسائل جديدة
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+
   
   // التحقق من أن messages هي مصفوفة
   if (!Array.isArray(messages)) {

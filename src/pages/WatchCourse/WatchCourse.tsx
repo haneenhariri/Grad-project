@@ -223,9 +223,9 @@ export default function WatchCourse() {
           <div className='bg-white rounded-lg shadow-sm p-5'>
             <div className='mb-4'>
               <div className='flex justify-between items-center mb-2'>
-                <h2>Course Contents</h2>
+                <h2>{t("Course Contents")}</h2>
                 <p className='text-sm text-[#23BD33]'>
-                  {isNaN(completedPercentage) ? '0' : Math.round(completedPercentage)}% Completed
+                  {isNaN(completedPercentage) ? '0' : Math.round(completedPercentage)}% {t("Completed")}
                 </p>
               </div>
               

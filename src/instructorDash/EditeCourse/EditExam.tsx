@@ -4,6 +4,7 @@ import { QuizQuestion } from "../AddExam/CreateExam";
 import axiosInstance from "../../services/axiosInstance";
 import { showToast } from "../../utils/toast";
 import Editor from "@monaco-editor/react";
+import Button from "../../Ui/Button/Button";
 
 interface EditExamProps {
   courseId: number;
@@ -285,12 +286,12 @@ const handleSingleQuestionSubmit = async (index: number) => {
                     {t('Add Option')}
                   </button>
                   <button
-  type="button"
-  onClick={() => handleSingleQuestionSubmit(questionIndex)}
-  className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
->
-  {t('Save This Question')}
-</button>
+                  type="button"
+                  onClick={() => handleSingleQuestionSubmit(questionIndex)}
+                  className="mt-4 mx-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                >
+                  {t('Save This Question')}
+                </button>
                 </div>
               )}
               
@@ -316,12 +317,12 @@ const handleSingleQuestionSubmit = async (index: number) => {
                     {t('Students will use this editor to write their code answers')}
                   </p>
                   <button
-  type="button"
-  onClick={() => handleSingleQuestionSubmit(questionIndex)}
-  className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
->
-  {t('Save This Question')}
-</button>
+                    type="button"
+                    onClick={() => handleSingleQuestionSubmit(questionIndex)}
+                    className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  >
+                    {t('Save This Question')}
+                  </button>
                 </div>
               )}
             </div>
@@ -336,13 +337,13 @@ const handleSingleQuestionSubmit = async (index: number) => {
           >
             {t('Add Another Question')}
           </button>
-          <button
+          <Button 
             type="submit"
             disabled={isSubmitting}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            {isSubmitting ? t("Saving...") : t("Save Changes")}
-          </button>
+            textColor="text-white"
+            Bg="bg-violet-950"
+            text={isSubmitting ? t('Saving...') : t('Save Exam')}
+          />
         </div>
       </form>
     </div>

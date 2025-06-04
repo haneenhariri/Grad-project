@@ -25,8 +25,8 @@ export default function PurchaseHistory() {
   const lang = useSelector((state: RootState) => state.language.lang);
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedPayment, setExpandedPayment] = useState<number | null>(null);
-  
+  const [expandedPayment, setExpandedPayment] = useState<string | null>(null);
+
   // تجميع المدفوعات حسب التاريخ
   const groupedPayments = payments.reduce((groups: Record<string, Payment[]>, payment) => {
     const date = new Date(payment.created_at).toLocaleDateString('en-US', {
@@ -49,7 +49,12 @@ export default function PurchaseHistory() {
         setLoading(true);
         const response = await userPayment(lang);
         if (response && response.data) {
-          setPayments(response.data);
+          const fixedData = response.data.map((item: any) => ({
+            ...item,
+            created_at: item.purchased_at,
+            amount: item.total_price,
+          }));
+          setPayments(fixedData);
         }
       } catch (error) {
         console.error("Error fetching payments:", error);
@@ -76,10 +81,9 @@ export default function PurchaseHistory() {
     return payments.reduce((total, payment) => total + payment.amount, 0).toFixed(2);
   };
   
-  const toggleExpand = (date: string) => {
-    const dateTimestamp = new Date(date).getTime();
-    setExpandedPayment(expandedPayment === dateTimestamp ? null : dateTimestamp);
-  };
+const toggleExpand = (date: string) => {
+  setExpandedPayment(expandedPayment === date ? null : date);
+};
   
   if (loading) {
     return (
@@ -102,7 +106,7 @@ export default function PurchaseHistory() {
       <h2 className="text-2xl font-semibold mb-6">{t("Purchase History")}</h2>
       
       {Object.entries(groupedPayments).map(([date, datePayments]) => {
-        const isExpanded = expandedPayment === new Date(date).getTime();
+        const isExpanded = expandedPayment === date;
         const totalAmount = calculateTotalAmount(datePayments);
         
         return (
@@ -153,31 +157,22 @@ export default function PurchaseHistory() {
                 {datePayments.map((payment) => (
                   <div key={payment.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
                     <div className="flex gap-4">
-                      <div className="col-span-6 flex gap-4 ">
+                      <div className="w-1/2 flex gap-4 ">
                         <img src={`http://127.0.0.1:8000/storage/${payment.course_cover}`} className="w-40 h-32 object-cover rounded" alt="" />
-                        <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          
-                          <div className="flex items-center">
-                            <img src={star} alt="star" className="w-4 h-4" />
-                            <span className="text-sm ml-1">4.7</span>
-                          </div>
-                          <span className="text-xs text-gray-500">(451 {t("Reviews")})</span>
-                        </div>
+                        <div className=" flex justify-between  flex-col">
                         <h4 className="font-medium line-clamp-2">{payment.course}</h4>
                         <p className="text-sm text-gray-500 mt-1">{t("Created by:")}: {payment.instructor}</p>
                         </div>
-
                       </div>
                       
                       <div className="w-1/4 flex items-center justify-center">
                         <span className="text-violet-600 font-semibold">${payment.amount.toFixed(2)}</span>
                       </div>
                       
-                      <div className="w-2/4">
-                        <div className="flex flex-col items-end">
+                      <div className="w-1/4">
+                        <div className="flex justify-between h-full  flex-col items-end">
                           <p className="text-lg font-medium">{formatDate(payment.created_at)}</p>
-                          <div className="flex gap-4 mt-2 text-sm">
+                          <div className="flex  gap-4 mt-2 text-sm">
                             <div className="flex items-center gap-1">
                               <span className="font-medium">{payment.instructor}</span>
                             </div>

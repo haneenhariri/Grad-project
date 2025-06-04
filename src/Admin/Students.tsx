@@ -3,26 +3,58 @@ import Button from "../Ui/Button/Button";
 import axiosInstance from "../services/axiosInstance";
 import Search from "../components/Search/Search";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
-import {  FiEdit2, FiMoreVertical, FiTrash2 } from "react-icons/fi";
+import {  FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import user from "../assets/Users (1).png";
+import { deleteTeacher } from "../services/teacherForm";
+import StudentCourses from "./Users/StudentCourses";
 
 
 
 interface Student {
   id: number;
   name: string;
-  email: string;
+  email?: string;
   profile_picture?: string | null;
+  courses?: Course[];
 }
-
+interface Course {
+  title: {
+    en: string;
+    [key: string]: string;
+  };
+}
 export default function Students() {
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+    // إغلاق النافذة المنبثقة عند الضغط على Escape
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedStudent) {
+        setSelectedStudent(null);
+      }
+    };
 
+    document.addEventListener('keydown', handleEscKey);
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [selectedStudent]);
+    const handelDeleteUser = async (id: number) => {
+      try {
+        await deleteTeacher(id);
+        setStudents((prev) => prev.filter((students) => students.id !== id));
+        setOpenDropdown(null);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   useEffect(() => {
     const fetchStudents = async () => {
       try {
@@ -48,11 +80,25 @@ export default function Students() {
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
+    columnHelper.accessor('profile_picture', {
+      header: 'Profile Picture',
+      cell: info => {
+        const value = info.getValue();
+        const ImageURL = value ? `http://127.0.0.1:8000/storage/${value}` : user
+        return (
+          <img
+            src={ImageURL}
+            alt="Profile"
+            className="w-10 h-10 rounded-full object-cover"
+          />
+        );
+      },
+    }),
     columnHelper.display({
       id: 'actions',
       header: 'Actions',
       cell: props => {
-        const courseId = props.row.original.id;
+        const studentId = props.row.original.id;
         const rowIndex = props.row.index;
         return (
           <div className="relative" ref={dropdownRef}>
@@ -67,26 +113,27 @@ export default function Students() {
               <div className="absolute z-10 right-0 mt-2 w-48 bg-white border border-gray-200 shadow-lg rounded-md overflow-hidden animate-fadeIn">
                 <button 
                   className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                  onClick={() => navigate(`/Admin/detail/${courseId}`)}
-                >
-                  <FiEdit2 size={16} className="mr-2 text-blue-500" />
-                  <span>Edit Course</span>
+                  onClick={() => {
+                    setSelectedStudent(props.row.original);
+                    setOpenDropdown(null);
+                  }}                >
+                  <FiEye size={16} className="mr-2 text-blue-500" />
+                  <span>View Courses for User</span>
                 </button>
                 <button
                   className="flex items-center w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 transition-colors"
-                  /* onClick={() => handleDeleteStudent(courseId)} */
+                  onClick={() => handelDeleteUser(studentId)}
                 >
                   <FiTrash2 size={16} className="mr-2 text-red-500" />
-                  <span>Delete Course</span>
+                  <span>Delete User</span>
                 </button>
-
               </div>
             )}
           </div>
         );
       },
     }),
-  ], [openDropdown , navigate]);
+  ], [openDropdown , columnHelper]);
   const table = useReactTable({
     data: students,
     columns,
@@ -192,6 +239,10 @@ export default function Students() {
           </table>
         </div>
       </div>
+      {/* Modal for student details */}
+      {selectedStudent && (
+        <StudentCourses modalRef={modalRef} selectedStudent={selectedStudent} setSelectedStudent={setSelectedStudent} />
+      )}
     </>
   );
 }

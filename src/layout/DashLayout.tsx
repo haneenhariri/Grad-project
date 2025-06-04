@@ -10,7 +10,7 @@ export default function DashLayout() {
       <DashSide/>
       <div className="w-full ">
         <DashHead/>
-        <div className="  p-4">
+        <div className="p-4">
         <ToastProvider/>
         <Outlet/>
         </div>

@@ -6,6 +6,8 @@ import { EditProfileInst } from "../services/profileStd";
 import { useTranslation } from "react-i18next";
 import Label from "../Ui/Label/Label";
 import Input from "../Ui/Input/Input";
+import { useAppDispatch } from "../hooks/hooks";
+import { fetchProfile } from "../redux/profileSlice/profileSlice";
 export default function InstractSettings() {
   const [image, setImage] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | null>(null);
@@ -15,10 +17,12 @@ export default function InstractSettings() {
   const [specialization, setSpecialization] = useState<string>("");
   const [summery, setSummery] = useState<string>("");
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
   const mutation = useMutation({
     mutationFn: EditProfileInst,
     onSuccess: (data) => {
       console.log("Profile updated successfully", data);
+      dispatch(fetchProfile());
     },
     onError: (error) => {
       console.error("Error updating profile", error);
