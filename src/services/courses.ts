@@ -36,9 +36,8 @@ export const allCourses = async (lang: 'ar' | 'en'): Promise<courseDataProps[]> 
 };
 
 export const singleCourse = async (id: number , language: 'ar' | 'en' ) => {
-      const response = await axiosInstance.get(`/courses?lang=${language}`); 
-      const selectedCourse = response.data.data.find((course: CouCard) => course.id === id);
-      return selectedCourse;
+      const response = await axiosInstance.get(`/public-courses/${id}?lang=${language}`); 
+      return response.data.data;
 };
 
 export const  watchSingleCourse = async (id: number , language : 'ar' | 'en') => 

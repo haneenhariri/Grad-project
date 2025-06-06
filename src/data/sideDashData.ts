@@ -4,7 +4,7 @@ import ern from "../assets/CreditCard (1).png";
 import my from "../assets/Stack.png";
 import stng from "../assets/Gear.png";
 import message from "../assets/ChatCircleDots (1).png";
-
+import codeReview from "../assets/icons/review.png";
 export const instractSide  = 
 [
     {
@@ -36,5 +36,10 @@ export const instractSide  =
         pathLink : '/instruct/settings',
         title : 'Settings' ,
         img : stng
+    },
+    {
+        pathLink : '/instruct/codeReview',
+        title : 'Code Review' ,
+        img : codeReview,
     }
 ]

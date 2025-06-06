@@ -20,8 +20,10 @@ import Quiz from './pages/Quiz/Quiz.tsx';
 import Dash from './Admin/Dash/Dash.tsx';
 import StdDash from './pages/UserDash/StdDash.tsx';
 import ChatApp from './chat/ChatApp.tsx';
-import Log from './Admin/log/log.tsx';
+import Log from './Admin/log/Log.tsx';
+import CodeReview from './instructorDash/ExamAns/ExamAns.tsx'
 import TestResults from './pages/UserDash/TestResults.tsx';
+import CourseAnswers from './instructorDash/ExamAns/CourseAnswers.tsx';
 
 const Home  = lazy(() => import(/* webpackChunkName: "home" */ './pages/Home/Home.tsx'))
 const Auth = lazy(() => import(/* webpackChunkName: "auth" */ './pages/Auth/Auth.tsx'));
@@ -125,6 +127,8 @@ const routes = createBrowserRouter([
       { path: 'Message/:user_id', element: <ChatApp /> },
       { path: 'MyCourses', element: <MyCourse /> },
       { path: 'detail/:id', element: <EditeCourse /> },
+      { path: 'codeReview', element: <CodeReview/> },
+      { path: 'courseAnswers/:id', element: <CourseAnswers/> },
     ],
   },
 ]);

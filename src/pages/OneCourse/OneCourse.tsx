@@ -110,32 +110,40 @@ export default function OneCourse() {
       </div>
     );
   };
-
+  const getAverageRating = (rates: { rate: number }[] = []) => {
+    if (rates.length === 0) return 0;
+    const total = rates.reduce((sum, r) => sum + r.rate, 0);
+    return total / rates.length;
+  };
   if (loading) return <Spinner />;
   if (error) return <p>{error}</p>;
 
   return (
     <>
       <section className=" pt-[108px] h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
-        <div className=" md:w-3/4 w-full">
-          <div className=" flex gap-6">
+        <div className="mt-10 md:w-3/4 w-full">
+            <div>
+              <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-6">{course?.title}</h2>
+              <div className="mb-5 w-full flex justify-between items-center">
+                      <div className=" flex items-center gap-6">
+                        <img className=" w-12 h-12 rounded-full" src={`http://127.0.0.1:8000/storage/${course?.instructor.profile_picture}`} alt="" />
+                        <p className=" flex flex-col text-gray-600 md:text-base text-sm font-semibold">
+                        {t("Created by:")} <span className=" text-black md:text-lg text-base">{course?.instructor.name}</span>
+                        </p>
+                      </div>
+                      <div className=" flex items-center gap-1.5">
+                        {renderStars(getAverageRating(course?.rates))}
+                        <span>{getAverageRating(course?.rates).toFixed(1)}</span>
+                      </div>
+              </div>
+            </div>
+          <div className="">
           <img
             src={`http://127.0.0.1:8000/storage/${course?.cover}`}
             alt={course?.title}
             className=" w-1/2 mb-5 "
            />
-              <div>
-                    <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-3.5">{course?.title}</h2>
-                    <div className="mb-5 w-full flex justify-between items-center">
-                      <p className=" text-gray-600 md:text-base text-sm font-semibold">
-                        {t("Created by:")} <span className=" text-black md:text-lg text-base">{course?.instructor}</span>
-                      </p>
-                      <div className=" flex items-center gap-1.5">
-                        {renderStars(course?.rating)}
-                        {course?.rating}
-                      </div>
-                    </div>
-              </div>
+
           </div>
           <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">{t("Description")}</h3>
           <p className=" text-gray-800 lg:text-base text-sm">{course.description}</p>
