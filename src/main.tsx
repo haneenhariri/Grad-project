@@ -48,6 +48,8 @@ const Payments = lazy(() => import(/* webpackChunkName: "payments" */ './Admin/P
 const AdminSettings = lazy(() => import(/* webpackChunkName: "admin-settings" */ './Admin/AdminSettings.tsx'));
 const Wishlist = lazy(()=> import(/* webpackChunkName: Wishlist */ './pages/UserDash/Wishlist.tsx'));
 const PurchaseHistory = lazy( () => import( /* webpackChunkName: PurchaseHistory */ './components/PurchaseHistory/PurchaseHistory.tsx'))
+const StudentCourseAnswers = lazy(() => import('./instructorDash/ExamAns/StudentCourseAnswers.tsx'));
+
 const routes = createBrowserRouter([
   {
     path: '/',
@@ -129,6 +131,7 @@ const routes = createBrowserRouter([
       { path: 'detail/:id', element: <EditeCourse /> },
       { path: 'codeReview', element: <CodeReview/> },
       { path: 'courseAnswers/:id', element: <CourseAnswers/> },
+    { path: 'courseAnswers/:courseId/user/:userId', element: <StudentCourseAnswers /> },
     ],
   },
 ]);

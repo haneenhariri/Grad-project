@@ -161,14 +161,14 @@ export default function Quiz() {
               {/* Code editor */}
               {currentQuizQuestion.type === "code" && (
                 <div className="mt-4">
-                  <p className="text-Grey/60 mb-2">{t("Write your code below:")}</p>
+                  <p className="text-Grey/60 mb-2">{t("Write your code below")}:</p>
                 </div>
               )}
             </div>
 
             {/* Code editor section */}
             {currentQuizQuestion.type === "code" && (
-              <div className="md:w-full h-[500px] border rounded-lg overflow-hidden">
+              <div className="md:w-full h-[500px] border rounded-lg overflow-hidden" style={{ direction: "ltr" }}>
                 <Editor
                   height="100%"
                   defaultLanguage="csharp"

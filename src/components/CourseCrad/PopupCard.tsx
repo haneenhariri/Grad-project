@@ -138,7 +138,7 @@ export default function PopupCard({
       </div>
       <div className="flex mb-2.5 items-center gap-2">
         <img src={chart} alt="level" className="w-4.5 h-4.5" />
-        <p className="text-base font-semibold text-gray-600">{t("CoursesSection.Level")}: {level}</p>
+        <p className="text-base font-semibold text-gray-600">{t("CoursesSection.Level")}: {t(`CoursesSection.levels.${level}`)}</p>
       </div>
       <div className="mt-4">
         <Button 

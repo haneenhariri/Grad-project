@@ -1,11 +1,17 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { generalStats } from "../../services/dashServe";
-import { FaUsers, FaChalkboardTeacher, FaBook, FaGraduationCap } from 'react-icons/fa';
-import { MdAttachMoney, MdPending, MdStar } from 'react-icons/md';
-import { BsCurrencyDollar } from 'react-icons/bs';
+import {
+  FaUsers,
+  FaChalkboardTeacher,
+  FaBook,
+  FaGraduationCap,
+} from "react-icons/fa";
+import { MdAttachMoney, MdPending, MdStar } from "react-icons/md";
+import { BsCurrencyDollar } from "react-icons/bs";
 import InfoCard from "./InfoCard";
 import Revenue from "./Revenue";
 import Spinner from "../../components/Spinner/Spinner";
+import { useTranslation } from "react-i18next";
 
 export interface DashboardStats {
   total_students: number;
@@ -21,6 +27,7 @@ export interface DashboardStats {
 export default function Dash() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -37,73 +44,77 @@ export default function Dash() {
   }, []);
 
   if (loading) {
-    return <Spinner/>
+    return <Spinner />;
   }
 
   if (!stats) {
-    return <div className="flex h-64 items-center justify-center">Failed to load dashboard data</div>;
+    return (
+      <div className="flex h-64 items-center justify-center">
+        Failed to load dashboard data
+      </div>
+    );
   }
 
-   const cards = [
+  const cards = [
     {
-      title: "Total Students",
+      title: t("dashboard.Total Students"),
       value: stats.total_students,
       icon: <FaUsers size={24} className="text-orange-500" />,
       bgColor: "bg-orange-50",
-      iconBgColor: "bg-orange-100"
+      iconBgColor: "bg-orange-100",
     },
     {
-      title: "Course Instructors",
+      title: t("dashboard.Course Instructors"),
       value: stats.total_instructors,
       icon: <FaChalkboardTeacher size={24} className="text-violet-500" />,
       bgColor: "bg-violet-50",
-      iconBgColor: "bg-violet-100"
+      iconBgColor: "bg-violet-100",
     },
-    
-            {
-      title: "Pending Courses",
+
+    {
+      title: t("dashboard.Pending Courses"),
       value: stats.pending_courses,
       icon: <MdPending size={24} className="text-pink-500" />,
       bgColor: "bg-pink-50",
-      iconBgColor: "bg-pink-100"
+      iconBgColor: "bg-pink-100",
     },
-    
+
     {
-      title: "Platform Revenue",
+      title: t("dashboard.Platform Revenue"),
       value: `$${stats.platform_revenue.toFixed(2)}`,
       icon: <MdAttachMoney size={24} className="text-teal-500" />,
       bgColor: "bg-teal-50",
-      iconBgColor: "bg-teal-100"
+      iconBgColor: "bg-teal-100",
     },
     {
-      title: "Total Courses",
+      title: t("dashboard.Total Courses"),
       value: stats.total_courses,
       icon: <FaBook size={24} className="text-emerald-500" />,
       bgColor: "bg-emerald-50",
-      iconBgColor: "bg-emerald-100"
+      iconBgColor: "bg-emerald-100",
     },
 
     {
-      title: "Accepted Courses",
+      title: t("dashboard.Accepted Courses"),
       value: stats.accepted_courses,
       icon: <FaGraduationCap size={24} className="text-blue-500" />,
       bgColor: "bg-blue-50",
-      iconBgColor: "bg-blue-100"
+      iconBgColor: "bg-blue-100",
     },
 
     {
-      title: "Average Rating",
+      title: t("dashboard.Average Rating"),
       value: stats.average_rating,
       icon: <MdStar size={24} className="text-amber-500" />,
       bgColor: "bg-amber-50",
-      iconBgColor: "bg-amber-100"
+      iconBgColor: "bg-amber-100",
     },
     {
-      title: "Total Revenue",
+      title: t("dashboard.Total Revenue"),
       value: `$${stats.total_revenue.toFixed(2)}`,
       icon: <BsCurrencyDollar size={24} className="text-indigo-500" />,
       bgColor: "bg-indigo-50",
-      iconBgColor: "bg-indigo-100"
+      iconBgColor: "bg-indigo-100",
     },
   ];
 
@@ -111,10 +122,17 @@ export default function Dash() {
     <section>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card, index) => (
-          <InfoCard key={index} icon={card.icon} title={card.title} value={card.value} bgColor={card.bgColor} iconBgColor={card.iconBgColor} />
+          <InfoCard
+            key={index}
+            icon={card.icon}
+            title={card.title}
+            value={card.value}
+            bgColor={card.bgColor}
+            iconBgColor={card.iconBgColor}
+          />
         ))}
       </div>
-      <Revenue/>
+      <Revenue />
     </section>
   );
 }
