@@ -204,6 +204,7 @@
     "SubCategory" : "Course Sub-category:",
     "SelectCategory" : "Select a category",
     "Question" : "Question",
+    "QUESTION" : "QUESTION",
     "Question Type" : "Question Type",
     "Multiple Choice" : "Multiple Choice",
     "Add Option" : "Add Option",
@@ -278,7 +279,7 @@
     "Purchase History" : "Purchase History",
     "Upload Photo" : "Upload Photo",
     "Change image" : "Change image" ,
-    
+    "Login to Enroll": "Login to Enroll",
     "Current cover": "Current cover image will be used. Click Change image to upload a new one.",
     "instructor": {
         "becomeInstructor": "Become an Instructor",
@@ -376,7 +377,15 @@
         "reviewCourse": "Review Course",
         "progress": "Progress",
         "continueLearning": "Continue Learning",
-        "lessonsCompleted": "lessons completed"
+        "lessonsCompleted": "lessons completed",
+        "students_registered": "Registered Students",
+        "total_revenue": "Total Revenue",
+        "courses_count": "Courses Count",
+        "overall_rating": "Overall Rating",
+        "top_courses": "My Most Popular Courses",
+        "Total Students": "Total Students",
+        "Course Instructors": "Course Instructors",
+        "Pending Courses": "Pending Courses"
     },
     "search": {
         "searchCourses": "Search courses...",
@@ -398,6 +407,11 @@
         "message": "Message"
     },
     "Quiz" : "Quiz",
+    "Loading quiz...": "Loading quiz...",
+    "NEXT QUESTION": "NEXT QUESTION",
+    "FINISH QUIZ": "FINISH QUIZ",
+    "SUBMITTING...": "SUBMITTING...",
+    "Write your code below":"Write your code below",
     "Send" : "Send",
     "imageSize" : "Image size should be under 1MB and image ratio needs to be 1:1",
     "codeReview": {

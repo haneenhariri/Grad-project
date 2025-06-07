@@ -243,22 +243,20 @@ export default function StudentCourseAnswers() {
                     {t("codeReview.Student Answer")}:
                   </h4>
                   {answer.type === "code" && answer.user_answer.answer ? (
-                    <div className="border border-gray-300 rounded-md overflow-hidden">
-                      <div style={{ direction: "ltr" }}>
-                        <Editor
-                          height="300px"
-                          defaultLanguage="html"
-                          value={answer.user_answer.answer}
-                          theme="vs-dark"
-                          options={{
-                            readOnly: true,
-                            minimap: { enabled: false },
-                            scrollBeyondLastLine: false,
-                            fontSize: 14,
-                            lineNumbers: "on",
-                          }}
-                        />
-                      </div>
+                    <div className="border border-gray-300 rounded-md overflow-hidden" style={{ direction: "ltr" }}>
+                      <Editor
+                        height="300px"
+                        defaultLanguage="html"
+                        value={answer.user_answer.answer}
+                        theme="vs-dark"
+                        options={{
+                          readOnly: true,
+                          minimap: { enabled: false },
+                          scrollBeyondLastLine: false,
+                          fontSize: 14,
+                          lineNumbers: "on",
+                        }}
+                      />
                     </div>
                   ) : (
                     <p className="bg-white border border-gray-200 p-4 rounded-md text-gray-800 shadow-sm">

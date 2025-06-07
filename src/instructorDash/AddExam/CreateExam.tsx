@@ -290,7 +290,7 @@ export default function CreateExam({ courseId }: CreateExamProps) {
                   <label className="block mb-2 font-medium">
                     {t('Preview Code Editor')}
                   </label>
-                  <div className="h-[200px] border rounded-md overflow-hidden">
+                  <div className="h-[200px] border rounded-md overflow-hidden" style={{ direction: "ltr" }}>
                     <Editor
                       height="100%"
                       defaultLanguage="javascript"

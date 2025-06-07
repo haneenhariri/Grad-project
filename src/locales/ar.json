@@ -109,6 +109,7 @@
     "Remove Question" : "حذف السؤال",
     "Question Type" : "نوع السؤال",
     "Question" : "السؤال",
+    "QUESTION" : "السؤال",
     "Multiple Choice" : "اختيار من متعدد",
     "Code Question" : "سؤال كود",
     "Question Text" : "نص السؤال",
@@ -275,6 +276,7 @@
     "CoursePrice" : "سعر الدورة ",
     "Description" : "وصف الكورس",
     "Administrator" : "المسؤول",
+    "Login to Enroll": "سجّل الدخول للتسجيل",
     "instructor": {
         "becomeInstructor": "كن مدربًا",
         "becomeInstructorDesc": "كن مدربًا وابدأ التدريس مع 26 ألف مدرب معتمد. أنشئ قصة نجاح مع 67.1 ألف طالب",
@@ -371,7 +373,15 @@
         "reviewCourse": "تقييم الدورة",
         "progress": "التقدم",
         "continueLearning": "متابعة التعلم",
-        "lessonsCompleted": "الدروس المكتملة"
+        "lessonsCompleted": "الدروس المكتملة",
+        "students_registered": "الطلاب المسجلين",
+        "total_revenue": "إجمالي الإيرادات",
+        "courses_count": "عدد الكورسات",
+        "overall_rating": "التقييم العام",
+        "top_courses": "كورساتي الأكثر شعبية",
+        "Total Students": "عدد الطلاب الكلي",
+        "Course Instructors": "أساتذة الكورسات",
+        "Pending Courses": "الكورسات المعلقة"
     },
     "search": {
         "searchCourses": "البحث عن الدورات...",
@@ -393,6 +403,11 @@
         "message": "رسالة"
     },
     "Quiz" : " الاختبار",
+    "Loading quiz...": "تحميل الاختبار...",
+    "Write your code below": "اكتب الكود الخاص بك بالأسفل",
+    "NEXT QUESTION": "السؤال التالي",
+    "FINISH QUIZ": "إنهاء الاختبار",
+    "SUBMITTING...": "جارٍ الإرسال...",
     "Type a message..." : "اكتب رسالة...",
     "Send" : "ارسال",
     "imageSize" : "يجب أن يكون حجم الصورة أقل من 1 ميجا بايت ويجب أن تكون نسبة الصورة 1:1",
