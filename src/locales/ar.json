@@ -381,7 +381,16 @@
         "top_courses": "كورساتي الأكثر شعبية",
         "Total Students": "عدد الطلاب الكلي",
         "Course Instructors": "أساتذة الكورسات",
-        "Pending Courses": "الكورسات المعلقة"
+        "Pending Courses": "الكورسات المعلقة",
+        "Platform Revenue": "إيرادات المنصة",
+        "Total Courses": "إجمالي الدورات",
+        "Accepted Courses": "الدورات المقبولة",
+        "Average Rating": "متوسط التقييم",
+        "Total Revenue": "إجمالي الإيرادات",
+        "Revenue": "الإيرادات",
+        "This week": "هذا الاسبوع",
+        "This month": "هذا الشهر",
+        "This year": "هذه السنة"
     },
     "search": {
         "searchCourses": "البحث عن الدورات...",

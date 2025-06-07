@@ -385,7 +385,16 @@
         "top_courses": "My Most Popular Courses",
         "Total Students": "Total Students",
         "Course Instructors": "Course Instructors",
-        "Pending Courses": "Pending Courses"
+        "Pending Courses": "Pending Courses",
+        "Platform Revenue": "Platform Revenue",
+        "Total Courses": "Total Courses",
+        "Accepted Courses": "Accepted Courses",
+        "Average Rating": "Average Rating",
+        "Total Revenue": "Total Revenue",
+        "Revenue": "Revenue",
+        "This week": "This week",
+        "This month": "This month",
+        "This year": "This year"
     },
     "search": {
         "searchCourses": "Search courses...",

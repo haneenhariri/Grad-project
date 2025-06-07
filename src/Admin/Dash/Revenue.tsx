@@ -11,6 +11,7 @@ import {
   Area,
 } from 'recharts';
 import { revenueStats } from '../../services/dashServe';
+import { useTranslation } from 'react-i18next';
 
 interface RevenueDataItem {
   period: string;
@@ -22,6 +23,7 @@ export default function RevenueChart() {
   const [periodType, setPeriodType] = useState<'this_week' | 'this_month' | 'this_year'>('this_month');
   const [revenueType, setRevenueType] = useState<'total_revenue' | 'platform_revenue'>('total_revenue');
   const [activePoint, setActivePoint] = useState<{period: string, total: number} | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +56,7 @@ export default function RevenueChart() {
   return (
     <div className="p-4 bg-white w-1/2 rounded-lg my-5 shadow-sm">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Revenue</h2>
+        <h2 className="text-xl font-semibold text-gray-800">{t("dashboard.Revenue")}</h2>
         <div className="flex gap-4">
           <div className="relative">
             <select
@@ -62,8 +64,8 @@ export default function RevenueChart() {
               value={revenueType}
               onChange={(e) => setRevenueType(e.target.value as 'total_revenue' | 'platform_revenue')}
             >
-              <option value="total_revenue">Total Revenue</option>
-              <option value="platform_revenue">Platform Revenue</option>
+              <option value="total_revenue">{t("dashboard.Total Revenue")}</option>
+              <option value="platform_revenue">{t("dashboard.Platform Revenue")}</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -78,9 +80,9 @@ export default function RevenueChart() {
               value={periodType}
               onChange={(e) => setPeriodType(e.target.value as 'this_week' | 'this_month' | 'this_year')}
             >
-              <option value="this_week">This week</option>
-              <option value="this_month">This month</option>
-              <option value="this_year">This year</option>
+              <option value="this_week">{t("dashboard.This week")}</option>
+              <option value="this_month">{t("dashboard.This month")}</option>
+              <option value="this_year">{t("dashboard.This year")}</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

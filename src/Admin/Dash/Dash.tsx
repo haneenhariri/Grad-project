@@ -80,14 +80,14 @@ export default function Dash() {
     },
 
     {
-      title: "Platform Revenue",
+      title: t("dashboard.Platform Revenue"),
       value: `$${stats.platform_revenue.toFixed(2)}`,
       icon: <MdAttachMoney size={24} className="text-teal-500" />,
       bgColor: "bg-teal-50",
       iconBgColor: "bg-teal-100",
     },
     {
-      title: "Total Courses",
+      title: t("dashboard.Total Courses"),
       value: stats.total_courses,
       icon: <FaBook size={24} className="text-emerald-500" />,
       bgColor: "bg-emerald-50",
@@ -95,7 +95,7 @@ export default function Dash() {
     },
 
     {
-      title: "Accepted Courses",
+      title: t("dashboard.Accepted Courses"),
       value: stats.accepted_courses,
       icon: <FaGraduationCap size={24} className="text-blue-500" />,
       bgColor: "bg-blue-50",
@@ -103,14 +103,14 @@ export default function Dash() {
     },
 
     {
-      title: "Average Rating",
+      title: t("dashboard.Average Rating"),
       value: stats.average_rating,
       icon: <MdStar size={24} className="text-amber-500" />,
       bgColor: "bg-amber-50",
       iconBgColor: "bg-amber-100",
     },
     {
-      title: "Total Revenue",
+      title: t("dashboard.Total Revenue"),
       value: `$${stats.total_revenue.toFixed(2)}`,
       icon: <BsCurrencyDollar size={24} className="text-indigo-500" />,
       bgColor: "bg-indigo-50",
