@@ -56,7 +56,7 @@ export default function ExamAns() {
           cell: props => {
             const courseId = props.row.original.id;
             return(
-            <div className="text-gray-700"><Button text="Show Answers" onClick={() => navigate(`/instruct/courseAnswers/${courseId}`)} Bg="text-white bg-btn"/></div>
+            <div className="text-gray-700"><Button text="Show Students" onClick={() => navigate(`/instruct/courseAnswers/${courseId}`)} Bg="text-white bg-btn"/></div>
             )
           },
         }),
