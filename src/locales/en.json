@@ -67,7 +67,8 @@
         "backToHome":"Back to Home",
         "Save changes" : "Save changes",
         "Change password" : "Change password",
-        "Mark as Completed" : "Mark as Completed"
+        "Mark as Completed" : "Mark as Completed",
+        "Save": "Save"
     },
     "hero":
     {
@@ -361,5 +362,18 @@
     },
     "Quiz" : "Quiz",
     "Send" : "Send",
-    "imageSize" : "Image size should be under 1MB and image ratio needs to be 1:1"
+    "imageSize" : "Image size should be under 1MB and image ratio needs to be 1:1",
+    "codeReview": {
+        "Student Answer Details": "Student Answer Details",
+        "Student Name": "Student Name",
+        "Email": "Email",
+        "Student Total Mark": "Student Total Mark",
+        "Question": "Question",
+        "Max Mark": "Max Mark",
+        "Mark": "Mark",
+        "Student Answer": "Student Answer",
+        "No Answer": "No Answer",
+        "No answers found": "No answers found for this student in this course.",
+        "Loading...": "Loading answers..."
+    }
 }
