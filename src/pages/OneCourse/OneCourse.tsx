@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { singleCourse } from "../../services/courses";
-import { buyCourse } from "../../services/payment";   
-import star from '../../assets/icons/Star (3).png'
-import clock from '../../assets/icons/Clock.png'
-import clock1 from '../../assets/icons/Alarm (1).png'
-import level from '../../assets/icons/bar-chart.png'
-import file from '../../assets/icons/Notebook.png'
-import divec from '../../assets/icons/Monitor.png'
-import online from '../../assets/Stack.png'
+import { buyCourse } from "../../services/payment";
+import star from "../../assets/icons/Star (3).png";
+import clock from "../../assets/icons/Clock.png";
+import clock1 from "../../assets/icons/Alarm (1).png";
+import level from "../../assets/icons/bar-chart.png";
+import file from "../../assets/icons/Notebook.png";
+import divec from "../../assets/icons/Monitor.png";
+import online from "../../assets/Stack.png";
 import Spinner from "../../components/Spinner/Spinner";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -23,13 +23,15 @@ export default function OneCourse() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [paymentMessage, setPaymentMessage] = useState<string>(""); 
-  const [balance, setBalance] = useState<number | null>(null); 
-  const [isSuccessfulPayment, setIsSuccessfulPayment] = useState(false);   
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const {t} = useTranslation();
+  const [paymentMessage, setPaymentMessage] = useState<string>("");
+  const [balance, setBalance] = useState<number | null>(null);
+  const [isSuccessfulPayment, setIsSuccessfulPayment] = useState(false);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+  const { t } = useTranslation();
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState<boolean>(false);
-  const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
+  const lang = (localStorage.getItem("language") as "ar" | "en") || "en";
 
   const handlePayment = async () => {
     if (!isAuthenticated) {
@@ -48,7 +50,7 @@ export default function OneCourse() {
         const response = await buyCourse(course.id);
 
         if (response.status === "success") {
-          setPaymentMessage(response.message || "تم الدفع بنجاح"); 
+          setPaymentMessage(response.message || "تم الدفع بنجاح");
           setIsSuccessfulPayment(true);
           setBalance(balance - course.price);
           setIsAlreadyEnrolled(true); // تحديث حالة الالتحاق
@@ -66,16 +68,19 @@ export default function OneCourse() {
     }
     setShowModal(true);
   };
-  
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await imgProfile();
         setBalance(response.data.account.balance); // تحديث الرصيد من API
-        
+
         // التحقق مما إذا كان الطالب مشترك بالفعل في هذا الكورس
-        if (response.data.courses && Array.isArray(response.data.courses) && id) {
+        if (
+          response.data.courses &&
+          Array.isArray(response.data.courses) &&
+          id
+        ) {
           const isEnrolled = response.data.courses.some(
             (course: any) => course.id === Number(id)
           );
@@ -88,7 +93,7 @@ export default function OneCourse() {
 
     const fetchCourse = async () => {
       try {
-        const data = await singleCourse(Number(id) , lang );
+        const data = await singleCourse(Number(id), lang);
         setCourse(data);
       } catch (error) {
         setError("Error loading course");
@@ -99,7 +104,7 @@ export default function OneCourse() {
 
     fetchUserData();
     fetchCourse();
-  }, [id, isAuthenticated , lang]);
+  }, [id, isAuthenticated, lang]);
 
   const renderStars = (rating: number | null) => {
     return (
@@ -122,31 +127,43 @@ export default function OneCourse() {
     <>
       <section className=" pt-[108px] h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
         <div className="mt-10 md:w-3/4 w-full">
-            <div>
-              <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-6">{course?.title}</h2>
-              <div className="mb-5 w-full flex justify-between items-center">
-                      <div className=" flex items-center gap-6">
-                        <img className=" w-12 h-12 rounded-full" src={`http://127.0.0.1:8000/storage/${course?.instructor.profile_picture}`} alt="" />
-                        <p className=" flex flex-col text-gray-600 md:text-base text-sm font-semibold">
-                        {t("Created by:")} <span className=" text-black md:text-lg text-base">{course?.instructor.name}</span>
-                        </p>
-                      </div>
-                      <div className=" flex items-center gap-1.5">
-                        {renderStars(getAverageRating(course?.rates))}
-                        <span>{getAverageRating(course?.rates).toFixed(1)}</span>
-                      </div>
+          <div>
+            <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-6">
+              {course?.title}
+            </h2>
+            <div className="mb-5 w-full flex justify-between items-center">
+              <div className=" flex items-center gap-6">
+                <img
+                  className=" w-12 h-12 rounded-full"
+                  src={`http://127.0.0.1:8000/storage/${course?.instructor.profile_picture}`}
+                  alt=""
+                />
+                <p className=" flex flex-col text-gray-600 md:text-base text-sm font-semibold">
+                  {t("Created by:")}{" "}
+                  <span className=" text-black md:text-lg text-base">
+                    {course?.instructor.name}
+                  </span>
+                </p>
+              </div>
+              <div className=" flex items-center gap-1.5">
+                {renderStars(getAverageRating(course?.rates))}
+                <span>{getAverageRating(course?.rates).toFixed(1)}</span>
               </div>
             </div>
-          <div className="">
-          <img
-            src={`http://127.0.0.1:8000/storage/${course?.cover}`}
-            alt={course?.title}
-            className=" w-1/2 mb-5 "
-           />
-
           </div>
-          <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">{t("Description")}</h3>
-          <p className=" text-gray-800 lg:text-base text-sm">{course.description}</p>
+          <div className="">
+            <img
+              src={`http://127.0.0.1:8000/storage/${course?.cover}`}
+              alt={course?.title}
+              className=" w-1/2 mb-5 "
+            />
+          </div>
+          <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">
+            {t("Description")}
+          </h3>
+          <p className=" text-gray-800 lg:text-base text-sm">
+            {course.description}
+          </p>
         </div>
         {/* buy */}
         <div className=" shadow-sm bg-white mt-6  h-max rounded-sm w-full md:w-1/3">
@@ -161,25 +178,30 @@ export default function OneCourse() {
                 <img src={clock} alt="clock" className=" md:w-5 w-4.5 " />
                 <span className=" text-sm">{t("CourseDuration")}</span>
               </div>
-              <span className=" text-sm text-gray-600">{course?.duration}{t("weeks")}</span>
+              <span className=" text-sm text-gray-600">
+                {course?.duration}{" "}
+                {t("weeks")}
+              </span>
             </div>
             <div className="flex mb-2.5 justify-between items-center">
               <div className=" flex gap-1 items-center">
-                <img src={level} alt="clock" className=" md:w-5 w-4.5 "/>
+                <img src={level} alt="clock" className=" md:w-5 w-4.5 " />
                 <span className=" text-sm">{t("level")}</span>
               </div>
-              <span className=" text-sm text-gray-600  ">{course?.level}</span>
+              <span className="text-sm text-gray-600">
+                {t(`CoursesSection.levels.${course?.level}`)}
+              </span>{" "}
             </div>
           </div>
           <div className="border-b md:p-5 p-2.5">
             {isAuthenticated ? (
               isAlreadyEnrolled ? (
                 // إذا كان الطالب مسجل بالفعل، عرض زر المشاهدة
-                <Link 
+                <Link
                   to={`/watch/${course?.id}`}
                   className="w-full block text-center py-3 px-4 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors"
                 >
-                  {t('Watch Course')}
+                  {t("Watch Course")}
                 </Link>
               ) : (
                 // إذا لم يكن مسجل، عرض زر الدفع
@@ -187,7 +209,7 @@ export default function OneCourse() {
                   onClick={handlePayment}
                   className="w-full py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-md transition-colors"
                 >
-                  {t('Enroll Now')} - ${course?.price}
+                  {t("Enroll Now")} - ${course?.price}
                 </button>
               )
             ) : (
@@ -197,12 +219,14 @@ export default function OneCourse() {
                 state={{ from: `/oneCourse/${id}` }}
                 className="w-full block text-center py-3 px-4 bg-violet-600 hover:bg-violet-700 text-white rounded-md transition-colors"
               >
-                {t('Login to Enroll')}
+                {t("Login to Enroll")}
               </Link>
             )}
           </div>
           <div className="border-b md: md:p-5  p-2.5 ">
-            <p className=" text-base mb-2.5 font-semibold">{t("This course includes:")}</p>
+            <p className=" text-base mb-2.5 font-semibold">
+              {t("This course includes:")}
+            </p>
             <div className="mb-2 flex gap-1 items-center text-sm text-violet-500">
               <img src={clock} alt="" className=" md:w-5 w-4.5 " />
               <span>{t("Lifetime access")}</span>
@@ -212,11 +236,11 @@ export default function OneCourse() {
               <span>{t("Free downloadable resources")}</span>
             </div>
             <div className="mb-2 flex gap-1 items-center text-sm ">
-              <img src={divec} alt="" className=" md:w-5 w-4.5 "/>
+              <img src={divec} alt="" className=" md:w-5 w-4.5 " />
               <span>{t("Access on mobile , tablet and TV")}</span>
             </div>
             <div className="mb-2 flex gap-1 items-center text-sm text-violet-500">
-              <img src={online} alt="" className=" md:w-5 w-4.5 "/>
+              <img src={online} alt="" className=" md:w-5 w-4.5 " />
               <span>{t("100% online course")}</span>
             </div>
           </div>
@@ -228,20 +252,30 @@ export default function OneCourse() {
             <p className="text-lg mb-4">{paymentMessage}</p>
             {isSuccessfulPayment ? (
               <div className="flex justify-center gap-4">
-                <button onClick={() => navigate("/courses")} className="px-4 py-2 bg-green-600 text-white rounded">
-                Cancel
+                <button
+                  onClick={() => navigate("/courses")}
+                  className="px-4 py-2 bg-green-600 text-white rounded"
+                >
+                  Cancel
                 </button>
-                <button onClick={() => navigate(`/watch/${course?.id}`)} className="px-4 py-2 bg-blue-600 text-white rounded">
+                <button
+                  onClick={() => navigate(`/watch/${course?.id}`)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
                   watch course
-                  </button>
+                </button>
               </div>
             ) : (
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-red-600 text-white rounded">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-red-600 text-white rounded"
+              >
                 Close
               </button>
             )}
           </div>
-        </div>)}
+        </div>
+      )}
     </>
   );
 }

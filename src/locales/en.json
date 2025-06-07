@@ -102,8 +102,15 @@
         "more" : "We have more Courses.",
         "Browse" : "Browse All",
         "CourseBy" : "Course by : ",
-        "Rating" : "Rating:",
+        "Rating" : "Rating",
         "Price" : "Price",
+        "Duration" : "Duration",
+        "Level" : "Level",
+        "levels": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "expert": "Expert"
+        },
         "Recommended Courses":  "Recommended Courses"
     },
     "Course Contents" : "Course Contents",

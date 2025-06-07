@@ -101,8 +101,15 @@
         "more" : "لدينا المزيد من الدورات ",
         "Browse" : "عرض الجميع ",
         "CourseBy" : "من قبل ",
-        "Rating" : ":التقييم",
+        "Rating" : "التقييم",
         "Price" : "السعر",
+        "Duration" : "المدة",
+        "Level" : "المستوى",
+        "levels": {
+            "beginner": "مبتدئ",
+            "intermediate": "متوسط",
+            "expert": "خبير"
+        },
         "Recommended Courses" : "الدورات الموصى بها"
     },
     "Course Contents" : "محتوى الدورة",
@@ -158,6 +165,7 @@
     "Good" : "جيد",
     "100% online course": "دورة تدريبية عبر الإنترنت 100%",
     "This course includes:" : "تتضمن هذه الدورة:",
+    "weeks" : "أسابيع",
     "Average" : "متوسط",
     "Access on mobile , tablet and TV" : "إمكانية الوصول عبر الهاتف المحمول والكمبيوتر اللوحي ",
     "Lifetime access" : "الوصول مدى الحياة",
