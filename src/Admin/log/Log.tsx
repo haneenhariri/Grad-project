@@ -49,7 +49,6 @@ export default function Log() {
   const columns = useMemo<ColumnDef<LogItem>[]>(
     () => [
       { header: 'ID', accessorKey: 'id' },
-      { header: 'Log Name', accessorKey: 'log_name' },
       { header: 'Description', accessorKey: 'description' },
       { header: 'Event', accessorKey: 'event' },
       {

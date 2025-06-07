@@ -161,7 +161,7 @@ export default function MessageSide() {
   };
 
   return (
-    <div className="flex w-full flex-col h-[calc(100vh-100px)] bg-white border border-[#f1cff594] shadow-md overflow-hidden">
+    <div className="flex w-full flex-col h-[calc(100vh-40px)] bg-white border border-[#f1cff594] shadow-md overflow-hidden">
       {/* رأس المحادثة */}
       {receiver && (
         <HeadChat 

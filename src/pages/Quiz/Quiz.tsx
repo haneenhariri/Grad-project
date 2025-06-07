@@ -115,7 +115,7 @@ export default function Quiz() {
 
   return (
     <div className="mt-[108px] min-h-screen  pb-10">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto  py-8">
         {/* Quiz header */}
         <div className="bg-btn text-white py-4 px-6 rounded-t-lg">
           <h2 className="text-xl font-bold">
@@ -127,7 +127,7 @@ export default function Quiz() {
         <div className="bg-white rounded-b-lg shadow-md p-6 mb-8">
           <div className="flex flex-col  gap-8">
             {/* Question section */}
-            <div className="md:w-1/2 flex flex-col">
+            <div className="md:w-full flex flex-col">
               <div>
               <h3 className="text-xl font-medium mb-6 text-primary">
                 {currentQuizQuestion.question}
@@ -141,7 +141,7 @@ export default function Quiz() {
 
               {/* Multiple choice options */}
               {currentQuizQuestion.type === "multipleChoice" && currentQuizQuestion.options && (
-                <div className="space-y-4 mt-6">
+                <div className="grid grid-cols-2 gap-6 my-10">
                   {currentQuizQuestion.options.map((option, index) => (
                     <div 
                       key={index}

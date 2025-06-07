@@ -6,7 +6,7 @@ import Search from "../components/Search/Search";
 interface Payment {
   account_id: number;
   amount: number;
-  transactionDate: string;
+  created_at: string;
   course: string;
   student:string;
 }
@@ -45,7 +45,7 @@ export default function Earning() {
         <div className="font-medium text-gray-900">{`$${info.getValue()}`}</div>
       ),
     }),
-    columnHelper.accessor('transactionDate', {
+    columnHelper.accessor('created_at', {
       header: 'Transaction Date',
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>

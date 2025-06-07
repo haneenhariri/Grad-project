@@ -4,7 +4,6 @@ import { singleCourse } from "../../services/courses";
 import { buyCourse } from "../../services/payment";   
 import star from '../../assets/icons/Star (3).png'
 import clock from '../../assets/icons/Clock.png'
-import clock1 from '../../assets/icons/Alarm (1).png'
 import level from '../../assets/icons/bar-chart.png'
 import file from '../../assets/icons/Notebook.png'
 import divec from '../../assets/icons/Monitor.png'
@@ -15,11 +14,33 @@ import { RootState } from "../../redux/store";
 import { imgProfile } from "../../services/profileStd";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-
+export interface oneCourse
+{
+  id : number;
+  title : string;
+  description : string;
+  duration: number;
+  level : string;
+  price : number;
+  cover : string;
+  course_language : string;
+  instructor : 
+  {
+    id : number;
+    name : string;
+    profile_picture : string;
+  };
+  category :
+  {
+    id : number;
+    name : string;
+  };
+  
+}
 export default function OneCourse() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [course, setCourse] = useState<any>(null);
+  const [course, setCourse] = useState<oneCourse>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -120,7 +141,7 @@ export default function OneCourse() {
 
   return (
     <>
-      <section className=" pt-[108px] h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-4 px-4 lg:px-10 desktop:px-40">
+      <section className=" pt-[108px] min-h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-6 px-4 lg:px-10 desktop:px-40">
         <div className="mt-10 md:w-3/4 w-full">
             <div>
               <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-6">{course?.title}</h2>

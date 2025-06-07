@@ -105,11 +105,16 @@ export default function TestResults() {
                 ) : (
                   <div className="flex flex-col items-center gap-1">
                     <span className="text-green-600 font-semibold text-lg">
-                      {t("Score")}: {result.score}/{result.total_questions}
+                       {t("Percentage")}: {result.percentage}%
+                    
                     </span>
                     <span className="text-gray-600 text-sm">
-                      {t("Percentage")}: {result.percentage}%
+                       {t("Score")}: {result.score}
                     </span>
+                    <span className="text-gray-600 text-sm">
+                       {t("total questions")}: {result.total_questions}
+                    </span>
+                    
                   </div>
                 )}
               </div>

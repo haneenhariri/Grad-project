@@ -248,7 +248,7 @@ export default function CreateCourse() {
     return <Spinner/>
   }
   return (
-    <div className=" min-h-[80vh] bg-White/99 pb-10">
+    <div className=" min-h-[80vh] bg-White/99 ">
       {step < 4 ? (
         <form onSubmit={send} className="container mx-auto">
           {/* Header */}

@@ -1,9 +1,9 @@
 import development from '../assets/Category/Cpu.png'
-import Data from '../assets/Category/data-science.png'
-import AI from '../assets/Category/artificial-intelligence.png'
-import Cybersecurity from '../assets/Category/cybersecurity_15254340.png'
+import Data from '../assets/Category/data.png'
+import AI from '../assets/Category/ai.png'
+import Cybersecurity from '../assets/Category/cyber.png'
 import Design from '../assets/Category/PenNib.png'
-import it from '../assets/Category/information-technology.png'
+import it from '../assets/Category/information.png'
 
 export const categoryData = 
 [

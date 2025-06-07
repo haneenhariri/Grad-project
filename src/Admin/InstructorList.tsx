@@ -296,38 +296,38 @@ export default function InstructorList() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div 
             ref={modalRef}
-            className="bg-white p-6 rounded-lg shadow-lg  max-w-[90%] max-h-[90vh] overflow-y-auto animate-fadeIn"
+            className="bg-white p-10 rounded-lg shadow-lg  max-w-[90%] max-h-[90vh] overflow-y-auto animate-fadeIn"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-xl font-semibold mb-4 text-primary">Instructor Details</h2>
+            <h2 className="text-xl font-semibold mb-6 text-primary">Instructor Details</h2>
             
             <div className="space-y-3 mb-6">
-              <p className="flex justify-between">
-                <strong className="text-gray-700">Name:</strong> 
+              <p className="flex gap-6 mb-2.5">
+                <strong className="text-btn">Name:</strong> 
                 <span className="text-gray-900">{selectedInstructor.name}</span>
               </p>
-              <p className="flex justify-between">
-                <strong className="text-gray-700">Email:</strong> 
+              <p className="flex gap-6 mb-2.5">
+                <strong className="text-btn">Email:</strong> 
                 <span className="text-gray-900">{selectedInstructor.email}</span>
               </p>
-              <p className="flex justify-between">
-                <strong className="text-gray-700">Education:</strong> 
+              <p className="flex gap-6 mb-2.5">
+                <strong className="text-btn">Education:</strong> 
                 <span className="text-gray-900">{selectedInstructor.education}</span>
               </p>
-              <p className="flex justify-between">
-                <strong className="text-gray-700">Specialization:</strong> 
+              <p className="flex gap-6 mb-2.5">
+                <strong className="text-btn">Specialization:</strong> 
                 <span className="text-gray-900">{selectedInstructor.specialization}</span>
               </p>
               
               <div>
-                <strong className="text-gray-700">Summary:</strong>
-                <p className="mt-1 text-gray-900 bg-gray-50 p-3 rounded-md text-sm">
+                <strong className="text-btn">Summary:</strong>
+                <p className="mt-1 text-gray-900 bg-gray-200 p-3 rounded-md text-sm">
                   {selectedInstructor.summery}
                 </p>
               </div>
               
               <p>
-                <strong className="text-gray-700">CV:</strong> 
+                <strong className="text-btn">CV:</strong> 
                 <a 
                   href={`http://127.0.0.1:8000/storage/${selectedInstructor.cv}`} 
                   target="_blank" 
@@ -338,8 +338,8 @@ export default function InstructorList() {
                 </a>
               </p>
               
-              <p className="flex justify-between">
-                <strong className="text-gray-700">Status:</strong> 
+              <p className="flex  gap-6 ">
+                <strong className="text-btn">Status:</strong> 
                 <span 
                   className={`px-3 py-1 rounded-full text-xs font-medium ${
                     selectedInstructor.status === "accepted"
@@ -356,19 +356,19 @@ export default function InstructorList() {
             
             <div className="grid grid-cols-3 gap-3 mt-6">
               <button 
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                className="px-4 py-2 border text-green-600  border-green-600  rounded-md hover:text-white hover:bg-green-700 transition-colors"
                 onClick={() => updateInstructorStatus(selectedInstructor.id, "accepted")}
               >
                 Accept
               </button>
               <button 
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                className="px-4 py-2 border text-red-600 border-red-600  rounded-md hover:text-white hover:bg-red-700 transition-colors"
                 onClick={() => updateInstructorStatus(selectedInstructor.id, "rejected")}
               >
                 Reject
               </button>
               <button 
-                className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500 transition-colors"
+                className="px-4 py-2 border text-gray-400 border-gray-400 hover:text-white rounded-md hover:bg-gray-500 transition-colors"
                 onClick={() => setSelectedInstructor(null)}
               >
                 Close

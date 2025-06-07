@@ -87,7 +87,7 @@ export const changeStatusCourse = async ({ id, status }: changeStatusProps) => {
     return response.status;
 };
 
-export const updateCourseData = async ({courseData , courseId} : any) => {
+export const updateCourseData = async ({courseData , courseId} : { courseData : CouCard ; courseId : number }) => {
   try{
     const formData = new FormData();
     if(courseData.cover){
