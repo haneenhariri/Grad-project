@@ -42,7 +42,7 @@ export default function StudentCourseAnswers() {
 
   // استقبال بيانات الطالب من location.state
   const { studentName, studentEmail } = location.state || {};
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchStudentAnswers = async () => {
@@ -233,7 +233,6 @@ export default function StudentCourseAnswers() {
                       onClick={() => submitMark(answer.user_answer.id)}
                       disabled={isSubmitting}
                       Bg="bg-blue-600 text-white hover:bg-blue-700"
-                      size="small"
                     />
                   </div>
                 </div>

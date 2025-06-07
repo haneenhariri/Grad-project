@@ -68,7 +68,9 @@
         "Save changes" : "Save changes",
         "Change password" : "Change password",
         "Mark as Completed" : "Mark as Completed",
-        "Save": "Save"
+        "Save": "Save",
+        "Show Answers": "Shwo Answers",
+        "Show Students": "Show Students"
     },
     "hero":
     {
@@ -288,7 +290,42 @@
         "professionalInfo": "Professional Information",
         "applicationSubmitted": "Application Submitted!",
         "applicationSuccess": "Your request has been successfully submitted and will be reviewed soon. We'll contact you via email with the results.",
-        "backToHome": "Back to Home"
+        "backToHome": "Back to Home",
+        "whyStartTeaching": {
+            "heading": "Why you’ll start teaching on Eduguard",
+            "paragraph": "Join the teaching community and share your knowledge with students around the world. Eduguard provides you with the tools you need to deliver quality content and earn income.",
+            "feature1": {
+                "title": "Teach your students as you want.",
+                "description": "Whether it's live sessions or recorded content, you have full freedom to organize and deliver your material in your preferred way."
+            },
+            "feature2": {
+                "title": "Manage your course, payment in one place",
+                "description": "Everything you need in one dashboard: create your courses, track student enrollments, and receive your earnings securely."
+            },
+            "feature3": {
+                "title": "Chat with your students",
+                "description": "Stay connected with your students through our built-in messaging system and provide them with ongoing support."
+            }
+        },
+        "instructorSteps": {
+            "header": "How you'll become a successful instructor",
+            "step1": {
+                "title": "1. Apply to become instructor.",
+                "description": "Sed et mattis urna. Sed tempus fermentum est, eu lobortis nibh consequat eu."
+            },
+            "step2": {
+                "title": "2. Setup & edit your profile.",
+                "description": "Duis non ipsum at leo efficitur pulvinar. Morbi semper nisi eget accumsan ullamcorper."
+            },
+            "step3": {
+                "title": "3. Create your new course",
+                "description": "Praesent congue ornare nibh sed ullamcorper. Proin venenatis tellus non turpis scelerisque."
+            },
+            "step4": {
+                "title": "4. Start teaching & earning",
+                "description": "Praesent congue ornare nibh sed ullamcorper. Proin venenatis tellus non turpis scelerisque."
+            }
+        }
     },
     "form": {
         "name": "Name",
