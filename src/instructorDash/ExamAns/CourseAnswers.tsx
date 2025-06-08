@@ -61,23 +61,23 @@ export default function CourseAnswers() {
         cell: (info) => <div className="text-gray-700">{info.getValue()}</div>,
       }),
       columnHelper.display({
-        id: "status",
-        header: "Status",
-        cell: (info) => {
-          const firstAnswerMark = info.row.original.answers?.[0]?.mark;
-          const isMarked = firstAnswerMark != null;
+              id: "status",
+              header: "Status",
+              cell: (info) => {
+                const firstAnswerMark = info.row.original.answers?.[0]?.mark;
+                const isMarked = firstAnswerMark != null;
 
-          return (
-            <div
-              className={`font-medium ${
-                isMarked ? "text-green-600" : "text-red-600"
-              }`}
-            >
-              {isMarked ? t("dashboard.Marked") : t("dashboard.Not Marked")}
-            </div>
-          );
-        },
-      }),
+                return (
+                  <div
+                    className={`font-medium ${
+                      isMarked ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
+                    {isMarked ? t("dashboard.Marked") : t("Not Marked")}
+                  </div>
+                );
+              },
+            }),
       columnHelper.display({
         id: "actions",
         header: "Actions",

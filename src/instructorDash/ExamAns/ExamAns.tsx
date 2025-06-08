@@ -39,15 +39,18 @@ export default function ExamAns() {
           ),
         }),
         columnHelper.accessor('title', {
-          header: 'title',
+          header: 'Course title',
           cell: info => (
-            <div className="font-medium text-gray-900">{`$${info.getValue()}`}</div>
+            <div className="font-medium text-gray-900">{`${info.getValue()}`}</div>
           ),
         }),
         columnHelper.accessor('students_answered_count', {
           header: 'students_answered_count',
           cell: info => (
-            <div className="text-gray-700">{info.getValue()}</div>
+            <div className=" flex justify-center items-center text-center ">
+              <span className="w-max bg-green-300 px-4 py-1 text-green-900 rounded-sm">
+                {info.getValue()}
+              </span></div>
           ),
         }),
         columnHelper.display({

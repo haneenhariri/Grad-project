@@ -5,6 +5,7 @@ import {  useNavigate } from 'react-router-dom';
 import { myCourseProp } from '../types/interfaces';
 import { useTranslation } from 'react-i18next';
 import Button from '../Ui/Button/Button';
+import { FiEdit2, FiEye, FiTrash2 } from 'react-icons/fi';
 
 export default function MyCourse() {
   const navigate = useNavigate();
@@ -60,14 +61,20 @@ export default function MyCourse() {
                     </button>
                     {openDropdown === index && (
                       <div className="absolute z-10 right-0 mt-2 w-40 bg-white border border-gray-200 shadow-lg rounded-md">
-                        <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/detail/${course.id}`)}>
-                          {t("Edit")}
+                        <button className="flex items-center gap-2 w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/detail/${course.id}`)}>
+                          <FiEdit2 size={16} className="mr-2 text-green-500" />
+                          <span>Edit </span>
+                        </button>
+                        <button className=" items-center flex gap-1 w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100" onClick={() => navigate(`/instruct/detail/${course.id}`)}>
+                          <FiEye size={16} className="mr-2 text-blue-500" />
+                          <span>View</span>
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                          className="flex items-center gap-1 w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
                           onClick={() => handleDeleteCourse(course.id)}
                         >
-                         {t("Delete")}
+                          <FiTrash2 size={16} className="mr-2" />
+                          <span>Delete</span>
                         </button>
                       </div>
                     )}
