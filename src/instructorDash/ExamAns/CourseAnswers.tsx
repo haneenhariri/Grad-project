@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-table";
 import Search from "../../components/Search/Search";
 import Button from "../../Ui/Button/Button";
+import { useTranslation } from "react-i18next";
 
 export default function CourseAnswers() {
   const { id } = useParams();
@@ -20,7 +21,7 @@ export default function CourseAnswers() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const { id: courseId } = useParams(); // إعادة تسمية id إلى courseId للوضوح
-
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,6 +59,24 @@ export default function CourseAnswers() {
       columnHelper.accessor("user.email", {
         header: "email",
         cell: (info) => <div className="text-gray-700">{info.getValue()}</div>,
+      }),
+      columnHelper.display({
+        id: "status",
+        header: "Status",
+        cell: (info) => {
+          const firstAnswerMark = info.row.original.answers?.[0]?.mark;
+          const isMarked = firstAnswerMark != null;
+
+          return (
+            <div
+              className={`font-medium ${
+                isMarked ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {isMarked ? t("dashboard.Marked") : t("dashboard.Not Marked")}
+            </div>
+          );
+        },
       }),
       columnHelper.display({
         id: "actions",

@@ -26,7 +26,8 @@
     {
         "Already have an account?" : "Already have an account?",
         "Login": "Login",
-        "formTextLogin" : "Welcome back! Please log in to access your account."
+        "formTextLogin" : "Welcome back! Please log in to access your account.",
+        "Welcome": "Welcome"
     },
     "Logo":
     {
@@ -69,7 +70,7 @@
         "Change password" : "Change password",
         "Mark as Completed" : "Mark as Completed",
         "Save": "Save",
-        "Show Answers": "Shwo Answers",
+        "Show Answers": "Show Answers",
         "Show Students": "Show Students"
     },
     "hero":
@@ -229,6 +230,7 @@
     "ResetPasswordT" : "Recovery Code Sent!",
     "ResetPasswordP" : "Type in your registered email address to reset password",
     "ResetPassword2" : "Please check your email for next steps to reset your password.",
+    "LoginSuccess": "User logged in successfully!",
     "LogoutSuccess": "Logout successfully!",
     "RecoveryCode" : "Recovery Code",
     "Send message" : "Send message",
@@ -401,7 +403,21 @@
         "Revenue": "Revenue",
         "This week": "This week",
         "This month": "This month",
-        "This year": "This year"
+        "This year": "This year",
+        "Marked": "Marked",
+        "Exam questions added successfully": "Exam questions added successfully",
+        "Multiple choice questions must have at least 2 options and a correct answer": "Multiple choice questions must have at least 2 options and a correct answer",
+        "Question Updated successfully": "Question Updated successfully",
+        "Course updated": "Course information updated successfully",
+        "Failed to update the question": "Failed to update the question",
+        "All lessons updated successfully!": "All lessons updated successfully!",
+        "Exam questions updated successfully": "Exam questions updated successfully!",
+        "Course created successfully!": "Course created successfully!",
+        "Question {{index}} is empty": "Question {{index}} is empty",
+        "Question {{index}} must have a positive mark value": "Question {{index}} must have a positive mark value",
+        "All options for question {{index}} must be filled": "All options for question {{index}} must be filled",
+        "Please select a correct answer for question {{index}}": "Please select a correct answer for question {{index}}",
+        "You must have at least 2 options": "You must have at least 2 options"
     },
     "search": {
         "searchCourses": "Search courses...",
