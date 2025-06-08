@@ -25,7 +25,8 @@
     {
         "Already have an account?" : " هل لديك بالفعل حساب ؟",
         "Login": "تسجيل دخول",
-        "formTextLogin" : "مرحبًا بك مرة أخرى! يرجى تسجيل الدخول للوصول إلى حسابك."
+        "formTextLogin" : "مرحبًا بك مرة أخرى! يرجى تسجيل الدخول للوصول إلى حسابك.",
+        "Welcome": "مرحباً"
     },
     "Logo":
     {
@@ -243,6 +244,7 @@
     "ResetPasswordP": "أدخل عنوان بريدك الإلكتروني المسجل لإعادة تعيين كلمة المرور",
     "ResetPassword2": "يرجى التحقق من بريدك الإلكتروني للخطوات التالية لإعادة تعيين كلمة المرور",
     "RecoveryCode" : "رمز الاستعادة",
+    "LoginSuccess": "تم تسجيل الدخول بنجاح!",
     "LogoutSuccess": "تم تسجيل الخروج بنجاح!",
     "LogoutError": "حدث خطأ أثناء تسجيل الخروج!",
     "PasswordsMatch": "يجب أن تتطابق كلمات المرور",
@@ -398,7 +400,21 @@
         "Revenue": "الإيرادات",
         "This week": "هذا الاسبوع",
         "This month": "هذا الشهر",
-        "This year": "هذه السنة"
+        "This year": "هذه السنة",
+        "Marked": "تم التصحيح",
+        "Exam questions added successfully": "تم إضافة أسئلة الاختبار بنجاح",
+        "Multiple choice questions must have at least 2 options and a correct answer": "يجب أن تحتوي أسئلة الاختيار من متعدد على خيارين على الأقل وإجابة صحيحة",
+        "Question Updated successfully": "تم تحديث السؤال بنجاح",
+        "Course updated": "!تم تحديث معلومات الدورة بنجاح",
+        "Failed to update the question": "فشل في تحديث السؤال",
+        "All lessons updated successfully!": "!تم تحديث جميع الدروس بنجاح",
+        "Exam questions updated successfully": "!تم تحديث أسئلة الاختبار بنجاح",
+        "Course created successfully!": "!تم إنشاءالكورس بنجاح",
+        "Question {{index}} is empty": "السؤال رقم {{index}} فارغ",
+        "Question {{index}} must have a positive mark value": "يجب أن يحتوي السؤال رقم {{index}} على درجة موجبة",
+        "All options for question {{index}} must be filled": "يجب ملء جميع الخيارات في السؤال رقم {{index}}",
+        "Please select a correct answer for question {{index}}": "يرجى اختيار الإجابة الصحيحة للسؤال رقم {{index}}",
+        "You must have at least 2 options": "يجب أن يكون لديك خياران على الأقل"
     },
     "search": {
         "searchCourses": "البحث عن الدورات...",

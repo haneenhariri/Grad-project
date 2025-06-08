@@ -26,7 +26,7 @@ const handleSingleQuestionSubmit = async (index: number) => {
 
   if (question.type === 'multipleChoice') {
     if (!question.options || question.options.length < 2 || !question.correct_answer) {
-      showToast(t('Multiple choice questions must have at least 2 options and a correct answer'), 'error');
+      showToast(t('dashboard.Multiple choice questions must have at least 2 options and a correct answer'), 'error');
       return;
     }
   }
@@ -39,10 +39,10 @@ const handleSingleQuestionSubmit = async (index: number) => {
       await axiosInstance.post('/questions', { ...question, course_id: courseId });
     }
 
-    showToast(t('Question updated successfully'), 'success');
+    showToast(t("dashboard.Question Updated successfully"), 'success');
   } catch (error) {
     console.error('Error updating question:', error);
-    showToast(t('Failed to update the question'), 'error');
+    showToast(t('dashboard.Failed to update the question'), 'error');
   } finally {
     setIsSubmitting(false);
   }
@@ -104,7 +104,7 @@ const handleSingleQuestionSubmit = async (index: number) => {
         }
       }
 
-      showToast(t('Exam questions updated successfully'), 'success');
+      showToast(t('dashboard.Exam questions updated successfully'), 'success');
     } catch (error) {
       console.error('Error updating questions:', error);
       showToast(t('Failed to update exam questions'), 'error');

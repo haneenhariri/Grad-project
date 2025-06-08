@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import { Category, Lesson, myCourseProp, SubCategory } from '../../types/interfaces';
 import { allCategories, fetchSingleCourse } from '../../services/courses';
 import Label from '../../Ui/Label/Label';
+import { useTranslation } from 'react-i18next';
 
 export default function AdminEditeCourse() {
   const [step, setStep] = useState(1);
@@ -37,6 +38,7 @@ export default function AdminEditeCourse() {
   const [courseLanguage,setCourseLanguage] = useState('');
   const [course, setCourse] = useState<myCourseProp | null>(null);
   const [lessons, setLessons] = useState<Lesson[]>([]); // تأكد من أن القيمة الافتراضية مصفوفة فارغة
+  const { t } = useTranslation();
   console.log(course);
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +270,7 @@ export default function AdminEditeCourse() {
         });
 
         console.log("API Response:", response.data);
-        showToast("Course information updated successfully!", 'success');
+        showToast(t("dashboard.Course updated!"), 'success');
         
         // بعد نجاح تحديث معلومات الكورس، يمكن تحديث الدروس
         await updateLessons();

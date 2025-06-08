@@ -307,7 +307,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
           }
         });
 
-        showToast("Course information updated successfully!", 'success');
+        showToast(t("dashboard.Course updated"), 'success');
       
         setStep(step + 1);
         
@@ -350,7 +350,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
             }
           );
           }
-        showToast("All lessons updated successfully!", 'success');
+        showToast(t("dashboard.All lessons updated successfully!"), 'success');
         setStep(step + 1);
       } catch (error) {
         console.error("Error updating lessons:", error);
