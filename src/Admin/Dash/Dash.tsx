@@ -12,6 +12,7 @@ import InfoCard from "./InfoCard";
 import Revenue from "./Revenue";
 import Spinner from "../../components/Spinner/Spinner";
 import { useTranslation } from "react-i18next";
+import Rating from "./Rating/Rating";
 
 export interface DashboardStats {
   total_students: number;
@@ -120,19 +121,24 @@ export default function Dash() {
 
   return (
     <section>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card, index) => (
-          <InfoCard
-            key={index}
-            icon={card.icon}
-            title={card.title}
-            value={card.value}
-            bgColor={card.bgColor}
-            iconBgColor={card.iconBgColor}
-          />
-        ))}
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {cards.map((card, index) => (
+            <InfoCard
+              key={index}
+              icon={card.icon}
+              title={card.title}
+              value={card.value}
+              bgColor={card.bgColor}
+              iconBgColor={card.iconBgColor}
+            />
+          ))}
+        </div>
+        <div className=" flex gap-6">
+          <Revenue />
+          <Rating />
+        </div>
       </div>
-      <Revenue />
     </section>
   );
 }
