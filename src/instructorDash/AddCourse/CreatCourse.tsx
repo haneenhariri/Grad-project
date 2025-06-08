@@ -199,7 +199,7 @@ export default function CreateCourse() {
         },
       });
   
-      showToast("Course created successfully!", 'success');
+      showToast(t("dashboard.Course created successfully!"), 'success');
       console.log("API Response:", response.data);
       
       // Store the new course ID and move to the exam step
