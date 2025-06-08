@@ -12,14 +12,19 @@ export const generalStatsInstracror = async () =>
     const response = await axiosInstance.get(`${URLINST}/general-stats`);
     return response.data.data;
 }
-export const ratingsStats = async () =>
+export const ratingsStats = async (period: string) =>
 {
-    const response = await axiosInstance.get(`${URLINST}/ratings`);
+    const response = await axiosInstance.get(`${URLINST}/ratings?period=${period}`);
     return response.data.data;
 }
 export const revenueStats = async (period: string) => 
 {
     const response = await axiosInstance.get(`${URL}/revenue-stats?period=${period}`);
+    return response.data.data;
+}
+export const revenueStatsInst = async (period: string) => 
+{
+    const response = await axiosInstance.get(`${URLINST}/revenue?period=${period}`);
     return response.data.data;
 }
 

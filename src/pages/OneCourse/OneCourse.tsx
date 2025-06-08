@@ -146,8 +146,8 @@ export default function OneCourse() {
 
   return (
     <>
-      <section className=" pt-[108px] min-h-screen items-center  justify-center pb-12 flex md:flex-row flex-col gap-6 px-4 lg:px-10 desktop:px-40">
-        <div className="mt-10 md:w-3/4 w-full">
+      <section className=" pt-[108px] min-h-screen mt-10  pb-12 flex md:flex-row flex-col gap-6 px-4 lg:px-10 desktop:px-40">
+        <div className=" md:w-3/4 w-full">
           <div>
             <h2 className=" lg:text-4xl md:text-xl text-lg font-semibold mb-6">
               {course?.title}
@@ -176,7 +176,7 @@ export default function OneCourse() {
             <img
               src={`http://127.0.0.1:8000/storage/${course?.cover}`}
               alt={course?.title}
-              className=" w-1/2 mb-5 "
+              className=" w-full h-auto  mb-5 "
             />
           </div>
           <h3 className="mb-5 lg:text-2xl md:text-xl text-lg font-semibold">
@@ -187,7 +187,7 @@ export default function OneCourse() {
           </p>
         </div>
         {/* buy */}
-        <div className=" shadow-sm bg-white mt-6  h-max rounded-sm w-full md:w-1/3">
+        <div className=" shadow-sm bg-white   h-max rounded-sm w-full md:w-1/3">
           <div className="border-b  md:p-5 p-2.5">
             <div className="flex mb-2.5 justify-between items-center">
               <span className=" text-lg font-semibold">{course?.price}$</span>

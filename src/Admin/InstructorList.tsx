@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { allRequest, allTeacher, deleteTeacher } from "../services/teacherForm";
-import axios from "axios";
-import { getSecureCookie } from "../utils/cookiesHelper";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import Search from "../components/Search/Search";
 import { FiMoreVertical, FiEye, FiTrash2 } from "react-icons/fi";
@@ -27,8 +25,6 @@ export default function InstructorList() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   
-
-
   // إغلاق النافذة المنبثقة عند الضغط على Escape
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {

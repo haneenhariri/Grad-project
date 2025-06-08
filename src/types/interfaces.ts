@@ -13,6 +13,18 @@ export interface PusherMessageEvent {
   };
   timestamp: string;
 }
+export interface TopCourse {
+  id: number;
+  title: {
+    ar: string;
+    en: string;
+  };
+  students_count: number;
+  price: number;
+  cover: string;
+  average_rating : number;
+  revenue : number;
+}
 export interface profileDataProps
 {
   name?: string;

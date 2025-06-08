@@ -8,6 +8,7 @@ import Comment from "../../components/Comment/Comment";
 import Head from "./Head";
 import Button from "../../Ui/Button/Button";
 import { useTranslation } from "react-i18next";
+import SelectedLesson from "./SelectedLesson";
 
 export default function WatchCourse() {
   const  { t } = useTranslation()
@@ -130,95 +131,16 @@ export default function WatchCourse() {
 
   if (loading) return <Spinner />;
 
-  const renderSelectedLesson = () => {
-    if (!selectedLesson) return null;
-    console.log("Selected lesson:", selectedLesson);
-    return (
-      <div className=" rounded-lg   overflow-hidden mb-6">
-        {selectedLesson.files && selectedLesson.files.length > 0 ? (
-          selectedLesson.files.map((file: any, index: number) => {
-            console.log("File data:", file);
-            return (
-              <div key={index} className="mb-4">
-                {file.type === 'video' && (
-                  <>
-                    <video 
-                      src={`http://127.0.0.1:8000/storage/${file.path}`} 
-                      controls 
-                      className="w-full h-auto"
-                      onError={(e) => console.error("Video error:", e)}
-                      onEnded={() => {
-                        if (!completedLessons.has(selectedLesson.id)) {
-                          markLessonAsCompleted(selectedLesson.id);
-                        }
-                      }}
-                    />
-                  </>
-                )}
-                {file.type === 'image' && (
-                  <>
-                    <img 
-                      src={`http://127.0.0.1:8000/storage/${file.path}`} 
-                      alt={selectedLesson.title} 
-                      className="w-full h-auto"
-                      onError={(e) => console.error("Image error:", e)}
-                    />
-                  </>
-                )}
-                {file.type === 'pdf' && (
-                  <div className="p-4 border rounded">
-                    <a 
-                      href={`http://127.0.0.1:8000/storage/${file.path}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline flex items-center"
-                    >
-                      {t("View PDF Document")}
-                    </a>
-                  </div>
-                )}
-                {!['video', 'image', 'pdf'].includes(file.type) && (
-                  <div className="p-4 border rounded">
-                    <a 
-                      href={`http://127.0.0.1:8000/storage/${file.path}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline flex items-center"
-                    >
-                      {t("Download File")} ({file.origin_name})
-                    </a>
-                  </div>
-                )} 
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center text-gray-500">
-            {t("No files available for this lesson")}
-          </div>
-        )}
-        <div className="">
-          <h2 className="text-xl font-semibold mb-2">{selectedLesson.title}</h2>
-          <h2 className="text-xl font-semibold mb-2">{t("Lectures Description")}</h2>
-          <p  id="Description" className="text-gray-700  mb-4">{selectedLesson.description}</p>
-          {!completedLessons.has(selectedLesson.id) && (
-            <Button text="Mark as Completed" Bg="bg-green-600 text-white hover:bg-green-700 transition-colors" onClick={() => markLessonAsCompleted(selectedLesson.id) }/>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <section className="mb-">
-     <Head title={course?.title}/>
+     <Head title={course?.title} lessonTitle={selectedLesson.title}/>
       <div className="px-4 lg:px-10 desktop:px-40 py-8">
       <div className="flex flex-col md:flex-row gap-6">
         <div className='w-full md:w-10/12'>
-          {renderSelectedLesson()}
+          <SelectedLesson selectedLesson={selectedLesson} completedLessons={completedLessons} markLessonAsCompleted={markLessonAsCompleted}/>
           <Comment lesson_id={selectedLesson?.id || 0} />
         </div>
-        
         <div className='w-full md:w-5/12'>
           <div className='bg-white rounded-lg shadow-sm p-5'>
             <div className='mb-4'>

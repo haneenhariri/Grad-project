@@ -203,7 +203,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
                 </div>
               </div>
             ) : (
-              <p className="text-gray-700 text-sm mb-2">{reply.content}</p>
+              <p className="text-gray-700 text-base mb-2">{reply.content}</p>
             )}
             
             <button 
@@ -403,7 +403,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
 
   return (
     <div className="rounded-lg ">
-      <h2 className="text-xl font-semibold mb-6">{t("Comments")}</h2>
+      <h2 className="text-xl font-semibold mb-6">{t("Comments")} ({comments.length})</h2>
       {loading ? (
         <div className="py-10 text-center">
           <Spinner/>
