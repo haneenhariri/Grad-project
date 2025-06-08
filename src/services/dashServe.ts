@@ -17,6 +17,11 @@ export const ratingsStats = async (period: string) =>
     const response = await axiosInstance.get(`${URLINST}/ratings?period=${period}`);
     return response.data.data;
 }
+export const ratingsStatsAdmin = async (period: string) =>
+{
+    const response = await axiosInstance.get(`${URL}/course-ratings?period=${period}`);
+    return response.data.data;
+}
 export const revenueStats = async (period: string) => 
 {
     const response = await axiosInstance.get(`${URL}/revenue-stats?period=${period}`);
