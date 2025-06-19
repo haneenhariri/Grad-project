@@ -286,7 +286,7 @@ export default function ExamAns() {
           <div className="flex items-center text-sm text-gray-600">
             <span className="flex items-center gap-1">
               {t("instructor.table.Page")} <strong>{table.getState().pagination.pageIndex + 1}</strong>{" "}
-              of <strong>{table.getPageCount()}</strong>
+              {t("instructor.table.of")} <strong>{table.getPageCount()}</strong>
             </span>
           </div>
 
