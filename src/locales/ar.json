@@ -113,11 +113,17 @@
         "levels": {
             "beginner": "مبتدئ",
             "intermediate": "متوسط",
-            "expert": "خبير"
+            "expert": "خبير",
+            "advance": "متقدم"
         },
-        "Recommended Courses" : "الدورات الموصى بها"
+        "Recommended Courses" : "الدورات الموصى بها",
+        "Course description in English": "وصف الدورة باللغة الانكليزية",
+        "Course description in Arabic": "وصف الدورة باللغة العربية"
     },
     "Course Contents" : "محتوى الدورة",
+    "Video": "فيديو",
+    "File": "ملف",
+    "duration_placeholder": "مدة الدورة (مثال: ساعتان)",
     "Remove Question" : "حذف السؤال",
     "Question Type" : "نوع السؤال",
     "Question" : "السؤال",
@@ -309,6 +315,10 @@
         "applicationSubmitted": "تم تقديم الطلب!",
         "applicationSuccess": "تم تقديم طلبك بنجاح وسيتم مراجعته قريبًا. سنتواصل معك عبر البريد الإلكتروني بالنتائج.",
         "backToHome": "العودة إلى الرئيسية",
+        "No Payments found": "لم يتم العثور على مدفوعات",
+        "search": {
+            "course placeholder": "ابحث عن الدورات..."
+        },
         "whyStartTeaching": {
             "heading": "لماذا تبدأ التدريس على Eduguard",
             "paragraph": "انضم إلى مجتمع المعلمين وشارك خبراتك مع طلاب من مختلف أنحاء العالم. Eduguard توفر لك الأدوات اللازمة لتقديم محتوى احترافي وتحقيق دخل مستدام.",
@@ -343,6 +353,24 @@
                 "title": "٤. ابدأ بالتدريس وجني الأرباح",
                 "description": "ابدأ بمشاركة معرفتك، وتابع تسجيلات الطلاب، وابدأ بتحقيق دخل من دوراتك التعليمية."
             }
+        },
+        "table": {
+            "from": "من",
+            "amount": "المبلغ",
+            "date": "تاريخ العملية",
+            "course": "الدورة",
+            "Course Title": "عنوان الدورة",
+            "Students": "الطلاب",
+            "Rating": "التقييم",
+            "Revenue": "الإيرادات",
+            "id": "المعرف",
+            "title": "العنوان",
+            "students_answered_count": "عدد الطلاب الذين أجابوا",
+            "actions": "الإجراءات",
+            "show_students": "عرض الطلاب",
+            "Page": "صفحة",
+            "of": "من",
+            "Rows per page": "سطر في الصفحة"
         }
     },
     "form": {

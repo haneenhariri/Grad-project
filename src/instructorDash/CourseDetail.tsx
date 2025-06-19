@@ -282,7 +282,7 @@ export default function EditCourse() {
               </label>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder={'course price'}
+                placeholder={t('CoursePrice')}
                 type="text"
                 name='price'
                 value={price}

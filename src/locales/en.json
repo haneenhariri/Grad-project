@@ -114,11 +114,17 @@
         "levels": {
             "beginner": "Beginner",
             "intermediate": "Intermediate",
-            "expert": "Expert"
+            "expert": "Expert",
+            "advance": "Advance"
         },
-        "Recommended Courses":  "Recommended Courses"
+        "Recommended Courses":  "Recommended Courses",
+        "Course description in English": "Course description in English",
+        "Course description in Arabic": "Course description in Arabic"
     },
     "Course Contents" : "Course Contents",
+    "Video": "Video",
+    "File": "File",
+    "duration_placeholder": "Course duration (e.g., 2 hours)",
     "Save This Question" : "Save This Question",
     "You don't have any courses yet." : "You don't have any courses yet.",
     "ChargingText" : " Charging an account will immediately add funds to the user's balance. The user will be able to use these funds to purchase courses.",
@@ -312,6 +318,10 @@
         "applicationSubmitted": "Application Submitted!",
         "applicationSuccess": "Your request has been successfully submitted and will be reviewed soon. We'll contact you via email with the results.",
         "backToHome": "Back to Home",
+        "No Payments found": "No Payments found",
+        "search": {
+            "course placeholder": "Search courses..."
+        },
         "whyStartTeaching": {
             "heading": "Why you’ll start teaching on Eduguard",
             "paragraph": "Join the teaching community and share your knowledge with students around the world. Eduguard provides you with the tools you need to deliver quality content and earn income.",
@@ -346,6 +356,24 @@
                 "title": "4. Start teaching & earning",
                 "description": "Praesent congue ornare nibh sed ullamcorper. Proin venenatis tellus non turpis scelerisque."
             }
+        },
+        "table": {
+            "from": "From",
+            "amount": "Amount",
+            "date": "Transaction Date",
+            "course": "Course",
+            "Course Title": "Course Title",
+            "Students": "Students",
+            "Rating": "Rating",
+            "Revenue": "Revenue",
+            "id": "ID",
+            "title": "Title",
+            "students_answered_count": "Students Answered",
+            "actions": "Actions",
+            "show_students": "Show Students",
+            "Page": "صفحة",
+            "of": "of",
+            "Rows per page": "Rows per page"
         }
     },
     "form": {

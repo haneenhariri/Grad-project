@@ -354,7 +354,7 @@ export default function CreateCourse() {
               <Label label='Duration' />
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course duration (e.g., 2 hours)'
+                placeholder={t("duration_placeholder")}
                 type="text"
                 id="duration"
                 value={duration}
@@ -366,7 +366,7 @@ export default function CreateCourse() {
              <Label label='CoursesSection.Price'/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course price'
+                placeholder={t('CoursePrice')}
                 type="text"
                 id="price"
                 value={price}
@@ -434,7 +434,7 @@ export default function CreateCourse() {
             <textarea
               id="descriptionEn"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in English'
+              placeholder={t("CoursesSection.Course description in English")}
               value={descriptionEn}
               onChange={(e) => setDescriptionEn(e.target.value)}
               required
@@ -446,7 +446,7 @@ export default function CreateCourse() {
             <textarea
               id="descriptionAr"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in Arabic'
+              placeholder={t("CoursesSection.Course description in Arabic")}
               value={descriptionAr}
               onChange={(e) => setDescriptionAr(e.target.value)}
               required
@@ -531,8 +531,8 @@ export default function CreateCourse() {
                         }}
                         className="p-2 border rounded-md"
                       >
-                        <option value="video">Video</option>
-                        <option value="file">File</option>
+                        <option value="video">{t("Video")}</option>
+                        <option value="file">{t("File")}</option>
                       </select>
                       <button
                         type='button'
