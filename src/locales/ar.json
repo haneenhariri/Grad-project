@@ -10,7 +10,11 @@
         "Create New Course": "إنشاء دورة جديدة",
         "Earning": "الأرباح",
         "My Courses": "دوراتي",
+        "Payments": "المدفوعات",
+        "Instructors": "المدرسين",
+        "Students": "الطلاب",
         "Settings": "الإعدادات",
+        "Active Log" : "سجل النشاطات",
         "Message" : "الرسائل",
         "Test results" : "نتائج الاختبارات",
         "Code Review" : "مراجعة الاكواد"
@@ -206,6 +210,13 @@
     "Lesson" : "الدرس",
     "All Courses" : "كامل الكورسات " ,
     "Suggestion" : "  المقترحة : ",
+    "Tags": {
+        "ui": "واجهة المستخدم",
+        "ux": "تجربة المستخدم",
+        "web": "تصميم الويب",
+        "interface": "الواجهة",
+        "app": "تطبيق"
+    },
     "Sort by" : "ترتيب حسب :",
     "Filter" : "العرض حسب",
     "Most Popular" : "الأكثر شعبية",
@@ -414,7 +425,10 @@
         "Question {{index}} must have a positive mark value": "يجب أن يحتوي السؤال رقم {{index}} على درجة موجبة",
         "All options for question {{index}} must be filled": "يجب ملء جميع الخيارات في السؤال رقم {{index}}",
         "Please select a correct answer for question {{index}}": "يرجى اختيار الإجابة الصحيحة للسؤال رقم {{index}}",
-        "You must have at least 2 options": "يجب أن يكون لديك خياران على الأقل"
+        "You must have at least 2 options": "يجب أن يكون لديك خياران على الأقل",
+        "Overall Course Rating":"التقييم العام للكورس",
+        "Overall Rating":"التقييم العام",
+        "LoadingRating": "جاري تحميل بيانات التقييم..."
     },
     "search": {
         "searchCourses": "البحث عن الدورات...",

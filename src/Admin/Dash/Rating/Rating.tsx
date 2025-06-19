@@ -10,6 +10,7 @@ import {
 } from "recharts";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { ratingsStatsAdmin } from "../../../services/dashServe";
+import { useTranslation } from "react-i18next";
 
 interface RatingTimelineItem {
   period: string;
@@ -37,6 +38,7 @@ export default function Rating() {
     "this_week" | "this_month" | "this_year"
   >("this_month");
   const [ratings, setRatings] = useState<RatingData | null>(null);
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchRate = async () => {
       try {
@@ -73,7 +75,7 @@ export default function Rating() {
   if (!ratings) {
     return (
       <div className="text-center py-10 text-gray-500">
-        Loading rating data...
+        {t("dashboard.LoadingRating")}
       </div>
     );
   }
@@ -103,11 +105,11 @@ export default function Rating() {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-4 justify-between p-4 rounded-lg shadow-sm w-1/2 mx-auto">
+    <div className="bg-white flex flex-col gap-4 my-5 justify-between p-4 rounded-lg shadow-sm w-1/2 mx-auto">
       {/* Header with dropdown (optional) */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg  text-gray-800 font-semibold">
-          Overall Course Rating
+          {t("dashboard.Overall Course Rating")}
         </h2>
         <div className="relative">
           <select
@@ -115,9 +117,9 @@ export default function Rating() {
             onChange={(e) => setPeriodType(e.target.value as typeof periodType)}
             className="appearance-none bg-transparent pr-8 pl-3 py-2 border border-gray-300 rounded-md text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <option value="this_week">This Week</option>
-            <option value="this_month">This Month</option>
-            <option value="this_year">This Year</option>
+            <option value="this_week">{t("dashboard.This week")}</option>
+            <option value="this_month">{t("dashboard.This month")}</option>
+            <option value="this_year">{t("dashboard.This year")}</option>
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
             <svg
@@ -145,7 +147,7 @@ export default function Rating() {
           <div className="flex justify-center mt-1 mb-1">
             {renderStars(overall_rating)}
           </div>
-          <div className="text-sm text-gray-500">Overall Rating</div>
+          <div className="text-sm text-gray-500">{t("dashboard.Overall Rating")}</div>
         </div>
         <ResponsiveContainer width="100%">
           <LineChart data={timeline}>

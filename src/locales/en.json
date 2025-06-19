@@ -10,7 +10,11 @@
         "Create New Course" : "Create New Course",
         "Earning" : "Earning",
         "My Courses" : "My Courses",
+        "Payments": "Payments",
+        "Instructors": "Instructors",
+        "Students": "Students",
         "Settings" : "Settings",
+        "Active Log" : "Active Log",
         "Message" : "Messages",
         "Test results" : "Test results",
         "Code Review" : "Code Review"
@@ -187,6 +191,13 @@
     "Trending" : "Trending",
     "Most Popular" : "Most Popular",
     "Suggestion" : "Suggestion:",
+    "Tags": {
+        "ui": "user interface",
+        "ux": "user experience",
+        "web": "web design",
+        "interface": "interface",
+        "app": "app"
+    },
     "Sort by" : "Sort by:",
     "Support" : "Support",
     "Help Center" : "Help Center",
@@ -417,7 +428,10 @@
         "Question {{index}} must have a positive mark value": "Question {{index}} must have a positive mark value",
         "All options for question {{index}} must be filled": "All options for question {{index}} must be filled",
         "Please select a correct answer for question {{index}}": "Please select a correct answer for question {{index}}",
-        "You must have at least 2 options": "You must have at least 2 options"
+        "You must have at least 2 options": "You must have at least 2 options",
+        "Overall Course Rating": "Overall Course Rating",
+        "Overall Rating": "Overall Rating",
+        "LoadingRating": "Loading rating data..."
     },
     "search": {
         "searchCourses": "Search courses...",
