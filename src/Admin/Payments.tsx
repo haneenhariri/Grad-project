@@ -178,7 +178,7 @@ export default function Payments() {
              (
               <tr >
                 <td colSpan={columns.length} className="px-6 py-10 text-center text-gray-500"> 
-                  No Payments found
+                  {t("instructor.No Payments found")}
                 </td>
               </tr>
              )}

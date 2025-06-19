@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import user from "../assets/Users (1).png";
 import { deleteTeacher } from "../services/teacherForm";
 import StudentCourses from "./Users/StudentCourses";
+import { useTranslation } from "react-i18next";
 
 
 
@@ -33,7 +34,8 @@ export default function Students() {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
-    // إغلاق النافذة المنبثقة عند الضغط على Escape
+  const { t } = useTranslation();
+  // إغلاق النافذة المنبثقة عند الضغط على Escape
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && selectedStudent) {
@@ -69,22 +71,22 @@ export default function Students() {
    const columnHelper = createColumnHelper<Student>();
    const columns = useMemo(() => [
     columnHelper.accessor('name', {
-      header: 'Name',
+      header: t('instructor.table.name'),
       cell: info => (
         <div className="font-medium text-gray-900">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('email', {
-      header: 'Email',
+      header: t('instructor.table.email'),
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('profile_picture', {
-      header: 'Profile Picture',
+      header: t('instructor.table.profilePicture'),
       cell: info => {
         const value = info.getValue();
-        const ImageURL = value ? `http://127.0.0.1:8000/storage/${value}` : user
+        const ImageURL = value ? `http://127.0.0.1:8000/storage/${value}` : user;
         return (
           <img
             src={ImageURL}
@@ -96,7 +98,7 @@ export default function Students() {
     }),
     columnHelper.display({
       id: 'actions',
-      header: 'Actions',
+      header: t('instructor.table.actions'),
       cell: props => {
         const studentId = props.row.original.id;
         const rowIndex = props.row.index;
@@ -116,16 +118,17 @@ export default function Students() {
                   onClick={() => {
                     setSelectedStudent(props.row.original);
                     setOpenDropdown(null);
-                  }}                >
+                  }}
+                >
                   <FiEye size={16} className="mr-2 text-blue-500" />
-                  <span>View Courses for User</span>
+                  <span>{t('instructor.table.viewCourses')}</span>
                 </button>
                 <button
                   className="flex items-center w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 transition-colors"
                   onClick={() => handelDeleteUser(studentId)}
                 >
                   <FiTrash2 size={16} className="mr-2 text-red-500" />
-                  <span>Delete User</span>
+                  <span>{t('instructor.table.deleteUser')}</span>
                 </button>
               </div>
             )}

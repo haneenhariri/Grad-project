@@ -321,6 +321,7 @@
         "applicationSuccess": "Your request has been successfully submitted and will be reviewed soon. We'll contact you via email with the results.",
         "backToHome": "Back to Home",
         "No Payments found": "No Payments found",
+        "Student Details": "Student Details",
         "instructorDetails": "Instructor Details",
         "name": "Name",
         "email": "Email",
@@ -407,7 +408,10 @@
             "show_students": "Show Students",
             "Page": "صفحة",
             "of": "of",
-            "Rows per page": "Rows per page"
+            "Rows per page": "Rows per page",
+            "profilePicture": "Profile Picture",
+            "viewCourses": "View Courses",
+            "deleteUser": "Delete User"
         }
     },
     "form": {
@@ -498,7 +502,22 @@
         "pending": "pending",
         "rejected": "rejected",
         "No courses found": "No courses found",
-        "No Instructor found": "No Instructor found"
+        "No Instructor found": "No Instructor found",
+        "log": {
+            "id": "ID",
+            "date": "Date",
+            "action": "Action",
+            "event": "Event",
+            "causer": "Causer",
+            "subjectType": "Subject Type",
+            "subjectId": "Subject ID",
+            "eventType": {
+            "created": "Created",
+            "updated": "Updated",
+            "deleted": "Deleted",
+            "default": "Unknown"
+            }
+        }
     },
     "search": {
         "searchCourses": "Search courses...",

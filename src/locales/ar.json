@@ -42,7 +42,7 @@
         "Save Exam" : "حفظ الاختبار",
         "Submit for review" : "ارسال للمراجعة",
         "Create a New Course" : "إنشاء كورس جديد",
-        "Add Student" : "اضافةطالب",
+        "Add Student" : "اضافة طالب",
         "Charge Account" : "شحن حساب" ,
         "Charge Account..." : "...شحن حساب",
         "Update Course info" : "تحديث معلومات الكورس",
@@ -319,6 +319,7 @@
         "backToHome": "العودة إلى الرئيسية",
         "No Payments found": "لم يتم العثور على مدفوعات",
         "instructorDetails": "تفاصيل المحاضر",
+        "Student Details": "تفاصيل الطالب",
         "name": "الاسم",
         "email": "البريد الإلكتروني",
         "education": "المؤهل العلمي",
@@ -404,7 +405,10 @@
             "show_students": "عرض الطلاب",
             "Page": "صفحة",
             "of": "من",
-            "Rows per page": "سطر في الصفحة"
+            "Rows per page": "سطر في الصفحة",
+            "profilePicture": "الصورة الشخصية",
+            "viewCourses": "عرض الدورات",
+            "deleteUser": "حذف المستخدم"
         }
     },
     "form": {
@@ -495,7 +499,22 @@
         "pending": "قيد الانتظار",
         "rejected": "مرفوض",
         "No courses found": "لم يتم العثور على دورات",
-        "No Instructor found": "لم يتم العثور على استاذ"
+        "No Instructor found": "لم يتم العثور على استاذ",
+        "log": {
+            "id": "المعرف",
+            "date": "التاريخ",
+            "action": "الإجراء",
+            "event": "الحدث",
+            "causer": "المُسبب",
+            "subjectType": "نوع العنصر",
+            "subjectId": "معرف العنصر",
+            "eventType": {
+            "created": "تم الإنشاء",
+            "updated": "تم التحديث",
+            "deleted": "تم الحذف",
+            "default": "غير معروف"
+            }
+        }
     },
     "search": {
         "searchCourses": "البحث عن الدورات...",
