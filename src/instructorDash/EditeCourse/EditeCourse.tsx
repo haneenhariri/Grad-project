@@ -447,14 +447,14 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option 
                     key={cat.id} 
                     value={cat.id}
                     style={String(cat.id) === String(category_id) ? {fontWeight: 'bold', color: '#8b5cf6'} : {}}
                   >
-                    {cat.name} {String(cat.id) === String(category_id) ? '' : ''}
+                    {t(`topCategory.${cat.name}`)} {String(cat.id) === String(category_id) ? '' : ''}
                   </option>
                 ))}
               </select>
@@ -468,7 +468,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option 
                     key={sub.id} 
@@ -491,10 +491,10 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setLevel(e.target.value)}
                 required
               >
-                <option value="">Select Level</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advance">Advance</option>
+                <option value="">{t("SelectLevel")}</option>
+                <option value="beginner">{t("CoursesSection.levels.beginner")}</option>
+                <option value="intermediate">{t("CoursesSection.levels.intermediate")}</option>
+                <option value="advance">{t("CoursesSection.levels.advance")}</option>
               </select>
             </div>
             <div className='w-1/2'>
@@ -506,9 +506,9 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">English</option>
-                <option value="arabic">Arabic</option>
+                <option value="">{t("SelectCourseLanguage")}</option>
+                <option value="english">{t("english")}</option>
+                <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>

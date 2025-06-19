@@ -458,7 +458,7 @@ export default function AdminEditeCourse() {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option 
                     key={cat.id} 
@@ -479,7 +479,7 @@ export default function AdminEditeCourse() {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option 
                     key={sub.id} 
@@ -518,9 +518,9 @@ export default function AdminEditeCourse() {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">English</option>
-                <option value="arabic">Arabic</option>
+                <option value="">{t("SelectCourseLanguage")}</option>
+                <option value="english">{t("english")}</option>
+                <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>

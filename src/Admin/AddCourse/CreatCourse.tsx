@@ -295,7 +295,7 @@ export default function CreateCourse() {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -312,7 +312,7 @@ export default function CreateCourse() {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option key={sub.id} value={sub.id}>{sub.name}</option>
                 ))}
