@@ -22,7 +22,7 @@ export default function Logo({textColor} :logoProps) {
           <text x="22" y="18" fontFamily="Tajawal, Arial, sans-serif" fontSize="18" fontWeight="bold" fill="white" textAnchor="middle" alignmentBaseline="central" dominantBaseline="middle">ع</text>
         </svg>
       </div>
-      <h1 className={`font-extrabold md:text-[30px] text-2xl ${textColor} font-tajawal`}>{t("Logo.logo")}</h1>
+      <h1 className={`font-extrabold md:text-[30px] sm:text-2xl sm:block hidden ${textColor} font-tajawal`}>{t("Logo.logo")}</h1>
     </NavLink>
   )
 }

@@ -24,9 +24,8 @@ export default function ProfileSettings() {
   const dispatch = useAppDispatch();
   const mutation = useMutation({
     mutationFn: EditProfile,
-    onSuccess: (data) => {
-      console.log("Profile updated successfully", data);
-      showToast('Profile updated successfully', 'success');
+    onSuccess: () => {
+      showToast(t('Profile updated successfully'), 'success');
       setName("");
       setEmail("");
       setImage(undefined);
@@ -58,12 +57,10 @@ export default function ProfileSettings() {
     if (name) profileData.name = name;
     if (email) profileData.email = email;
     if (image) profileData.profile_picture = image;
-    // طباعة البيانات للتحقق
-    console.log("Submitting profile data:", profileData);
     
     // التحقق من وجود بيانات للإرسال
     if (Object.keys(profileData).length === 0) {
-      showToast('No changes to update', 'info');
+      showToast(t('No changes to update'), 'info');
       return;
     }
     
@@ -75,10 +72,10 @@ export default function ProfileSettings() {
     <>
       <div className=" flex  flex-col  gap-5 rounded-md p-5 ">
         <div className="w-full">
-           <h2 className="text-2xl font-semibold mb-6">{t("navigation.Settings")}</h2>
+          <h2 className="text-2xl font-semibold mb-6">{t("navigation.Settings")}</h2>
           <form onSubmit={handleSubmit}>
-            <div className=" flex gap-6">
-            <div className="w-10/12">
+            <div className=" md:flex-row flex-col flex gap-6">
+            <div className="md:w-10/12 w-full">
               <Label label="Name"/>
               <Input type="text" name="name"  value={name}  onChange={(e) => setName(e.target.value)}  placeholder={t("NamePlace")} />
               <Label label="Email"/>

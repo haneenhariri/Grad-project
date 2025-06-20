@@ -10,8 +10,7 @@ export default function Search() {
 
    const handleSearchClick = () => {
     if (searchTerm.trim()) {
-      navigate(`/courses?q=${searchTerm}`);
-    }
+navigate(`/courses?query=${searchTerm}`);    }
   };
   return (
     <div className=" bg-white  w-10/12  p-2.5 shadow-md rounded-lg">

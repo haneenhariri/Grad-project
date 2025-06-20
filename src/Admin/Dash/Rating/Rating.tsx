@@ -181,7 +181,7 @@ export default function Rating() {
           <div key={star} className="flex items-center gap-2">
             <div className="flex items-center min-w-[80px] text-sm text-gray-700">
               <FaStar className="text-orange-500 mr-1" />
-              {star} Star
+              {star} {t("Stars")}
             </div>
             <div className="flex-1 bg-gray-200 h-2 rounded overflow-hidden">
               <div

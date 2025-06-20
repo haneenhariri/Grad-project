@@ -48,19 +48,15 @@ export default function PopupCard({
       popup.style.zIndex = '50';
     }
   }, []);
-  
-  const handleAddToWishList = (e: React.MouseEvent) => {
-    e.stopPropagation(); // منع انتشار الحدث للكارد الأصلي
-    try {
-      addWishCourse(id).then(() => {
-        showToast("Added to wishlist", 'success');
-      });
-    } catch (error: unknown) {
-      console.log(error)
-      showToast( "Failed to add to wishlist", 'error');
-    }
-  };
-  
+  const handleAddToWishList = async (e: React.MouseEvent) => {
+  e.stopPropagation(); // منع انتشار الحدث للكارد الأصلي
+  try {
+    await addWishCourse(id); // انتظار النتيجة
+    showToast("Added to wishlist", 'success');
+  } catch (error: unknown) {
+    showToast("Failed to add to wishlist", 'error');
+  }
+};
   const handleCourseDetail = (e: React.MouseEvent) => {
     e.stopPropagation(); // منع انتشار الحدث للكارد الأصلي
     navigate(`/oneCourse/${id}`);
@@ -109,7 +105,7 @@ export default function PopupCard({
       style={getPositionStyle()}
     >
       <button 
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 bg-white rounded-full w-6 h-6 flex items-center justify-center"
+        className="absolute top-2 ltr:right-2 rtl:left-2 text-gray-500 hover:text-gray-700 bg-white rounded-full w-6 h-6 flex items-center justify-center"
         onClick={(e) => {
           e.stopPropagation();
           onClose();

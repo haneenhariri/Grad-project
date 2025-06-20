@@ -10,6 +10,8 @@ import Suggestion from "../../components/Suggestion/Suggestion";
 import FilterButton from "./FilterButton";
 import Sort from "./Sort";
 import { useTranslation } from "react-i18next";
+import FilterPopupMobile from "./FilterPopupMobile";
+import FilterSide from "./FilterSide";
 
 
 export default function CoursesPage() {
@@ -59,7 +61,7 @@ export default function CoursesPage() {
     }
 if (selectedCategories.length > 0) {
   filtered = filtered.filter((course) => {
-    const courseCategoryId = course.category_id; 
+    const courseCategoryId = course.sub_category?.main_category?.id; 
     return selectedCategories.includes(String(courseCategoryId)); 
   });
 }
@@ -126,71 +128,13 @@ if (selectedCategories.length > 0) {
     setSelectedOption(e.target.value)
   }
   return (
-    <section className="pt-[120px] pb-12 px-4 lg:px-10 desktop:px-40">
+    <section className="pt-[140px] pb-12 px-4 lg:px-10 desktop:px-40">
       <div className="flex sm:justify-between sm:flex-row flex-col gap-y-3 sm:items-center">
         <FilterButton onClick={() => setIsFilterVisible((prev) => !prev)}/>
         <Sort selectedOption={selectedOption} onClick={handelSort} />
       </div>
       {isFilterVisible && isMobile && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 w-10/12 max-w-md rounded-md">
-
-            <div className="p-2">
-            <button
-              className=" w-full text-right text-lg font-bold"
-              onClick={() => setIsFilterVisible(false)}
-            >
-              &times;
-            </button>
-                <h3 className="font-bold">Category</h3>
-                {["Web development", "Mobile Development", "AI", "Design", "Programming languages"].map((category) => (
-                  <div key={category}>
-                    <input
-                      type="checkbox"
-                      id={category}
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => toggleFilter(setSelectedCategories, category)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={category}>
-                      {category}
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="p-2">
-                <h3 className="font-bold">Rating</h3>
-                {[5.000, 4, 3, 2, 1].map((rating) => (
-                  <div key={rating}>
-                    <input
-                      type="checkbox"
-                      id={`rating-${rating}`}
-                      checked={selectedRatings.includes(rating)}
-                      onChange={() => toggleFilter(setSelectedRatings, rating)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={`rating-${rating}`}>
-                      {rating} Star & up
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="p-2">
-                <h3 className="font-bold">Course Level</h3>
-                {["Beginner", "Intermediate", "Expert"].map((level) => (
-                  <div key={level}>
-                    <input
-                      type="checkbox"
-                      id={level}
-                      checked={selectedLevels.includes(level)}
-                      onChange={() => toggleFilter(setSelectedLevels, level)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={level}>
-                      {level}
-                    </label>
-                  </div>
-                ))}
-              </div>
-          </div>
-        </div>
+       <FilterPopupMobile setSelectedRatings={setSelectedRatings}   selectedRatings={selectedRatings} setSelectedCategories={setSelectedCategories} toggleFilter={toggleFilter} selectedCategories={selectedCategories}  setIsFilterVisible={setIsFilterVisible} selectedLevels={selectedLevels}  setSelectedLevels={setSelectedLevels} selectedCategories={selectedCategories}/>
       )}
       <Suggestion/>
       {loading && (
@@ -199,56 +143,7 @@ if (selectedCategories.length > 0) {
         <div className="flex gap-6 mt-10">
           {/* filter side */}
          {!isMobile && isFilterVisible && (
-            <div className="h-max bg-white md:w-3/12 w-1/2 border border-violet-950">
-              <div className="p-2">
-                <h3 className="font-bold">{t("Category")}</h3>
-                  {["Development", "AI & ML", "Data Science", "Design", "Cyber-security" , "IT & Software"].map((category) => (
-                  <div key={category}>
-                    <input
-                      type="checkbox"
-                      id={category}
-                      checked={selectedCategories.includes(category)}
-                      onChange={() => toggleFilter(setSelectedCategories, category)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={category}>
-                      {category}
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="p-2">
-                <h3 className="font-bold">{t("CoursesSection.Rating")}</h3>
-                {[5.000, 4, 3, 2, 1].map((rating) => (
-                  <div key={rating}>
-                    <input
-                      type="checkbox"
-                      id={`rating-${rating}`}
-                      checked={selectedRatings.includes(rating)}
-                      onChange={() => toggleFilter(setSelectedRatings, rating)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={`rating-${rating}`}>
-                      {rating} Star & up
-                    </label>
-                  </div>
-                ))}
-              </div>
-              <div className="p-2">
-                <h3 className="font-bold">{t("level")}</h3>
-                {["Beginner", "Intermediate", "Expert"].map((level) => (
-                  <div key={level}>
-                    <input
-                      type="checkbox"
-                      id={level}
-                      checked={selectedLevels.includes(level)}
-                      onChange={() => toggleFilter(setSelectedLevels, level)}
-                    />
-                    <label className=" text-sm mx-1" htmlFor={level}>
-                      {level}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <FilterSide setSelectedRatings={setSelectedRatings}   selectedRatings={selectedRatings} setSelectedCategories={setSelectedCategories} toggleFilter={toggleFilter} selectedCategories={selectedCategories}  setIsFilterVisible={setIsFilterVisible} selectedLevels={selectedLevels}  setSelectedLevels={setSelectedLevels} selectedCategories={selectedCategories}/>
           )}
           {/* courses */}
           <div className={`grid gap-6 ${isFilterVisible ? "lg:grid-cols-3 md:grid-cols-2" : "grid-cols-1 lg:grid-cols-4 sm:grid-cols-2" } w-full`}>
@@ -261,7 +156,7 @@ if (selectedCategories.length > 0) {
                 level={course.level}
                 instructor={course.instructor}
                 title={course.title}
-                rating={course.rate}
+                rating={course.rating}
                 price={course.price}
                 mainCategoryName={course?.sub_category.main_category?.name}
               />

@@ -14,6 +14,7 @@ import {
 } from '@tanstack/react-table';
 import { FiEdit2, FiTrash2, FiCheck, FiX, FiMoreVertical } from 'react-icons/fi';
 import Search from "../components/Search/Search";
+import { useTranslation } from "react-i18next";
 
 interface Course {
   id: number;
@@ -36,6 +37,7 @@ export default function AdminCourse() {
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const lang = localStorage.getItem('language') as 'ar' | 'en' || 'en';
+  const { t } = useTranslation();
   // إغلاق القائمة المنسدلة عند النقر خارجها
 
   const updateCourseStatus = async (id: number, status: "accepted" | "rejected") => {
@@ -98,31 +100,31 @@ export default function AdminCourse() {
   
   const columns = useMemo(() => [
     columnHelper.accessor('title', {
-      header: 'Course Name',
+      header: t("instructor.table.Course Title"),
       cell: info => (
         <div className="font-medium text-gray-900">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('instructor', {
-      header: 'Instructor',
+      header: t("instructor.table.instructor"),
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('duration', {
-      header: 'Duration',
+      header: t("instructor.table.duration"),
       cell: info => (
-        <div className="text-gray-700">{`${info.getValue()} weeks`}</div>
+        <div className="text-gray-700">{`${info.getValue()} ${t("weeks")}`}</div>
       ),
     }),
     columnHelper.accessor('level', {
-      header: 'Level',
+      header: t("instructor.table.level"),
       cell: info => (
-        <div className="text-gray-700">{info.getValue()}</div>
+        <div className="text-gray-700">{t(`CoursesSection.levels.${info.getValue()}`)}</div>
       ),
     }),
     columnHelper.accessor('status', {
-      header: 'Status',
+      header: t("instructor.table.status"),
       cell: info => (
         <span
           className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -133,19 +135,19 @@ export default function AdminCourse() {
               : "text-red-700 bg-red-100"
           }`}
         >
-          {info.getValue()}
+          {t(`dashboard.${info.getValue()}`)}
         </span>
       ),
     }),
     columnHelper.accessor('price', {
-      header: 'Price',
+      header: t("instructor.table.price"),
       cell: info => (
         <div className="font-medium text-gray-900">{`$${info.getValue()}`}</div>
       ),
     }),
     columnHelper.display({
       id: 'actions',
-      header: 'Actions',
+      header: t("instructor.table.actions"),
       cell: props => {
         const courseId = props.row.original.id;
         const rowIndex = props.row.index;
@@ -165,28 +167,28 @@ export default function AdminCourse() {
                   onClick={() => navigate(`/Admin/detail/${courseId}`)}
                 >
                   <FiEdit2 size={16} className="mr-2 text-blue-500" />
-                  <span>Edit Course</span>
+                  <span>{t("instructor.table.edit_course")}</span>
                 </button>
                 <button
                   className="flex items-center w-full text-left px-4 py-3 text-red-600 hover:bg-gray-50 transition-colors"
                   onClick={() => handleDeleteCourse(courseId)}
                 >
                   <FiTrash2 size={16} className="mr-2 text-red-500" />
-                  <span>Delete Course</span>
+                  <span>{t("instructor.table.delete_course")}</span>
                 </button>
                 <button
                   className="flex items-center w-full text-left px-4 py-3 text-green-600 hover:bg-gray-50 transition-colors"
                   onClick={() => updateCourseStatus(courseId, "accepted")}
                 >
                   <FiCheck size={16} className="mr-2 text-green-500" />
-                  <span>Approve Course</span>
+                  <span>{t("instructor.table.approve_course")}</span>
                 </button>
                 <button
                   className="flex items-center w-full text-left px-4 py-3 text-yellow-600 hover:bg-gray-50 transition-colors"
                   onClick={() => updateCourseStatus(courseId, "rejected")}
                 >
                   <FiX size={16} className="mr-2 text-yellow-500" />
-                  <span>Reject Course</span>
+                  <span>{t("instructor.table.reject_course")}</span>
                 </button>
               </div>
             )}
@@ -299,7 +301,7 @@ export default function AdminCourse() {
                       colSpan={columns.length} 
                       className="px-6 py-10 text-center text-gray-500"
                     >
-                      No courses found
+                      {t("dashboard.No courses found")}
                     </td>
                   </tr>
                 )}
@@ -352,13 +354,13 @@ export default function AdminCourse() {
             
             <div className="flex items-center text-sm text-gray-600">
               <span className="flex items-center gap-1">
-                Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{' '}
+                {t("instructor.table.Page")} <strong>{table.getState().pagination.pageIndex + 1}</strong> {t("instructor.table.of")}{' '}
                 <p>{table.getPageCount()}</p>
               </span>
             </div>
             
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">Rows per page:</span>
+              <span className="text-sm text-gray-600">{t("instructor.table.Rows per page")}:</span>
               <select
                 value={table.getState().pagination.pageSize}
                 onChange={e => {

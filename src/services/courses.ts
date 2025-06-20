@@ -1,4 +1,4 @@
-import { CouCard } from "../types/interfaces";
+import {  myCourseProp } from "../types/interfaces";
 import { handleError } from "../utils/errorHandling";
 import axiosInstance from "./axiosInstance"
 interface LessonFile {
@@ -23,6 +23,7 @@ export  interface courseDataProps {
     cover: File | null;
     lessons: Lesson[];
     rating: string;
+    main_category_name?:string;
   }
 
 
@@ -87,7 +88,7 @@ export const changeStatusCourse = async ({ id, status }: changeStatusProps) => {
     return response.status;
 };
 
-export const updateCourseData = async ({courseData , courseId} : { courseData : CouCard ; courseId : number }) => {
+export const updateCourseData = async ({courseData , courseId} : { courseData : myCourseProp ; courseId : number }) => {
   try{
     const formData = new FormData();
     if(courseData.cover){
@@ -96,13 +97,13 @@ export const updateCourseData = async ({courseData , courseId} : { courseData : 
     formData.append('_method', 'PUT');
     formData.append('duration', courseData.duration);
     formData.append('level', courseData.level);
-    formData.append('title[en]', courseData.titleEn);
-    formData.append('title[ar]', courseData.titleAr);
-    formData.append('description[en]', courseData.descriptionEn);
-    formData.append('description[ar]', courseData.descriptionAr);
+    formData.append('title[en]', courseData.title.en);
+    formData.append('title[ar]', courseData.title.ar);
+    formData.append('description[en]', courseData.description.en);
+    formData.append('description[ar]', courseData.description.ar);
     formData.append('sub_category_id', courseData.subCategory_id);
     formData.append('price', courseData.price);
-    formData.append('course_language', courseData.courseLanguage);
+    formData.append('course_language', courseData.course_language);
    
     const response = await axiosInstance.post(`/multilingual/courses/${courseId}`, formData, {
       headers: {

@@ -187,7 +187,7 @@ export default function OneCourse() {
           </p>
         </div>
         {/* buy */}
-        <div className=" shadow-sm bg-white   h-max rounded-sm w-full md:w-1/3">
+        <div className=" shadow-sm bg-white  h-max rounded-sm w-full md:w-1/3">
           <div className="border-b  md:p-5 p-2.5">
             <div className="flex mb-2.5 justify-between items-center">
               <span className=" text-lg font-semibold">{course?.price}$</span>
@@ -268,7 +268,7 @@ export default function OneCourse() {
         </div>
       </section>
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 md:text-lg text-sm flex items-center justify-center">
+        <div className="fixed inset-0 w-full bg-black bg-opacity-50 md:text-lg text-sm flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <p className="text-lg mb-4">{paymentMessage}</p>
             {isSuccessfulPayment ? (

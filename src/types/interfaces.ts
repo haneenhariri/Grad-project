@@ -219,6 +219,7 @@ export interface myCourseProp
   cover: string;
   price: number;
   instructor: string;
+  subCategory_id?:number;
   sub_category: SubCategory;
   status: string;
   course_language: string;

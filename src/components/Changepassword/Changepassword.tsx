@@ -18,21 +18,30 @@ export default function Changepassword() {
     mutationFn: changePass,
     onSuccess: () => 
     {
-      showToast('Password reset successful!', 'success'); 
+      showToast(t('Password reset successful!'), 'success'); 
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
     },
     onError: (error: AxiosError<{ message?: string }>) => {
-      showToast('Failed to reset password. Please try', 'error'); 
+      showToast(t('Failed to reset password. Please try again.'), 'error'); 
       setError(error.response?.data?.message || "Failed to reset password. Please try again.");
     },
   })
+/**
+ * Handles the password reset form submission.
+ * Prevents default form behavior and checks if the new password matches the confirmation.
+ * If passwords match, initiates a mutation to change the password.
+ * Displays an error message if the passwords do not match.
+ *
+ * @param e - The form submission event.
+ */
+
   const handlePasswordReset = (e: React.FormEvent<HTMLFormElement>) => 
   {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      setError("The passwords do not match.");
+      setError(t("PasswordsMatch"));
       return;
     }
     mutation.mutate({
@@ -46,16 +55,14 @@ export default function Changepassword() {
       <div>
       <h2 className="md:text-2xl text-lg font-semibold mb-6">{t("Change password")}</h2>
       <Label label="Current Password"/>
-      <Input  type="password" placeholder={t("Current Password")}  value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
+      <Input   type="password" placeholder={t("Current Password")}  value={oldPassword} onChange={(e) => setOldPassword(e.target.value)}/>
       <Label label="New Password" />
       <Input type="password" placeholder={t("New Password")} value={newPassword} onChange={(e) => setNewPassword(e.target.value)}/>
       <Label  label="Confirm New Password"/>
       <Input type="password" placeholder={t("Confirm New Password")} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
-      <div className="">
-      <Button Bg="bg-btn" textColor="text-white" text="Change password"  />
-      </div>
+      <Button Bg="bg-btn" textColor="text-white w-max" text="Change password"  />
     </form>
   );
 }

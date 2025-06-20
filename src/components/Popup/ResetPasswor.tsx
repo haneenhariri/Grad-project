@@ -9,6 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import Label from "../../Ui/Label/Label";
+import Input from "../../Ui/Input/Input";
 
 
 export default function ResetPasswor() {
@@ -50,8 +52,8 @@ export default function ResetPasswor() {
           },
           onError: (error: AxiosError<{ message?: string }>) => 
           {
-            console.error("Login Error:", error.response?.data);
-            showToast('Login Error', 'error');
+            console.error(" Error:", error.response?.data);
+            showToast('Reset Password Error', 'error');
           }
         }
       )
@@ -103,21 +105,8 @@ export default function ResetPasswor() {
       {step === 1 && (
           <>
             <div>
-            <label className="mb-2.5 font-medium text-base block">
-              {t("Email")}
-            </label>
-            <input
-                className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
-                  errors.email ? "border border-red-500" : ""
-                }`}                
-                type="email"
-                placeholder={t("EmailPlace")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mb-2">{errors.email.message}</p>
-            )}
+            <Label label={t("Email")} />
+            <Input type="email" error={errors.email?.message} name="email" placeholder={t("EmailPlace")} value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div>
             <Button text="Next" Bg="bg-btn" textColor="w-full my-4 md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950" type='button' onClick={handleEmailSubmit} />
@@ -125,45 +114,17 @@ export default function ResetPasswor() {
             </>
         )}
         {step === 2 && (
-          <>            
-                  <label className="mb-2.5 font-medium text-base block">
-                    {t("RecoveryCode")}
-                  </label>      
-                  <input
-                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base `}                      
-                    type="text"
-                    placeholder={t("Enter verification code")}
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                  />
-                  <label className="mb-2.5 font-medium text-base block">
-                     {t("Password")}
-                  </label> 
-                  <input
-                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
-                      errors.password ? "border border-red-500" : ""
-                    }`}                      
-                    type="password"
-                    placeholder={t("New Password")}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                  <label className="mb-2.5 font-medium text-base block">
-                     {t("Confirm")}
-                  </label> 
-                  <input
-                    className={`w-full lg:p-5 p-2.5 mb-2 bg-White/95 rounded-md placeholder:text-base ${
-                      errors.password ? "border border-red-500" : ""
-                    }`}  
-                    type="password"
-                    placeholder={t("Confirm New Password")}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                  <div>
-                  <Button text="ResetPassword" Bg="bg-btn" textColor="w-full my-4 md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950" onClick={handlePasswordReset} />
-                  </div>
-                  </>
+          <>
+            <Label label={t("RecoveryCode")} />            
+            <Input type="text" placeholder={t("Enter verification code")} value={verificationCode} onChange={(e) => setVerificationCode(e.target.value)} />
+            <Label label={t("Password")} />
+            <Input type="password" error={errors.password?.message} placeholder={t("New Password")} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+            <Label label={t("Confirm")} />
+            <Input type="password" error={errors.confirmPassword?.message} placeholder={t("Confirm New Password")} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+            <div>
+                <Button text="ResetPassword" Bg="bg-btn" textColor="w-full my-4 md:text-base text-sm text-white lg:py-4.5 lg:px-5 p-2.5 rounded-lg bg-violet-950" onClick={handlePasswordReset} />
+            </div>
+          </>
         )}
         </form>
     </div>

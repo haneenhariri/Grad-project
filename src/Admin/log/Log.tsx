@@ -12,6 +12,7 @@ import {
 import axiosInstance from '../../services/axiosInstance';
 import Spinner from '../../components/Spinner/Spinner';
 import Search from '../../components/Search/Search';
+import { useTranslation } from 'react-i18next';
 
 interface PropertyChanges {
   attributes?: Record<string, any>;
@@ -46,6 +47,7 @@ export default function Log() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [selectedLog, setSelectedLog] = useState<LogItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { t } = useTranslation();
 
   const handleRowClick = (log: LogItem) => {
     setSelectedLog(log);
@@ -75,13 +77,13 @@ export default function Log() {
   const columns = useMemo(
     () => [
       columnHelper.accessor('id', {
-        header: 'ID',
+        header: t('dashboard.log.id'),
         cell: info => (
           <div className="font-medium text-gray-900">{info.getValue()}</div>
         ),
       }),
       columnHelper.accessor('created_at', {
-        header: 'Date',
+        header: t('dashboard.log.date'),
         cell: info => {
           const rawDate = info.getValue();
           const formatted = rawDate
@@ -102,13 +104,13 @@ export default function Log() {
         },
       }),
       columnHelper.accessor('description', {
-        header: 'Action',
+        header: t('dashboard.log.action'),
         cell: info => (
           <div className="font-medium text-gray-900">{info.getValue()}</div>
         ),
       }),
       columnHelper.accessor('event', {
-        header: 'Event',
+        header: t('dashboard.log.event'),
         cell: info => {
           const event = info.getValue();
           let color = '';
@@ -130,19 +132,19 @@ export default function Log() {
 
           return (
             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${color}`}>
-              {event}
+                {t(`dashboard.log.eventType.${event}`, { defaultValue: t('dashboard.log.eventType.default') })}
             </span>
           );
         },
       }),
       columnHelper.accessor('causer.name', {
-        header: 'Causer',
+        header: t('dashboard.log.causer'),
         cell: info => (
           <div className="font-medium text-gray-900">{info.getValue()}</div>
         ),
       }),
       columnHelper.accessor('subject_type', {
-        header: 'Subject Type',
+        header: t('dashboard.log.subjectType'),
         cell: info => (
           <div className="font-medium text-gray-900">
             {info.getValue().split('\\').pop()}
@@ -150,13 +152,13 @@ export default function Log() {
         ),
       }),
       columnHelper.accessor('subject_id', {
-        header: 'Subject ID',
+        header: t('dashboard.log.subjectId'),
         cell: info => (
           <div className="font-medium text-gray-900">{info.getValue()}</div>
         ),
       }),
     ],
-    []
+    [t]
   );
 
   const table = useReactTable({
@@ -308,13 +310,13 @@ export default function Log() {
           
           <div className="flex items-center text-sm text-gray-600">
             <span className="flex items-center gap-1">
-              Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{' '}
+              {t("instructor.table.Page")} <strong>{table.getState().pagination.pageIndex + 1}</strong> {t("instructor.table.of")}{' '}
               <p>{table.getPageCount()}</p>
             </span>
           </div>
           
           <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">Rows per page:</span>
+            <span className="text-sm text-gray-600">{t("instructor.table.Rows per page")}:</span>
             <select
               value={table.getState().pagination.pageSize}
               onChange={e => {

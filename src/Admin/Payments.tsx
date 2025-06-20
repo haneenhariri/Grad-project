@@ -13,6 +13,7 @@ import {
 } from '@tanstack/react-table';
 import Search from "../components/Search/Search";
 import Button from "../Ui/Button/Button";
+import { useTranslation } from "react-i18next";
 interface PaymentHistory {
   student: string;
   instructor: string ;
@@ -28,6 +29,7 @@ export default function Payments() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchPayments = async () => {
       try {
@@ -54,31 +56,31 @@ export default function Payments() {
   const columns = useMemo(() => 
   [
     columnHelper.accessor('student', {
-      header: 'From',
+      header: t('instructor.table.from'),
       cell: info => (
         <div className="font-medium text-gray-900">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('instructor', {
-      header: 'To',
+      header: t('instructor.table.to'),
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('amount', {
-      header: 'Amount',
+      header: t('instructor.table.amount'),
       cell: info => (
         <div className="font-medium text-gray-900">{`$${info.getValue()}`}</div>
       ),
     }),
     columnHelper.accessor('transactionDate', {
-      header: 'Transaction Date',
+      header: t('instructor.table.transaction_date'),
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>
       ),
     }),
     columnHelper.accessor('course', {
-      header: 'Course',
+      header: t('instructor.table.course'),
       cell: info => (
         <div className="text-gray-700">{info.getValue()}</div>
       ),
@@ -176,7 +178,7 @@ export default function Payments() {
              (
               <tr >
                 <td colSpan={columns.length} className="px-6 py-10 text-center text-gray-500"> 
-                  No Payments found
+                  {t("instructor.No Payments found")}
                 </td>
               </tr>
              )}
@@ -227,13 +229,13 @@ export default function Payments() {
             
             <div className="flex items-center text-sm text-gray-600">
               <span className="flex items-center gap-1">
-                Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of{' '}
+                {t("instructor.table.Page")} <strong>{table.getState().pagination.pageIndex + 1}</strong> {t("instructor.table.of")}{' '}
                 <strong>{table.getPageCount()}</strong>
               </span>
             </div>
             
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">Rows per page:</span>
+              <span className="text-sm text-gray-600">{t("instructor.table.Rows per page")}:</span>
               <select
                 value={table.getState().pagination.pageSize}
                 onChange={e => {
