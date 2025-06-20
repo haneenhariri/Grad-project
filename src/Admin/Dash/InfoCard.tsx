@@ -13,7 +13,7 @@ export default function InfoCard({title, value, icon, bgColor, iconBgColor}: Inf
   const {t} = useTranslation();
   return (
     <div className={`p-4 shadow-md ${bgColor} transition-all duration-300 hover:shadow-lg`}>
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col sm:flex-row text-center sm:text-start justify-center sm:justify-start items-center gap-6">
         <div className={` h-12 w-12  p-3 ${iconBgColor}`}>
           {icon}
         </div>
