@@ -8,7 +8,7 @@ interface TopCoursesProps
 export default function TopCourses({topCoursesProps} : TopCoursesProps ) {
   const { t, i18n } = useTranslation();
   return (
-    <div className=" w-1/2 bg-white  rounded-lg shadow-sm">
+    <div className="w-full lg:w-1/2 bg-white  rounded-lg shadow-sm">
       <h2 className="text-lg font-semibold p-4 ">{t("dashboard.top_courses")}</h2>
       <div className="overflow-x-auto  ">
         <table className="min-w-full text-left text-sm">

@@ -84,7 +84,7 @@ export default function InstractorDash() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 grid-cols-2 lg:grid-cols-4">
         {cards.map((card, index) => (
           <InfoCard
             key={index}
@@ -96,7 +96,7 @@ export default function InstractorDash() {
           />
         ))}
       </div>
-      <div className=" flex gap-6">
+      <div className="flex flex-col justify-center items-center lg:flex-row gap-6">
         <RevenueInst/>
         <Rating/>
       </div>

@@ -108,7 +108,7 @@ export default function Rating() {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-4 justify-between p-4 rounded-lg shadow-sm w-1/2 mx-auto">
+    <div className="bg-white flex flex-col gap-4 justify-between p-4 rounded-lg shadow-sm w-full lg:w-1/2 mx-auto">
       {/* Header with dropdown (optional) */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg  text-gray-800 font-semibold">
