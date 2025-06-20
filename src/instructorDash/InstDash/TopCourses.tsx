@@ -14,11 +14,11 @@ export default function TopCourses({topCoursesProps} : TopCoursesProps ) {
         <table className="min-w-full text-left text-sm">
           <thead className="bg-gray-100 text-gray-600">
             <tr>
-              <th className="px-4 py-3">ID</th>
-              <th className="px-4 py-3">Course Title</th>
-              <th className="px-4 py-3">Students</th>
-              <th className="px-4 py-3">Rating</th>
-              <th className="px-4 py-3">Revenue</th>
+              <th className="px-4 py-3">{t("instructor.table.id")}</th>
+              <th className="px-4 py-3">{t("instructor.table.Course Title")}</th>
+              <th className="px-4 py-3">{t("instructor.table.Students")}</th>
+              <th className="px-4 py-3">{t("instructor.table.Rating")}</th>
+              <th className="px-4 py-3">{t("instructor.table.Revenue")}</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">

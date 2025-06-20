@@ -57,6 +57,7 @@
         "Course Detail" : "Course Detail",
         "Save & Preview" : "Save & Preview",
         "Cancel" : "Cancel",
+        "Stars": "Stars",
         "Save & Next" : "Save & Next",
         "Start teaching" : "Start teaching",
         "Join the Family" : "Join the Family",
@@ -93,6 +94,7 @@
         "AI & ML" : "AI & ML",
         "Data Science" : "Data Science",
         "Cybersecurity" : "Cybersecurity",
+        "Cyber-security" : "Cybersecurity",
         "IT & Software" : "IT & Software",
         "Design" : "Design"
     },
@@ -114,11 +116,17 @@
         "levels": {
             "beginner": "Beginner",
             "intermediate": "Intermediate",
-            "expert": "Expert"
+            "expert": "Expert",
+            "advance": "Advance"
         },
-        "Recommended Courses":  "Recommended Courses"
+        "Recommended Courses":  "Recommended Courses",
+        "Course description in English": "Course description in English",
+        "Course description in Arabic": "Course description in Arabic"
     },
     "Course Contents" : "Course Contents",
+    "Video": "Video",
+    "File": "File",
+    "duration_placeholder": "Course duration (e.g., 2 hours)",
     "Save This Question" : "Save This Question",
     "You don't have any courses yet." : "You don't have any courses yet.",
     "ChargingText" : " Charging an account will immediately add funds to the user's balance. The user will be able to use these funds to purchase courses.",
@@ -312,6 +320,26 @@
         "applicationSubmitted": "Application Submitted!",
         "applicationSuccess": "Your request has been successfully submitted and will be reviewed soon. We'll contact you via email with the results.",
         "backToHome": "Back to Home",
+        "No Payments found": "No Payments found",
+        "Student Details": "Student Details",
+        "instructorDetails": "Instructor Details",
+        "name": "Name",
+        "email": "Email",
+        "education": "Education",
+        "specialization": "Specialization",
+        "summary": "Summary",
+        "cv": "CV",
+        "viewCV": "View CV",
+        "status": "Status",
+        "accepted": "Accepted",
+        "pending": "Pending",
+        "rejected": "Rejected",
+        "accept": "Accept",
+        "reject": "Reject",
+        "close": "Close",
+        "search": {
+            "course placeholder": "Search courses..."
+        },
         "whyStartTeaching": {
             "heading": "Why you’ll start teaching on Eduguard",
             "paragraph": "Join the teaching community and share your knowledge with students around the world. Eduguard provides you with the tools you need to deliver quality content and earn income.",
@@ -346,6 +374,44 @@
                 "title": "4. Start teaching & earning",
                 "description": "Praesent congue ornare nibh sed ullamcorper. Proin venenatis tellus non turpis scelerisque."
             }
+        },
+        "table": {
+            "from": "From",
+            "to": "to",
+            "amount": "Amount",
+            "date": "Transaction Date",
+            "course": "Course",
+            "Course Title": "Course Title",
+            "Students": "Students",
+            "Rating": "Rating",
+            "Revenue": "Revenue",
+            "instructor": "Instructor",
+            "duration": "Duration",
+            "level": "Level",
+            "status": "Status",
+            "price": "Price",
+            "edit_course": "Edit Course",
+            "delete_course": "Delete Course",
+            "approve_course": "Approve Course",
+            "reject_course": "Reject Course",
+            "name": "Name",
+            "email": "Email",
+            "education": "Education",
+            "specialization": "Specialization",
+            "view": "View",
+            "delete": "Delete",
+            "transaction_date": "Transaction Date",
+            "id": "ID",
+            "title": "Title",
+            "students_answered_count": "Students Answered",
+            "actions": "Actions",
+            "show_students": "Show Students",
+            "Page": "صفحة",
+            "of": "of",
+            "Rows per page": "Rows per page",
+            "profilePicture": "Profile Picture",
+            "viewCourses": "View Courses",
+            "deleteUser": "Delete User"
         }
     },
     "form": {
@@ -431,7 +497,27 @@
         "You must have at least 2 options": "You must have at least 2 options",
         "Overall Course Rating": "Overall Course Rating",
         "Overall Rating": "Overall Rating",
-        "LoadingRating": "Loading rating data..."
+        "LoadingRating": "Loading rating data...",
+        "accepted": "accepted",
+        "pending": "pending",
+        "rejected": "rejected",
+        "No courses found": "No courses found",
+        "No Instructor found": "No Instructor found",
+        "log": {
+            "id": "ID",
+            "date": "Date",
+            "action": "Action",
+            "event": "Event",
+            "causer": "Causer",
+            "subjectType": "Subject Type",
+            "subjectId": "Subject ID",
+            "eventType": {
+            "created": "Created",
+            "updated": "Updated",
+            "deleted": "Deleted",
+            "default": "Unknown"
+            }
+        }
     },
     "search": {
         "searchCourses": "Search courses...",

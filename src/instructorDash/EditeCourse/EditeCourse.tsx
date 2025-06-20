@@ -447,14 +447,14 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option 
                     key={cat.id} 
                     value={cat.id}
                     style={String(cat.id) === String(category_id) ? {fontWeight: 'bold', color: '#8b5cf6'} : {}}
                   >
-                    {cat.name} {String(cat.id) === String(category_id) ? '' : ''}
+                    {t(`topCategory.${cat.name}`)} {String(cat.id) === String(category_id) ? '' : ''}
                   </option>
                 ))}
               </select>
@@ -468,7 +468,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option 
                     key={sub.id} 
@@ -491,10 +491,10 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setLevel(e.target.value)}
                 required
               >
-                <option value="">Select Level</option>
-                <option value="beginner">Beginner</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="advance">Advance</option>
+                <option value="">{t("SelectLevel")}</option>
+                <option value="beginner">{t("CoursesSection.levels.beginner")}</option>
+                <option value="intermediate">{t("CoursesSection.levels.intermediate")}</option>
+                <option value="advance">{t("CoursesSection.levels.advance")}</option>
               </select>
             </div>
             <div className='w-1/2'>
@@ -506,16 +506,16 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">English</option>
-                <option value="arabic">Arabic</option>
+                <option value="">{t("SelectCourseLanguage")}</option>
+                <option value="english">{t("english")}</option>
+                <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>
               <Label label='Duration' />
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course duration (e.g., 2 hours)'
+                placeholder={t("duration_placeholder")}
                 type="text"
                 id="duration"
                 value={duration}
@@ -527,7 +527,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                <Label label='CoursesSection.Price'/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course price'
+                placeholder={t('CoursePrice')}
                 type="text"
                 id="price"
                 value={price}
@@ -601,7 +601,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
             <textarea
               id="descriptionEn"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in English'
+              placeholder={t("CoursesSection.Course description in English")}
               value={descriptionEn}
               onChange={(e) => setDescriptionEn(e.target.value)}
               required
@@ -610,7 +610,7 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
             <textarea
               id="descriptionAr"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in Arabic'
+              placeholder={t("CoursesSection.Course description in Arabic")}
               value={descriptionAr}
               onChange={(e) => setDescriptionAr(e.target.value)}
               required
@@ -732,8 +732,8 @@ async function createNewLesson(lesson: Omit<Lesson, 'id'>) {
                             }}
                             className="p-2 border rounded-md"
                           >
-                            <option value="video">Video</option>
-                            <option value="file">File</option>
+                            <option value="video">{t("Video")}</option>
+                            <option value="file">{t("File")}</option>
                           </select>
                           <button
                             type='button'

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { generalStatsInstracror, ratingsStats } from "../services/dashServe";
+import { generalStatsInstracror } from "../services/dashServe";
 import Spinner from "../components/Spinner/Spinner";
 import { FaBook, FaUsers } from "react-icons/fa";
 import { MdAttachMoney, MdStar } from "react-icons/md";

@@ -458,7 +458,7 @@ export default function AdminEditeCourse() {
                 onChange={handleCategoryChange}
                 required
               >
-                <option value="">Select a category</option>
+                <option value="">{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option 
                     key={cat.id} 
@@ -479,7 +479,7 @@ export default function AdminEditeCourse() {
                 onChange={(e) => setSubCategory_id(e.target.value)}
                 required
               >
-                <option value="">Select a sub-category</option>
+                <option value="">{t("SelectSubCategory")}</option>
                 {subCategories.map((sub) => (
                   <option 
                     key={sub.id} 
@@ -518,16 +518,16 @@ export default function AdminEditeCourse() {
                 onChange={(e) => setCourseLanguage(e.target.value)}
                 required
               >
-                <option value="">Select course language</option>
-                <option value="english">English</option>
-                <option value="arabic">Arabic</option>
+                <option value="">{t("SelectCourseLanguage")}</option>
+                <option value="english">{t("english")}</option>
+                <option value="arabic">{t("arabic")}</option>
               </select>
             </div>
             <div className='w-1/2'>
               <Label label='Duration' />
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course duration (e.g., 2 hours)'
+                placeholder={t("duration_placeholder")}
                 type="text"
                 id="duration"
                 value={duration}
@@ -539,7 +539,7 @@ export default function AdminEditeCourse() {
                <Label label='CoursesSection.Price'/>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder='Course price'
+                placeholder={t('CoursePrice')}
                 type="text"
                 id="price"
                 value={price}
@@ -615,7 +615,7 @@ export default function AdminEditeCourse() {
             <textarea
               id="descriptionEn"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in English'
+              placeholder={t("CoursesSection.Course description in English")}
               value={descriptionEn}
               onChange={(e) => setDescriptionEn(e.target.value)}
               required
@@ -626,7 +626,7 @@ export default function AdminEditeCourse() {
             <textarea
               id="descriptionAr"
               className="mb-5 w-full h-40 p-4 placeholder:text-base bg-White/95 rounded-md"
-              placeholder='Course description in Arabic'
+              placeholder={t("CoursesSection.Course description in Arabic")}
               value={descriptionAr}
               onChange={(e) => setDescriptionAr(e.target.value)}
               required
@@ -753,8 +753,8 @@ export default function AdminEditeCourse() {
                             }}
                             className="p-2 border rounded-md"
                           >
-                            <option value="video">Video</option>
-                            <option value="file">File</option>
+                            <option value="video">{t("Video")}</option>
+                            <option value="file">{t("File")}</option>
                           </select>
                           <button
                             type='button'

@@ -236,7 +236,7 @@ export default function EditCourse() {
                 value={category_id}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => setCategory_id(event.target.value)}
               >
-                <option value="">Select a category</option>
+                <option value="">Sele{t("SelectCategory")}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.id}>
                     {cat.name}
@@ -282,7 +282,7 @@ export default function EditCourse() {
               </label>
               <input
                 className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
-                placeholder={'course price'}
+                placeholder={t('CoursePrice')}
                 type="text"
                 name='price'
                 value={price}
