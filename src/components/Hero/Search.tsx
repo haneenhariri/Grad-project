@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import search from '../../assets/hero/Outline.png';
+import search from '../../assets-webp/Outline.webp';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-import icon from '../../assets/hero/Abstract Line (1).png';
+import icon from '../../assets/hero/Abstract-Line.webp';
 import './hero.css';
 import { useTranslation } from 'react-i18next';
 

@@ -1,7 +1,7 @@
-import hero from '../../assets/hero/lovely-teenage-girl-with-curly-hair-posing-yellow-tshirt-min 1.png';
-import heroIcon from '../../assets/hero/Group 9.png'
-import heroIcon2 from '../../assets/hero/icon/Group 6 (1).png'
-import email from '../../assets/hero/icon/email 2 1.png'
+import hero from '../../assets/hero/lovely.webp';
+import heroIcon from '../../assets/hero/GroupHero.webp'
+import heroIcon2 from '../../assets-webp/Group 6 (1).webp'
+import email from '../../assets-webp/email 2 1.webp'
 import { useTranslation } from 'react-i18next';
 export default function InemationSide() {
     const { t } = useTranslation();
@@ -38,7 +38,7 @@ export default function InemationSide() {
           </div>
         </div>
         
-        <img loading="lazy" src={hero} alt="hero-img" className="md:w-2/3 w-max h-full hero-image z-10" />
+        <img fetchPriority="high"  src={hero} alt="hero-img" className="md:w-2/3 w-max h-full hero-image z-10" />
       </div>
   )
 }

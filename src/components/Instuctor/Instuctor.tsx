@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Button from "../../Ui/Button/Button";
 import "./Instructor.css";
-import instructorImage from "../../assets/Union.png"; // تأكد من وجود هذه الصورة أو استبدلها بالمسار الصحيح
+import instructorImage from "../../assets-webp/Union.webp"; // تأكد من وجود هذه الصورة أو استبدلها بالمسار الصحيح
 
 export default function Instuctor() {
   const { t } = useTranslation();
