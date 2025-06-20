@@ -53,7 +53,7 @@ export default function MyCourse() {
   }
   return (
     <div>
-      <div className="grid grid-cols-3 my-5 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-5 gap-5">
         {courses?.map((course, index) => (
           <div key={index} className=" p-5 bg-gray-300/15 rounded-lg">
             <img
