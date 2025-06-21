@@ -95,13 +95,13 @@ export default function Wishlist() {
               className={`grid grid-cols-12 p-4 items-center ${index !== wishlist.length - 1 ? 'border-b' : ''}`}
             >
               {/* Course Info */}
-              <div className="col-span-6 flex gap-4">
+              <div className="col-span-12 sm:col-span-6 flex gap-4">
                 <img 
                   src={`http://127.0.0.1:8000/storage/${course.cover}`} 
                   alt={course.title} 
                   className="w-40 h-32 object-cover rounded"
                 />
-                <div className=" flex flex-col justify-between">
+                <div className=" flex flex-col justify-center">
                   <div>
                   {renderStars(course.rating)}
                   <h3 className="font-medium text-gray-800 line-clamp-2 mt-1">{course.title}</h3>
@@ -111,12 +111,12 @@ export default function Wishlist() {
               </div>
               
               {/* Price */}
-              <div className="col-span-2 text-center">
+              <div className="col-span-2 sm:col-span-2 text-center">
                 <span className="text-violet-600 font-semibold">${course.price}</span>
               </div>
               
               {/* Actions */}
-              <div className="col-span-4 flex justify-center gap-2">
+              <div className="col-span-10 sm:col-span-4 flex justify-center gap-2">
                 <button 
                   onClick={() => handleBuyNow(course.id)}
                   className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded transition-colors"

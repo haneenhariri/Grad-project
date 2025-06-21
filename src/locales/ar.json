@@ -311,6 +311,7 @@
     "Description" : "وصف الكورس",
     "Administrator" : "المسؤول",
     "Login to Enroll": "سجّل الدخول للتسجيل",
+    "wishlist add failed": "فشل في الإضافة إلى قائمة الرغبات",
     "instructor": {
         "becomeInstructor": "كن مدربًا",
         "becomeInstructorDesc": "كن مدربًا وابدأ التدريس مع 26 ألف مدرب معتمد. أنشئ قصة نجاح مع 67.1 ألف طالب",

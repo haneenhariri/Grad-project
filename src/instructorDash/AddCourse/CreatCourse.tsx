@@ -307,8 +307,8 @@ export default function CreateCourse() {
           {/* Step 1: Basic Information */}
           {step === 1 && (
             <div className="p-5">
-              <div className="flex justify-between gap-2">
-                <div className="w-1/2">
+              <div className="flex flex-col sm:flex-row justify-between gap-2">
+                <div className="sm:w-1/2">
                   <Label label="Title [en]" />
                   <input
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -319,7 +319,7 @@ export default function CreateCourse() {
                     required
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="sm:w-1/2">
                   <Label label="Title [ar]" />
                   <input
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -331,8 +331,8 @@ export default function CreateCourse() {
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="w-1/2">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="sm:w-1/2">
                   <Label label="Category" />
                   <select
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -349,7 +349,7 @@ export default function CreateCourse() {
                     ))}
                   </select>
                 </div>
-                <div className="w-1/2">
+                <div className="sm:w-1/2">
                   <Label label="SubCategory" />
                   <select
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -368,8 +368,8 @@ export default function CreateCourse() {
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                <div className="w-1/2">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="sm:w-1/2">
                   <Label label="level" />
                   <select
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -384,7 +384,7 @@ export default function CreateCourse() {
                     <option value="advance">{t("Advance")}</option>
                   </select>
                 </div>
-                <div className="w-1/2">
+                <div className="sm:w-1/2">
                   <Label label="CourseLanguage" />
                   <select
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -398,7 +398,7 @@ export default function CreateCourse() {
                     <option value="arabic">{t("arabic")}</option>
                   </select>
                 </div>
-                <div className="w-1/2">
+                <div className="sm:w-1/2">
                   <Label label="Duration" />
                   <input
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -410,7 +410,7 @@ export default function CreateCourse() {
                     required
                   />
                 </div>
-                <div className="w-1/2">
+                <div className="sm:w-1/2">
                   <Label label="CoursesSection.Price" />
                   <input
                     className="mb-5 w-full p-4 placeholder:text-base bg-White/95 rounded-md"
@@ -444,7 +444,7 @@ export default function CreateCourse() {
             <div>
               <div className="p-5 border-b">
                 <Label label="Course Thumbnail" />
-                <div className="flex gap-5">
+                <div className="flex flex-col sm:flex-row gap-5">
                   <div className="mb-5">
                     <div
                       className="border-2 flex border-gray-300 bg-gray-200 w-48 h-48 p-4 rounded-sm text-center cursor-pointer hover:bg-gray-100"
@@ -474,7 +474,7 @@ export default function CreateCourse() {
                     />
                   </div>
                   <div>
-                    <p className="w-2/3 text-base text-gray-700">
+                    <p className="w-full sm:w-2/3 text-base text-gray-700">
                       <Trans
                         i18nKey="uploadThumbnailText"
                         components={{
@@ -621,38 +621,40 @@ export default function CreateCourse() {
                       {lesson.files.map((file, fileIndex) => (
                         <div
                           key={fileIndex}
-                          className="flex items-center gap-2"
+                          className="flex flex-col sm:flex-row items-start gap-2"
                         >
                           <input
                             type="file"
                             onChange={(e) =>
                               handleFileChange(lessonIndex, fileIndex, e)
                             }
-                            className="flex-1 p-2 border rounded-md"
+                            className="flex-1 p-2 border w-full rounded-md"
                             required={fileIndex === 0}
                           />
-                          <select
-                            value={file.type}
-                            onChange={(e) => {
-                              const updatedLessons = [...lessons];
-                              updatedLessons[lessonIndex].files[
-                                fileIndex
-                              ].type = e.target.value as "video" | "file";
-                              setLessons(updatedLessons);
-                            }}
-                            className="p-2 border rounded-md"
-                          >
-                            <option value="video">{t("Video")}</option>
-                            <option value="file">{t("File")}</option>
-                          </select>
-                          <button
-                            type="button"
-                            onClick={() => removeFile(lessonIndex, fileIndex)}
-                            className="text-red-500 hover:text-red-700 p-2"
-                            disabled={lesson.files.length <= 1}
-                          >
-                            {t("Delete")}
-                          </button>
+                          <div className="flex">
+                            <select
+                              value={file.type}
+                              onChange={(e) => {
+                                const updatedLessons = [...lessons];
+                                updatedLessons[lessonIndex].files[
+                                  fileIndex
+                                ].type = e.target.value as "video" | "file";
+                                setLessons(updatedLessons);
+                              }}
+                              className="p-2 border rounded-md"
+                            >
+                              <option value="video">{t("Video")}</option>
+                              <option value="file">{t("File")}</option>
+                            </select>
+                            <button
+                              type="button"
+                              onClick={() => removeFile(lessonIndex, fileIndex)}
+                              className="text-red-500 hover:text-red-700 p-2"
+                              disabled={lesson.files.length <= 1}
+                            >
+                              {t("Delete")}
+                            </button>
+                          </div>
                         </div>
                       ))}
                       <button

@@ -81,7 +81,7 @@ export default function TestResults() {
               }`}
             >
               {/* Course Info */}
-              <div className="col-span-6 flex gap-4">
+              <div className="col-span-12 sm:col-span-6 flex gap-4">
                 <img
                   src={`http://127.0.0.1:8000/storage/${result.course_image}`}
                   alt={getLocalizedTitle(result.course_title)}
@@ -97,7 +97,7 @@ export default function TestResults() {
                 </div>
               </div>
               {/* Result */}
-              <div className="col-span-6 text-center">
+              <div className="col-span-12 sm:col-span-6 text-center">
                 {result.status === "pending" ? (
                   <span className="text-yellow-500 font-medium">
                     {t("Not graded yet")}

@@ -113,7 +113,7 @@ export default function ExamAns() {
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
+                      className="px-1 py-1 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       <div className="flex items-center">
@@ -206,7 +206,7 @@ export default function ExamAns() {
         </div>
         {/* pagination */}
         <div className="flex flex-wrap items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center w-full sm:w-auto justify-center space-x-2 mb-4 sm:mb-0">
             <button
               className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               onClick={() => table.setPageIndex(0)}

@@ -156,8 +156,8 @@ const toggleExpand = (date: string) => {
               <div className="border-t">
                 {datePayments.map((payment) => (
                   <div key={payment.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
-                    <div className="flex gap-4">
-                      <div className="w-1/2 flex gap-4 ">
+                    <div className="flex flex-wrap">
+                      <div className="w-full sm:w-1/2 flex mb-4 sm:mb-0 gap-4 ">
                         <img src={`http://127.0.0.1:8000/storage/${payment.course_cover}`} className="w-40 h-32 object-cover rounded" alt="" />
                         <div className=" flex justify-between  flex-col">
                         <h4 className="font-medium line-clamp-2">{payment.course}</h4>
@@ -165,11 +165,11 @@ const toggleExpand = (date: string) => {
                         </div>
                       </div>
                       
-                      <div className="w-1/4 flex items-center justify-center">
+                      <div className="w-1/4 sm:w-1/4 flex items-center justify-center">
                         <span className="text-violet-600 font-semibold">${payment.amount.toFixed(2)}</span>
                       </div>
                       
-                      <div className="w-1/4">
+                      <div className="w-3/4 sm:w-1/4">
                         <div className="flex justify-between h-full  flex-col items-end">
                           <p className="text-lg font-medium">{formatDate(payment.created_at)}</p>
                           <div className="flex  gap-4 mt-2 text-sm">
