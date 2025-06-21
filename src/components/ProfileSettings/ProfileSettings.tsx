@@ -74,7 +74,7 @@ export default function ProfileSettings() {
         <div className="w-full">
           <h2 className="text-2xl font-semibold mb-6">{t("navigation.Settings")}</h2>
           <form onSubmit={handleSubmit}>
-            <div className=" md:flex-row flex-col flex gap-6">
+            <div className=" md:flex-row flex-col-reverse flex gap-6">
             <div className="md:w-10/12 w-full">
               <Label label="Name"/>
               <Input type="text" name="name"  value={name}  onChange={(e) => setName(e.target.value)}  placeholder={t("NamePlace")} />

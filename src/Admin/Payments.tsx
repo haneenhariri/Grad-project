@@ -110,7 +110,7 @@ export default function Payments() {
 
   return (
     <>
-      <div className="flex justify-between mb-6">
+      <div className="flex flex-wrap gap-4 justify-between mb-6">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
         <Button text="Charge Account" Bg="bg-btn" textColor="text-white" onClick={() => navigate('/Admin/ChargeAccount')}/>
       </div>
@@ -186,7 +186,7 @@ export default function Payments() {
         </div>
         {/* pagination */}
         <div className="flex flex-wrap items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center  w-full sm:w-auto justify-center space-x-2 mb-4 sm:mb-0">
               <button
                 className="p-2 rounded-md border border-gray-300 bg-white text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 onClick={() => table.setPageIndex(0)}
