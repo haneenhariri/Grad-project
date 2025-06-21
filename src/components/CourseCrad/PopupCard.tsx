@@ -54,7 +54,7 @@ export default function PopupCard({
     await addWishCourse(id); // انتظار النتيجة
     showToast("Added to wishlist", 'success');
   } catch (error: unknown) {
-    showToast("Failed to add to wishlist", 'error');
+    showToast(t("wishlist add failed"), 'error');
   }
 };
   const handleCourseDetail = (e: React.MouseEvent) => {
