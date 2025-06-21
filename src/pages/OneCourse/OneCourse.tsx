@@ -277,13 +277,13 @@ export default function OneCourse() {
                   onClick={() => navigate("/courses")}
                   className="px-4 py-2 bg-green-600 text-white rounded"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={() => navigate(`/watch/${course?.id}`)}
                   className="px-4 py-2 bg-blue-600 text-white rounded"
                 >
-                  watch course
+                  {t("Watch Course")}
                 </button>
               </div>
             ) : (
@@ -291,7 +291,7 @@ export default function OneCourse() {
                 onClick={() => setShowModal(false)}
                 className="px-4 py-2 bg-red-600 text-white rounded"
               >
-                Close
+                {t("cancel")}
               </button>
             )}
           </div>

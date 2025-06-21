@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { userPayment } from "../../services/payment";
 import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner/Spinner";
-import star from '../../assets/icons/Star (3).png';
 import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { FaGraduationCap, FaMoneyBillWave, FaWallet } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -103,7 +102,7 @@ const toggleExpand = (date: string) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-semibold mb-6">{t("Purchase History")}</h2>
+      <h2 className="md:text-2xl text-lg font-semibold mb-6">{t("Purchase History")}</h2>
       
       {Object.entries(groupedPayments).map(([date, datePayments]) => {
         const isExpanded = expandedPayment === date;
@@ -150,13 +149,12 @@ const toggleExpand = (date: string) => {
                 )}
               </div>
             </div>
-            
             {/* Expanded Content */}
             {isExpanded && (
               <div className="border-t">
                 {datePayments.map((payment) => (
                   <div key={payment.id} className="p-4 border-b last:border-b-0 hover:bg-gray-50">
-                    <div className="flex gap-4">
+                    <div className="flex  gap-4">
                       <div className="w-1/2 flex gap-4 ">
                         <img src={`http://127.0.0.1:8000/storage/${payment.course_cover}`} className="w-40 h-32 object-cover rounded" alt="" />
                         <div className=" flex justify-between  flex-col">
@@ -164,11 +162,9 @@ const toggleExpand = (date: string) => {
                         <p className="text-sm text-gray-500 mt-1">{t("Created by:")}: {payment.instructor}</p>
                         </div>
                       </div>
-                      
                       <div className="w-1/4 flex items-center justify-center">
                         <span className="text-violet-600 font-semibold">${payment.amount.toFixed(2)}</span>
                       </div>
-                      
                       <div className="w-1/4">
                         <div className="flex justify-between h-full  flex-col items-end">
                           <p className="text-lg font-medium">{formatDate(payment.created_at)}</p>
