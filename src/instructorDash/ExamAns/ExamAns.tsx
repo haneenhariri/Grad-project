@@ -113,7 +113,7 @@ export default function ExamAns() {
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
+                      className="px-1 py-1 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       <div className="flex items-center">
