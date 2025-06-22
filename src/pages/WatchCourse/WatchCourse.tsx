@@ -170,7 +170,7 @@ export default function WatchCourse() {
                   }`}
                   onClick={() => setSelectedLesson(lesson)}
                 >
-                  <div className="flex justify-between items-center">
+                  <div className="flex md:flex-row flex-col gap-2 justify-between items-center">
                     <div>
                       <h3 className='font-medium'>{lesson.title}</h3>
                       <p className='text-sm text-gray-500'>{lesson.files?.length || 0} {t("files")}</p>

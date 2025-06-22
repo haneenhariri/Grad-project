@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance";
 import Editor from "@monaco-editor/react";
 import { useTranslation } from "react-i18next";
+import * as monaco from "monaco-editor";
 
 interface QuizQuestion {
   id : number;
@@ -23,7 +24,20 @@ export default function Quiz() {
   const [codeAnswers, setCodeAnswers] = useState<Record<number, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [languages, setLanguages] = useState<{ label: string; value: string }[]>([]);
+  const [language, setLanguage] = useState("javascript"); // المتغير الصحيح للغة المختارة
 
+    useEffect(() => {
+      const loadedLanguages = monaco.languages
+        .getLanguages()
+        .map((lang) => ({
+          label: lang.aliases?.[0] || lang.id,
+          value: lang.id,
+        }))
+        .filter((lang) => !!lang.label); // نضمن أنه يوجد اسم ظاهر
+
+      setLanguages(loadedLanguages);
+    }, []);
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
@@ -110,6 +124,13 @@ export default function Quiz() {
       </div>
     );
   }
+  if (isCompleted) {
+    return (
+      <div className="mt-[108px] min-h-screen flex justify-center items-center">
+        <h2 className="text-2xl font-bold text-green-600">{t("Quiz completed successfully!")}</h2>
+      </div>
+    );
+  }
 
   const currentQuizQuestion = quiz[currentQuestion];
 
@@ -161,8 +182,25 @@ export default function Quiz() {
               {/* Code editor */}
               {currentQuizQuestion.type === "code" && (
                 <div className="mt-4">
-                  <p className="text-Grey/60 mb-2">{t("Write your code below")}:</p>
+                  <p className="text-Grey/60 mb-2">{t("Write your code below")}:</p> 
+                                <label className="block mb-2 font-medium text-sm text-gray-600">
+                {t("Select Language")}
+              </label>
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="mb-4 border p-2 rounded-md w-full md:w-1/3"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.value} value={lang.value}>
+                      {lang.label}
+                    </option>
+                  ))}
+                </select>
+
+
                 </div>
+                
               )}
             </div>
 
@@ -171,7 +209,7 @@ export default function Quiz() {
               <div className="md:w-full h-[500px] border rounded-lg overflow-hidden" style={{ direction: "ltr" }}>
                 <Editor
                   height="100%"
-                  defaultLanguage="csharp"
+                  language={language}
                   value={codeAnswers[currentQuestion] || "// Write your code here"}
                   onChange={handleCodeChange}
                   theme="vs-dark"
@@ -179,7 +217,18 @@ export default function Quiz() {
                     minimap: { enabled: false },
                     fontSize: 14,
                     scrollBeyondLastLine: false,
+                    suggestOnTriggerCharacters: true,
+                    quickSuggestions: {
+                      other: true,
+                      comments: true,
+                      strings: true,
+                    },             
+                    wordBasedSuggestions: true,
+                    snippetSuggestions: "inline",
                     automaticLayout: true,
+                    readOnly: false,
+                    contextmenu: false,
+                    copyWithSyntaxHighlighting: false
                   }}
                 />
               </div>
@@ -188,9 +237,9 @@ export default function Quiz() {
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex justify-between items-center">
+        <div className="flex rtl:flex-row-reverse flex-row justify-between items-center">
           {/* Progress indicators */}
-          <div className="flex space-x-2">
+          <div className="flex rtl:space-x-reverse space-x-2">
             {quiz.map((_, index) => (
               <div 
                 key={index} 
@@ -206,10 +255,11 @@ export default function Quiz() {
           </div>
 
           {/* Next button */}
+          
           <button
             onClick={handleNextQuestion}
             disabled={isSubmitting}
-            className="bg-btn hover:bg-violet-700 text-white py-3 px-6 rounded-lg flex items-center transition-colors"
+            className="bg-btn hover:bg-violet-700 text-white py-3 px-6 rounded-lg flex rtl:flex-row-reverse items-center transition-colors"
           >
             {currentQuestion < quiz.length - 1 
               ? t("NEXT QUESTION") 

@@ -58,17 +58,17 @@ export default function SelectedLesson({selectedLesson , completedLessons , mark
           <h2 className="text-xl font-semibold mb-2">{t("Lectures Description")}</h2>
           <p  id="Description" className="text-gray-700  mb-6">{selectedLesson.description}</p>
           {pdfFiles.map((file) => (
-            <div key={file.id} className="p-6 flex justify-between items-center bg-gray-200 rounded-lg ">
+            <div key={file.id} className="md:p-6 p-2 flex justify-between items-center bg-gray-200 rounded-lg ">
               <div className=" flex items-center text-[#63066C] gap-2">
-                <img src={fileIcon} alt="" />
-                <p>{file.origin_name}</p>
+                <img src={fileIcon} alt="file" className="md:w-auto md:h-auto w-8 h-8" />
+                <p className="md:text-base text-sm">{file.origin_name}</p>
               </div>
               <a
                 href={`http://127.0.0.1:8000/storage/${file.path}`}
                 download={file.origin_name}
-                className=" bg-btn px-6 py-3 text-white hover:underline"
+                className=" bg-btn md:px-6 md:py-3  p-1 text-center md:text-base text-sm text-white hover:underline"
               >
-                {t("Download file")}
+                {t("Download File")}
               </a>
             </div>
           ))}

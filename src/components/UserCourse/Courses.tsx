@@ -99,9 +99,9 @@ export default function MyCourses() {
     <div className="">  
       <div>
         <h2 className="text-2xl font-semibold mb-6">{t("Courses")} ({courses.length})</h2>
-        <div className="flex justify-between mb-10">
+        <div className="flex flex-col-reverse sm:flex-row items-start justify-between mb-10">
           <Sort selectedOption={selectedOption} onClick={handleSort} />
-          <div className="relative">
+          <div className="relative w-full sm:w-auto flex-grow sm:flex-grow-0">
             <input
               type="text"
               placeholder={t('Search in your courses...')}

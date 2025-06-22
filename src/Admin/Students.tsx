@@ -159,7 +159,7 @@ export default function Students() {
 
   return (
     <>
-      <div className="flex gap-4   justify-between items-center mb-4">
+      <div className="flex gap-4 flex-wrap justify-between items-center mb-4">
         <Search globalFilter={globalFilter} setGlobalFilter={setGlobalFilter}/>
           <Button 
             Bg="bg-btn hover:bg-violet-800 transition-colors" 

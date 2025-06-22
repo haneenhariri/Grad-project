@@ -3,7 +3,7 @@ import SidebarChat from "./SidebarChat";
 
 export default function ChatApp() {
   return (
-    <div className=" flex justify-between gap-6 w-full">
+    <div className="flex flex-col sm:flex-row justify-between gap-6 w-full">
       <SidebarChat/>
       <MessageSide/>
     </div>

@@ -58,7 +58,7 @@ export default function AddComment({ lesson_id, parentCommentId = null, onCommen
 
   return (
     <div className="space-y-2">
-      <form onSubmit={handleSubmit} className="flex  gap-3">
+      <form onSubmit={handleSubmit} className="flex justify-between  md:gap-3 gap-1">
         <TextareaAutosize
           minRows={1}
           maxRows={5}
@@ -67,15 +67,15 @@ export default function AddComment({ lesson_id, parentCommentId = null, onCommen
             setComment(e.target.value);
             setError(''); 
           }}          
-          className="w-10/12 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-transparent"
+          className="md:w-10/12 flex-grow  md:px-4 md:py-3 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-violet-500 focus:border-transparent"
           placeholder={t("Write your comment...")}
         />
-        <div className="flex w-1/6 justify-between items-center">
+        <div className="flex md:w-1/6 justify-between items-center">
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="ml-auto w-full h-full px-5 py-2 bg-btn text-white text-lg font-medium rounded-md hover:bg-violet-950 transition-colors disabled:opacity-50"
+            className="ml-auto w-full h-full px-5 py-2 bg-btn text-white md:text-lg text-sm font-medium rounded-md hover:bg-violet-950 transition-colors disabled:opacity-50"
           >
           {loading ? t("btn.Posting...") : t("btn.Post")}
           </button>

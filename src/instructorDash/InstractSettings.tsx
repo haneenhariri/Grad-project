@@ -62,8 +62,8 @@ export default function InstractSettings() {
            <h2 className="text-2xl font-semibold mb-6">{t("navigation.Settings")}</h2>
            <form onSubmit={handleSubmit}>
             <div className="  ">
-                <div className="flex gap-6">
-                    <div className="w-10/12">
+                <div className="flex gap-6 flex-col-reverse sm:flex-row">
+                    <div className="w-full sm:w-10/12">
                           <Label label="Name"/>
                           <Input
                           type="text"
