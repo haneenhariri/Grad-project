@@ -5,23 +5,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar Styles */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d8b4fe;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #c084fc;
+}
+
+.scrollbar-thin::-webkit-scrollbar-corner {
+  background: transparent;
+}
 
 @layer base {
-    html {
-      @apply  bg-bg-primary-color font-tajawal ;
-    }
+  html {
+    @apply bg-bg-primary-color font-tajawal;
   }
-  
+}
+
 @font-face {
-  font-family: 'Tajawal';
-  src: url('/fonts/Tajawal-Regular.ttf') format('truetype');
+  font-family: "Tajawal";
+  src: url("/fonts/Tajawal-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap; /* لتحسين الأداء */
 }
-*
-{
-
+* {
   box-sizing: border-box;
 }
 
@@ -59,14 +84,14 @@
   display: inline-block;
   transform: scale(1.2);
   margin: 0 2px;
-  color: #9C4DF4;
+  color: #9c4df4;
   font-weight: 400;
   transition: all 0.3s ease;
 }
 
 .slash-char {
   display: inline-block;
-  color: #9C4DF4;
+  color: #9c4df4;
   font-weight: 700;
   margin: 0 1px;
   transition: all 0.3s ease;
@@ -79,12 +104,12 @@ a:hover .code-bracket {
 
 a:hover .slash-char {
   transform: scale(1.2);
-  color: #7E3DCF;
+  color: #7e3dcf;
   opacity: 1;
 }
 
 .logo-text::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -101,14 +126,6 @@ a:hover .logo-text::after {
   display: none;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-
-
-
-
-
-
-
-
