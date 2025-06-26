@@ -9,8 +9,8 @@ import {
   CartesianGrid,
 } from "recharts";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
-import { ratingsStatsAdmin } from "../../../services/dashServe";
 import { useTranslation } from "react-i18next";
+import { ratingsStatsAdmin } from "../../../services/dashServe";
 
 interface RatingTimelineItem {
   period: string;
@@ -43,12 +43,15 @@ export default function Rating() {
     const fetchRate = async () => {
       try {
         const res = await ratingsStatsAdmin(periodType);
-        const timeline = (res.original.timeline || []).map(
+        console.log("📦 Full response from API:", res);
+
+        const timeline = (res.timeline || []).map(
           (item: RatingTimelineItem) => ({
             ...item,
             average_rating: parseFloat(item.average_rating.toString()),
           })
         );
+
         const overallRating = parseFloat(res.overall_rating?.toString() || "0");
 
         setRatings({
@@ -72,7 +75,7 @@ export default function Rating() {
   }, [periodType]);
 
   // ✅ تأكد من أن البيانات موجودة قبل المتابعة
-  if (!ratings) {
+  if (!ratings || !ratings.timeline.length) {
     return (
       <div className="text-center py-10 text-gray-500">
         {t("dashboard.LoadingRating")}
@@ -105,7 +108,7 @@ export default function Rating() {
   };
 
   return (
-    <div className="bg-white flex flex-col gap-4 my-5 justify-between p-4 rounded-lg shadow-sm w-full lg:w-1/2 mx-auto">
+    <div className="bg-white flex flex-col gap-4 justify-between p-4 rounded-lg shadow-sm w-full lg:w-1/2 mx-auto">
       {/* Header with dropdown (optional) */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg  text-gray-800 font-semibold">
@@ -182,7 +185,7 @@ export default function Rating() {
             <div className="flex items-center min-w-[80px] text-sm text-gray-700">
               <FaStar className="text-orange-500 mr-1" />
               {star} {t("Stars")}
-            </div>
+            </div>    
             <div className="flex-1 bg-gray-200 h-2 rounded overflow-hidden">
               <div
                 className="bg-orange-500 h-full"

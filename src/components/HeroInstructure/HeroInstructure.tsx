@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import HeroPic from "../../../src/assets/instructor/heroinstructor.png"
+import HeroPic from "../../assets-webp/heroinstructor.webp"
 import Button from "../../Ui/Button/Button"
 import { useTranslation } from "react-i18next"
 

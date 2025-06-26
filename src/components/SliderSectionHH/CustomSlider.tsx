@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { dataTestmonialsLKHH } from "../../data/dataTestHH+LK";
-import prev from '../../assets/slider/prev.png';
-import next from '../../assets/slider/next.png';
+import prev from '../../assets-webp/prev.webp';
+import next from '../../assets-webp/next.webp';
 import SliderButton from "./SliderButton";
 import StdCard from "../StdCard/StdCard";
 

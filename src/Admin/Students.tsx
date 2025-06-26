@@ -5,7 +5,7 @@ import Search from "../components/Search/Search";
 import { createColumnHelper, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table";
 import {  FiEye, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import user from "../assets/Users (1).png";
+import user from "../assets-webp/Users (1).webp";
 import { deleteTeacher } from "../services/teacherForm";
 import StudentCourses from "./Users/StudentCourses";
 import { useTranslation } from "react-i18next";

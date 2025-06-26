@@ -1,7 +1,7 @@
-import basic from '../assets/AddCourse/Stack (1).png';
-import Adv from '../assets/AddCourse/ClipboardText.png';
-import Cur from '../assets/AddCourse/MonitorPlay.png';
-import Pub from '../assets/AddCourse/PlayCircle (1).png';
+import basic from '../assets-webp/Stack.webp';
+import Adv from '../assets-webp/ClipboardText.webp';
+import Cur from '../assets-webp/MonitorPlay.webp';
+import Pub from '../assets-webp/PlayCircle (1).webp';
 export const data =
 [
     {

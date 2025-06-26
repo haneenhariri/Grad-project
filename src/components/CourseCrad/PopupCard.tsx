@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
-import star from '../../assets/icons/Star (3).png';
-import chart from '../../assets/bar-chart (1).png';
+import star from '../../assets-webp/Star (3).webp';
+import chart from '../../assets-webp/bar-chart (1).webp';
 import clock from '../../assets/icons/Clock (1).png';
 import Button from "../../Ui/Button/Button";
 import { useNavigate } from "react-router-dom";

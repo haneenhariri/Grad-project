@@ -1,6 +1,6 @@
 
-import up from '../../assets/AddCourse/UploadSimple.png';
-import img from '../../assets/Image (28).png';
+import up from '../../assets-webp/UploadSimple.webp';
+import img from '../../assets-webp/Image (28).webp';
 import Button from '../../Ui/Button/Button';
 import { useEffect, useState } from 'react';
 import axios from 'axios';

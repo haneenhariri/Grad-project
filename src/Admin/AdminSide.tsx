@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
-import dash from "../assets/ChartBar.png";
-import user from "../assets/Users (1).png";
-import my from "../assets/Stack.png";
-import ern from "../assets/CreditCard (1).png";
-import stng from "../assets/Gear.png";
+import dash from "../assets-webp/ChartBar.webp";
+import user from "../assets-webp/Users (1).webp";
+import my from "../assets-webp/Stack.webp";
+import ern from "../assets-webp/CreditCard (1).webp";
+import stng from "../assets-webp/Gear.webp";
 import Logo from "../Ui/Logo/Logo";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";

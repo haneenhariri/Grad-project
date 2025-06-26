@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom"
-import face from "../../assets/social/face.png";
-import inst from "../../assets/social/Instragarm.png";
-import linked from "../../assets/social/Linkedin.png";
+import face from "../../assets-webp/face.webp";
+import inst from "../../assets-webp/Instragarm.webp";
+import linked from "../../assets-webp/Linkedin.webp";
 import twitter from "../../assets/social/Twitter (1).svg";
 import youtub from "../../assets/social/Frame 74.svg";
 import Logo from "../../Ui/Logo/Logo";

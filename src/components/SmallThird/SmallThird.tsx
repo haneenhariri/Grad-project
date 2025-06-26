@@ -1,4 +1,4 @@
-import tick from "../../../src/assets/instructor/icons/CheckCircle.png"
+import tick from "../../assets-webp/CheckCircle.webp"
 export default function SmallThird({title,description} : {title : string; description : string;}) {
   return (
     <div className="mb-6 flex">

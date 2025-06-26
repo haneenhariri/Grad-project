@@ -1,7 +1,7 @@
-import sarh from './../assets/our-testimonials/sarah.png'
-import jeson from './../assets/our-testimonials/Jason.png'
-import emilly from './../assets/our-testimonials/emilly.png'
-import michael from './../assets/our-testimonials/michael.png'
+import sarh from './../assets-webp/sarah.webp'
+import jeson from './../assets-webp/Jason.webp'
+import emilly from './../assets-webp/emilly.webp'
+import michael from './../assets-webp/michael.webp'
 export const dataTestmonialsLKHH = [
     {
         id:1,

@@ -312,7 +312,7 @@ export interface LessonFile {
 }
 
 export interface Lesson {
-  id : number;
+  id?: number;
   titleAr: string;
   titleEn: string;
   descriptionAr: string;

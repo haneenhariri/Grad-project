@@ -3,7 +3,7 @@ import img1 from "../../../src/assets/instructor/icons/Users.png"
 import img2 from "../../../src/assets/instructor/icons/Notebook.png"
 import img3 from "../../../src/assets/instructor/icons/GlobeHemisphereWest.png"
 import img4 from "../../../src/assets/instructor/icons/CircleWavyCheck.png"
-import img5 from "../../../src/assets/instructor/icons/Stack.png"
+import img5 from "../../assets-webp/Stack.webp"
 export default function SecondInstructor() {
   return (
     <section className="flex bg-violet-400 py-10 justify-between px-4 lg:px-20 desktop:px-40">

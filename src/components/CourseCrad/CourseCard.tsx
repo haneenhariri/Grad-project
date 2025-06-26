@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { CouCard } from "../../types/interfaces";
-import star from '../../assets/icons/Star (3).png';
+import star from '../../assets-webp/Star (3).webp';
 import { useTranslation } from "react-i18next";
 import PopupCard from "./PopupCard";
 

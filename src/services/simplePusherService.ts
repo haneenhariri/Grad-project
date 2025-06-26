@@ -20,7 +20,7 @@ class SimplePusherService {
     try {
       // استخدام المفتاح من متغيرات البيئة
       const pusherKey = import.meta.env.VITE_PUSHER_APP_KEY || '51cb977726ad1dd37a3b';
-      const pusherCluster = import.meta.env.VITE_PUSHER_APP_CLUSTER || 'mt1';
+      const pusherCluster = import.meta.env.VITE_PUSHER_APP_CLUSTER || 'eu';
       
       console.log('Initializing Pusher with:');
       console.log('- Pusher key:', pusherKey);

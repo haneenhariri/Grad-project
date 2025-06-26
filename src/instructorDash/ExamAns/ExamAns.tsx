@@ -38,7 +38,6 @@ export default function ExamAns() {
         console.error("Error fetching courses:", error);
       }
     };
-
     fetchCourseAns();
   }, []);
   const columnHelper = createColumnHelper<Course>();
@@ -109,11 +108,11 @@ export default function ExamAns() {
           <table className="w-full border-collapse">
             <tbody>
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="bg-gray-50">
+                <tr key={headerGroup.id} className="bg-gray-50 px-6 py-4">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="px-1 py-1 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
+                      className=" px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-200 cursor-pointer"
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       <div className="flex items-center">

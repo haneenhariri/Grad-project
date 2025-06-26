@@ -3,9 +3,6 @@ import FourthInstrucor from "../../components/FourthInstrucor/FourthInstrucor";
 import HeroInstructure from "../../components/HeroInstructure/HeroInstructure";
 // import SecondInstructor from "../../components/SecondInstructor/SecondInstructor";
 import ThirdInstructor from "../../components/ThirdInstructor/ThirdInstructor";
-// import pic1 from "../../../src/assets/Union.png"
-// import pic2 from "../../../src/assets/Union2.png"
-// import SeventhInstrucor from "../../components/SeventhInstrucor/SeventhInstrucor";
 
 export default function InstructorPage() {
   return (

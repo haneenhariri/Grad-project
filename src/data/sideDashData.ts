@@ -1,9 +1,9 @@
-import dash from "../assets/ChartBar.png";
-import add from "../assets/PlusCircle.png";
-import ern from "../assets/CreditCard (1).png";
-import my from "../assets/Stack.png";
-import stng from "../assets/Gear.png";
-import message from "../assets/ChatCircleDots (1).png";
+import dash from "../assets-webp/ChartBar.webp";
+import add from "../assets-webp/PlusCircle.webp";
+import ern from "../assets-webp/CreditCard (1).webp";
+import my from "../assets-webp/Stack.webp";
+import stng from "../assets-webp/Gear.webp";
+import message from "../assets-webp/ChatCircleDots (1).webp";
 import codeReview from "../assets/icons/review.png";
 export const instractSide  = 
 [
@@ -28,7 +28,7 @@ export const instractSide  =
         img : my
     },
     {
-        pathLink : '/instruct/Message/1',
+        pathLink : '/instruct/Message/3',
         title : 'Message' ,
         img : message
     },

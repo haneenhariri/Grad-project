@@ -9,7 +9,7 @@ import Head from "./Head";
 import Button from "../../Ui/Button/Button";
 import { useTranslation } from "react-i18next";
 import SelectedLesson from "./SelectedLesson";
-
+import { checkTestCompletion } from "../../services/quizService";
 export default function WatchCourse() {
   const  { t } = useTranslation()
   const { id } = useParams();
@@ -24,6 +24,33 @@ export default function WatchCourse() {
   useEffect(() => {
     console.log("Course ID from params:", id);
   }, [id]);
+    const handleStartQuiz = async () => {
+    try {
+      if (!course?.id) return;
+      
+      // التحقق مما إذا كان الطالب قد أكمل الاختبار بالفعل
+      const response = await checkTestCompletion(course.id);
+      
+      if (response.data.completed) {
+        showToast(t("You have already completed this quiz"), "info");
+      } else if (response.data.unanswered_questions.length > 0) {
+        // إذا كان هناك أسئلة لم يتم الإجابة عليها
+        navigate(`/quiz/${course.id}`, {
+          state: { 
+            unansweredQuestions: response.data.unanswered_questions,
+            resumeQuiz: true
+          }
+        });
+      } else {
+        // إذا لم يبدأ الاختبار بعد
+        navigate(`/quiz/${course.id}`);
+      }
+    } catch (error) {
+      console.error("Error checking quiz status:", error);
+      navigate(`/quiz/${course.id}`);
+    }
+  };
+
   // دالة لتحميل تقدم الطالب في الكورس
   const loadCourseProgress = async () => {
     try {
@@ -188,11 +215,15 @@ export default function WatchCourse() {
                   </div>
                 </div>
               ))}
-              {completedLessons.size === course?.lessons.length && (
-                <>
-                <Button text="Start Quiz" Bg=" w-full bg-green-600 text-white mt-4" onClick={() => navigate(`/quiz/${course.id}`)}/>
-                </>
-              )}
+                {completedLessons.size === course?.lessons.length && (
+                  <>
+                    <Button 
+                      text="Start Quiz" 
+                      Bg="w-full bg-green-600 text-white mt-4" 
+                      onClick={handleStartQuiz}
+                    />
+                  </>
+                )}
             </div>
           </div>
         </div>

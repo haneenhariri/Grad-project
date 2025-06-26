@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axiosInstance from "../../services/axiosInstance";
 import Editor from "@monaco-editor/react";
 import { useTranslation } from "react-i18next";
 import * as monaco from "monaco-editor";
+import { showToast } from "../../utils/toast";
+import Spinner from "../../components/Spinner/Spinner";
 
 interface QuizQuestion {
-  id : number;
+  id: number;
   course_id: number;
   question: string;
   options: string[] | null;
@@ -18,6 +20,7 @@ interface QuizQuestion {
 export default function Quiz() {
   const { id } = useParams();
   const { t } = useTranslation();
+  const location = useLocation();
   const [quiz, setQuiz] = useState<QuizQuestion[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -25,30 +28,67 @@ export default function Quiz() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [languages, setLanguages] = useState<{ label: string; value: string }[]>([]);
-  const [language, setLanguage] = useState("javascript"); // المتغير الصحيح للغة المختارة
+  const [language, setLanguage] = useState("javascript");
+  const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
+  const [resumeQuiz, setResumeQuiz] = useState(false);
 
-    useEffect(() => {
-      const loadedLanguages = monaco.languages
-        .getLanguages()
-        .map((lang) => ({
-          label: lang.aliases?.[0] || lang.id,
-          value: lang.id,
-        }))
-        .filter((lang) => !!lang.label); // نضمن أنه يوجد اسم ظاهر
-
-      setLanguages(loadedLanguages);
-    }, []);
   useEffect(() => {
-    const fetchQuiz = async () => {
+    const loadedLanguages = monaco.languages
+      .getLanguages()
+      .map((lang) => ({
+        label: lang.aliases?.[0] || lang.id,
+        value: lang.id,
+      }))
+      .filter((lang) => !!lang.label);
+
+    setLanguages(loadedLanguages);
+  }, []);
+
+  useEffect(() => {
+    const fetchQuizAndStatus = async () => {
       try {
-        const response = await axiosInstance.get(`http://127.0.0.1:8000/api/exam/${id}`);
-        setQuiz(response.data.data);
+        // جلب بيانات الاختبار
+        const quizResponse = await axiosInstance.get(`http://127.0.0.1:8000/api/exam/${id}`);
+        setQuiz(quizResponse.data.data);
+        
+        // التحقق من حالة الاختبار
+        if (location.state?.resumeQuiz) {
+          setResumeQuiz(true);
+          const unansweredIds = location.state.unansweredQuestions.map((q: any) => q.id);
+          setUnansweredQuestions(unansweredIds);
+          
+          // تحديد أول سؤال لم يتم الإجابة عليه
+          const firstUnansweredIndex = quizResponse.data.data.findIndex(
+            (q: QuizQuestion) => unansweredIds.includes(q.id)
+          );
+          setCurrentQuestion(Math.max(0, firstUnansweredIndex));
+        } else {
+          const statusResponse = await axiosInstance.get(
+            `http://127.0.0.1:8000/api/courses/${id}/check-test-completion`
+          );
+          if (statusResponse.data.completed) {
+            setIsCompleted(true);
+            showToast(t("You have already completed this quiz"), "info");
+          } else if (statusResponse.data.unanswered_questions.length > 0) {
+            setResumeQuiz(true);
+            const unansweredIds = statusResponse.data.unanswered_questions.map(
+              (q: any) => q.id
+            );
+            setUnansweredQuestions(unansweredIds);
+            
+            const firstUnansweredIndex = quizResponse.data.data.findIndex(
+              (q: QuizQuestion) => unansweredIds.includes(q.id)
+            );
+            setCurrentQuestion(Math.max(0, firstUnansweredIndex));
+          }
+        }
       } catch (error) {
-        console.error("Error fetching quiz:", error);
+        console.error("Error:", error);
       }
     };
-    fetchQuiz();
-  }, [id]);
+    
+    fetchQuizAndStatus();
+  }, [id, location.state, t]);
 
   const handleCodeChange = (value: string | undefined) => {
     if (value !== undefined) {
@@ -70,48 +110,54 @@ export default function Quiz() {
   const handleSubmitQuiz = async () => {
     setIsSubmitting(true);
     try {
-      // Get the current question
       const currentQuizQuestion = quiz[currentQuestion];
       
-      // Prepare the answer based on question type
       let answer = "";
-      
       if (currentQuizQuestion.type === "multipleChoice") {
         if (!selectedAnswer) {
-          // Show error if no option selected
-          console.error("Please select an answer");
+          showToast(t("Please select an answer"), "error");
           setIsSubmitting(false);
           return;
         }
         answer = selectedAnswer;
       } else if (currentQuizQuestion.type === "code") {
         if (!codeAnswers[currentQuestion] || codeAnswers[currentQuestion].trim() === "") {
-          // Show error if code is empty
-          console.error("Please write some code");
+          showToast(t("Please write some code"), "error");
           setIsSubmitting(false);
           return;
         }
         answer = codeAnswers[currentQuestion];
       }
       
-      // Get the current question ID
-      const question_id = currentQuizQuestion.id || currentQuestion;
-      
-      // Submit answer to backend
       await axiosInstance.post(`http://127.0.0.1:8000/api/user-answers`, { 
         answer,
-        question_id 
+        question_id: currentQuizQuestion.id 
       });
       
-      // Move to next question or complete quiz
+      // تحديث الأسئلة غير المجابة
+      setUnansweredQuestions(prev => 
+        prev.filter(id => id !== currentQuizQuestion.id)
+      );
+      
       if (currentQuestion < quiz.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
+        // إذا كان هناك أسئلة غير مجابة، ننتقل لأولها
+        const nextUnansweredIndex = quiz.findIndex(
+          (q, idx) => idx > currentQuestion && unansweredQuestions.includes(q.id)
+        );
+        
+        if (nextUnansweredIndex !== -1) {
+          setCurrentQuestion(nextUnansweredIndex);
+        } else {
+          setCurrentQuestion(currentQuestion + 1);
+        }
+        
         setSelectedAnswer(null);
       } else {
         setIsCompleted(true);
       }
     } catch (error) {
       console.error("Error submitting answer:", error);
+      showToast(t("Error submitting answer"), "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -120,7 +166,7 @@ export default function Quiz() {
   if (quiz.length === 0) {
     return (
       <div className="mt-[108px] min-h-screen flex justify-center items-center">
-        <div className="animate-pulse text-btn text-xl">{t("Loading quiz...")}</div>
+        <Spinner/>
       </div>
     );
   }
@@ -135,7 +181,16 @@ export default function Quiz() {
   const currentQuizQuestion = quiz[currentQuestion];
 
   return (
-    <div className="mt-[108px] min-h-screen  pb-10">
+    <div className="mt-[130px] min-h-screen  pb-10">
+      {resumeQuiz && (
+        <div className="bg-violet-100 container mx-auto  py-8 text-violet-800 p-4 mb-4 rounded-lg">
+          <p>{t("You have unanswered questions from your previous attempt")}</p>
+          <p className="text-sm mt-1">
+            {t("Continuing from where you left off")}...
+          </p>
+        </div>
+      )}
+      
       <div className="container mx-auto  py-8">
         {/* Quiz header */}
         <div className="bg-btn text-white py-4 px-6 rounded-t-lg">
@@ -162,7 +217,7 @@ export default function Quiz() {
 
               {/* Multiple choice options */}
               {currentQuizQuestion.type === "multipleChoice" && currentQuizQuestion.options && (
-                <div className="grid grid-cols-2 gap-6 my-10">
+                <div className="grid md:grid-cols-2 grid-cols-1 gap-6 my-10">
                   {currentQuizQuestion.options.map((option, index) => (
                     <div 
                       key={index}
@@ -183,79 +238,113 @@ export default function Quiz() {
               {currentQuizQuestion.type === "code" && (
                 <div className="mt-4">
                   <p className="text-Grey/60 mb-2">{t("Write your code below")}:</p> 
-                                <label className="block mb-2 font-medium text-sm text-gray-600">
-                {t("Select Language")}
-              </label>
-                <select
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                  className="mb-4 border p-2 rounded-md w-full md:w-1/3"
-                >
-                  {languages.map((lang) => (
-                    <option key={lang.value} value={lang.value}>
-                      {lang.label}
-                    </option>
-                  ))}
-                </select>
-
-
+                  <label className="block mb-2 font-medium text-sm text-gray-600">
+                    {t("Select Language")}
+                  </label>
+                  <select
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                    className="mb-4 border p-2 rounded-md w-full md:w-1/3"
+                  >
+                    {languages.map((lang) => (
+                      <option key={lang.value} value={lang.value}>
+                        {lang.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                
               )}
             </div>
 
             {/* Code editor section */}
-            {currentQuizQuestion.type === "code" && (
-              <div className="md:w-full h-[500px] border rounded-lg overflow-hidden" style={{ direction: "ltr" }}>
-                <Editor
-                  height="100%"
-                  language={language}
-                  value={codeAnswers[currentQuestion] || "// Write your code here"}
-                  onChange={handleCodeChange}
-                  theme="vs-dark"
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    scrollBeyondLastLine: false,
-                    suggestOnTriggerCharacters: true,
-                    quickSuggestions: {
-                      other: true,
-                      comments: true,
-                      strings: true,
-                    },             
-                    wordBasedSuggestions: true,
-                    snippetSuggestions: "inline",
-                    automaticLayout: true,
-                    readOnly: false,
-                    contextmenu: false,
-                    copyWithSyntaxHighlighting: false
-                  }}
-                />
-              </div>
-            )}
+
+{currentQuizQuestion.type === "code" && (
+  <div className="md:w-full h-[500px] border rounded-lg overflow-hidden" style={{ direction: "ltr" }}>
+    <Editor
+      height="100%"
+      language={language}
+      value={codeAnswers[currentQuestion] || "// Write your code here"}
+      onChange={handleCodeChange}
+      theme="vs-dark"
+      onMount={(editor, monaco) => {
+        // تعطيل النسخ واللصق
+        editor.onKeyDown((e) => {
+          const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+          const isCopy = (isMac && e.metaKey && e.code === "KeyC") || 
+                        (!isMac && e.ctrlKey && e.code === "KeyC");
+          const isPaste = (isMac && e.metaKey && e.code === "KeyV") || 
+                          (!isMac && e.ctrlKey && e.code === "KeyV");
+          if (isCopy || isPaste) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+
+        // تعطيل النقر بزر الفأرة الأيمن (القائمة)
+        editor.onContextMenu((e) => {
+          e.preventDefault();
+        });
+
+        // بدلاً من editor.onPaste، نستخدم هذا الأسلوب لمنع اللصق
+        editor.getModel()?.onDidChangeContent((e) => {
+          const changes = e.changes;
+          for (const change of changes) {
+            if (change.text.includes("\n") && change.text.length > 1) {
+              // يمكنك إضافة منطق لمنع اللصق هنا إذا لزم الأمر
+            }
+          }
+        });
+      }}
+      options={{
+        minimap: { enabled: false },
+        fontSize: 14,
+        scrollBeyondLastLine: false,
+        suggestOnTriggerCharacters: true,
+        quickSuggestions: {
+          other: true,
+          comments: true,
+          strings: true,
+        },
+        wordBasedSuggestions: true,
+        snippetSuggestions: "inline",
+        automaticLayout: true,
+        readOnly: false,
+        contextmenu: false,
+        copyWithSyntaxHighlighting: false,
+        // إضافة هذا الخيار لمنع اللصق
+        pasteAs: {
+          enabled: false
+        }
+      }}
+    />
+  </div>
+)}
           </div>
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex rtl:flex-row-reverse flex-row justify-between items-center">
+        <div className="flex rtl:flex-row-reverse flex-row  flex-wrap gap-3 justify-between items-center">
           {/* Progress indicators */}
-          <div className="flex rtl:space-x-reverse space-x-2">
-            {quiz.map((_, index) => (
-              <div 
-                key={index} 
-                className={`h-2 w-12 rounded-full ${
-                  index === currentQuestion 
-                    ? "bg-btn" 
-                    : index < currentQuestion 
-                      ? "bg-Grey/60" 
-                      : "bg-Grey/30"
-                }`}
-              />
-            ))}
+          <div className="flex flex-wrap gap-2 rtl:space-x-reverse ">
+            {quiz.map((q, index) => {
+              const isAnswered = !unansweredQuestions.includes(q.id);
+              return (
+                <div 
+                  key={index} 
+                  className={`h-2 w-12 rounded-full ${
+                    index === currentQuestion 
+                      ? "bg-btn" 
+                      : isAnswered
+                        ? "bg-Grey/60" 
+                        : "bg-Grey/30"
+                  }`}
+                  title={isAnswered ? t("Answered") : t("Not answered")}
+                />
+              );
+            })}
           </div>
 
           {/* Next button */}
-          
           <button
             onClick={handleNextQuestion}
             disabled={isSubmitting}

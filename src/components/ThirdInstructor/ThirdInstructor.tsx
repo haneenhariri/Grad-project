@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import screenimg from "../../../src/assets/instructor/third.png";
+import screenimg from "../../assets-webp/third.webp";
 import SmallThird from "../SmallThird/SmallThird";
 
 export default function ThirdInstructor() {

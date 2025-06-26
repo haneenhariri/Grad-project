@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { SidebarProps } from "../../types/interfaces";
-import xmark from "../../assets/nav/icon/x-mark.png";
+import xmark from "../../assets-webp/x-mark.webp";
 import { nav } from "../../data/navData";
 import { useTranslation } from "react-i18next";
 import { getSecureCookie } from "../../utils/cookiesHelper";

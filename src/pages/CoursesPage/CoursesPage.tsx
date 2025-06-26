@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CourseCard from "../../components/CourseCrad/CourseCard";
-import nextIcon from '../../assets/slider/ArrowLeft (1).png';
-import prevIcon from '../../assets/slider/ArrowRight (1).png';
+import nextIcon from '../../assets-webp/ArrowLeft (1).webp';
+import prevIcon from '../../assets-webp/ArrowRight (1).webp';
 import { allCourses } from "../../services/courses";
 import Spinner from "../../components/Spinner/Spinner";
 import { showToast } from "../../utils/toast";

@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthSide from "./AuthSide";
 import menu from "../../assets/nav/icon/toggle.svg";
-import heart from "../../assets/nav/icon/Heart.png";
+import heart from "../../assets-webp/Heart.webp";
 import SideBar from "../SideBar/SideBar";
 import Logo from "../../Ui/Logo/Logo";
 import { useSelector } from "react-redux";

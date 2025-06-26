@@ -1,5 +1,5 @@
-import up from "../../assets/AddCourse/UploadSimple.png";
-import img from "../../assets/Image (28).png";
+import up from "../../assets-webp/UploadSimple.webp";
+import img from "../../assets-webp/Image (28).webp";
 import Button from "../../Ui/Button/Button";
 import { useEffect, useState } from "react";
 import { allCategories } from "../../services/courses";
@@ -12,6 +12,7 @@ import Label from "../../Ui/Label/Label";
 import { Trans, useTranslation } from "react-i18next";
 import CreateExam from "../AddExam/CreateExam";
 import Head from "../EditeCourse/Head";
+import Titels from "./Titels";
 
 export default function CreateCourse() {
   const { t } = useTranslation();
@@ -136,7 +137,7 @@ export default function CreateCourse() {
     setSubCategories(selectedCategory?.sub_category || []);
     setSubCategory_id("");
   };
-
+ 
   async function send(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsSubmitting(true);
@@ -225,7 +226,6 @@ export default function CreateCourse() {
       );
 
       showToast(t("dashboard.Course created successfully!"), "success");
-      console.log("API Response:", response.data);
 
       // Store the new course ID and move to the exam step
       if (response.data && response.data.data && response.data.data.course_id) {
@@ -242,7 +242,7 @@ export default function CreateCourse() {
         }, 100);
       } else {
         console.error("Course ID not found in response:", response.data);
-        showToast("Course created but couldn't retrieve course ID", "warning");
+        showToast("Course created but couldn't retrieve course ID", "error");
       }
     } catch (error) {
       console.error("Error creating course:", error);
@@ -277,36 +277,10 @@ export default function CreateCourse() {
         <form onSubmit={send} className="container mx-auto">
           {/* Header */}
           <Head step={step} />
-          <div className="p-4 flex border-b items-center justify-between">
-            {step === 1 && (
-              <h2 className="text-2xl font-semibold">
-                {t("Basic Information")}
-              </h2>
-            )}
-            {step === 2 && (
-              <h2 className="text-2xl font-semibold">
-                {t("Advance Information")}
-              </h2>
-            )}
-            {step === 3 && (
-              <h2 className="text-2xl font-semibold">{t("Curriculum")}</h2>
-            )}
-            {step === 4 && (
-              <h2 className="text-2xl font-semibold">{t("Question")}</h2>
-            )}
-            <div className="flex gap-5">
-              <Button
-                type="button"
-                text="Save & Preview"
-                onClick={handlePrev}
-                textColor="text-violet-950"
-              />
-            </div>
-          </div>
-
+          <Titels step={step} handlePrev={handlePrev}/>
           {/* Step 1: Basic Information */}
           {step === 1 && (
-            <div className="p-5">
+            <div className="p-4">
               <div className="flex flex-col sm:flex-row justify-between gap-2">
                 <div className="sm:w-1/2">
                   <Label label="Title [en]" />
@@ -367,7 +341,6 @@ export default function CreateCourse() {
                   </select>
                 </div>
               </div>
-
               <div className="flex flex-col sm:flex-row gap-2">
                 <div className="sm:w-1/2">
                   <Label label="level" />

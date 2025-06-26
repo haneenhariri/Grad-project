@@ -139,7 +139,7 @@ export default function CourseAnswers() {
           <table className="w-full border-collapse">
             <tbody>
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="bg-gray-50">
+                <tr key={headerGroup.id} className="bg-gray-50 px-6 py-4">
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}

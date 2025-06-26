@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import filterIcon from "../../assets/Faders.png";
+import filterIcon from "../../assets-webp/Faders.webp";
 
 export default function FilterButton({onClick} : {onClick : () => void}) {
     const {t} = useTranslation()

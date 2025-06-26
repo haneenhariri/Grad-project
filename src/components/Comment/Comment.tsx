@@ -10,6 +10,7 @@ import { getSecureCookie } from "../../utils/cookiesHelper";
 import { deleteComment, updateComment } from "../../services/comments"; // استيراد دالة updateComment
 import { useTranslation } from "react-i18next";
 import Spinner from "../Spinner/Spinner";
+import { showToast } from "../../utils/toast";
 
 export default function Comment({ lesson_id }: { lesson_id: number }) {
   const { comments, loading, error } = useAppSelector((state) => state.comments);
@@ -64,7 +65,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
         dispatch(fetchComments(lesson_id));
       } catch (error) {
         console.error("Error deleting comment:", error);
-        alert("حدث خطأ أثناء حذف التعليق");
+        showToast("Error deleting comment" , 'error');
       }
     }
   };
@@ -88,7 +89,7 @@ export default function Comment({ lesson_id }: { lesson_id: number }) {
       setEditContent("");
     } catch (error) {
       console.error("Error updating comment:", error);
-      alert("حدث خطأ أثناء تعديل التعليق");
+      showToast("Error updating comment" , 'error');
     }
   };
   

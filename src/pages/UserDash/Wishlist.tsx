@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import Spinner from "../../components/Spinner/Spinner";
 import { showToast } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
-import star from '../../assets/icons/Star (3).png';
+import star from '../../assets-webp/Star (3).webp';
 import { addWishCourse } from "../../services/wishlist";
 
 export interface WishlistProps {

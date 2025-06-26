@@ -1,5 +1,5 @@
 import { NavLink, useParams } from 'react-router-dom'
-import arrow from '../../assets/ArrowLeft.png'
+import arrow from '../../assets-webp/ArrowLeft.webp'
 import Button from '../../Ui/Button/Button';
 import { useState } from 'react';
 import ReviewModel from './ReviewModel';

@@ -5,7 +5,7 @@ import { allCourses } from "../../services/courses";
 import Spinner from "../Spinner/Spinner";
 import { CourseTypeProps } from "../../types/interfaces";
 import SectionsTitle from "../../Ui/SectionsTitle/SectionsTitle";
-import arrow from '../../assets/ArrowRight (3).png'
+import arrow from '../../assets-webp/ArrowRight (3).webp'
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { useSelector } from "react-redux";

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { gitUserSide } from "../services/message";
 import { NavLink, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import imageUser from "../assets/Users (1).png";
+import imageUser from "../assets-webp/Users (1).webp";
 import { getSecureCookie } from "../utils/cookiesHelper";
 
 export interface SidebarChatProps {

@@ -1,10 +1,10 @@
 
-import basic from '../../assets/AddCourse/Stack (1).png';
-import Adv from '../../assets/AddCourse/ClipboardText.png';
-import Cur from '../../assets/AddCourse/MonitorPlay.png';
-import Pub from '../../assets/AddCourse/PlayCircle (1).png';
-import up from '../../assets/AddCourse/UploadSimple.png';
-import img from '../../assets/Image (28).png';
+import basic from '../../assets-webp/Stack.webp';
+import Adv from '../../assets-webp/ClipboardText.webp';
+import Cur from '../../assets-webp/MonitorPlay.webp';
+import Pub from '../../assets-webp/PlayCircle (1).webp';
+import up from '../../assets-webp/UploadSimple.webp';
+import img from '../../assets-webp/Image (28).webp';
 import Button from '../../Ui/Button/Button';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
