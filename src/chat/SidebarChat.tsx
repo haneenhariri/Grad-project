@@ -12,6 +12,11 @@ export interface SidebarChatProps {
   last_message_time?: string;
   updated_at?: string;
   created_at?: string;
+  last_message_at?: string;
+  messages?: Array<{
+    created_at: string;
+    updated_at: string;
+  }>;
   user: {
     id: number;
     name: string;
@@ -59,38 +64,69 @@ export default function SidebarChat() {
   };
 
   // Helper function to format time
-  const formatLastMessageTime = (timestamp?: string) => {
-    if (!timestamp) return "";
+  const formatLastMessageTime = (chatData: SidebarChatProps) => {
+    // جرب الحقول المختلفة المحتملة
+    let timestamp =
+      (chatData as any).last_message_time ||
+      (chatData as any).updated_at ||
+      (chatData as any).created_at ||
+      (chatData as any).last_message_at;
 
-    const messageDate = new Date(timestamp);
-    const now = new Date();
-    const diffInMs = now.getTime() - messageDate.getTime();
-    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    // إذا لم نجد timestamp، جرب من آخر رسالة في المصفوفة
+    if (!timestamp && chatData.messages && chatData.messages.length > 0) {
+      const lastMessage = chatData.messages[chatData.messages.length - 1];
+      timestamp = lastMessage.created_at || lastMessage.updated_at;
+    }
 
-    // إذا كان أقل من دقيقة
-    if (diffInMinutes < 1) {
+    console.log("Chat data for time:", chatData); // للتشخيص
+    console.log("Found timestamp:", timestamp); // للتشخيص
+
+    if (!timestamp) {
+      // إذا لم نجد timestamp، اعرض الوقت الحالي كبديل
+      const now = new Date();
+      return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+
+    try {
+      const messageDate = new Date(timestamp);
+      const now = new Date();
+
+      // تحقق من صحة التاريخ
+      if (isNaN(messageDate.getTime())) {
+        return "now";
+      }
+
+      const diffInMs = now.getTime() - messageDate.getTime();
+      const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+      const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+      const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+      // إذا كان أقل من دقيقة
+      if (diffInMinutes < 1) {
+        return "now";
+      }
+      // إذا كان أقل من ساعة
+      else if (diffInMinutes < 60) {
+        return `${diffInMinutes}m`;
+      }
+      // إذا كان أقل من 24 ساعة
+      else if (diffInHours < 24) {
+        return `${diffInHours}h`;
+      }
+      // إذا كان أقل من 7 أيام
+      else if (diffInDays < 7) {
+        return `${diffInDays}d`;
+      }
+      // إذا كان أكثر من أسبوع، اعرض التاريخ
+      else {
+        return messageDate.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        });
+      }
+    } catch (error) {
+      console.error("Error formatting time:", error);
       return "now";
-    }
-    // إذا كان أقل من ساعة
-    else if (diffInMinutes < 60) {
-      return `${diffInMinutes}m`;
-    }
-    // إذا كان أقل من 24 ساعة
-    else if (diffInHours < 24) {
-      return `${diffInHours}h`;
-    }
-    // إذا كان أقل من 7 أيام
-    else if (diffInDays < 7) {
-      return `${diffInDays}d`;
-    }
-    // إذا كان أكثر من أسبوع، اعرض التاريخ
-    else {
-      return messageDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
     }
   };
 
@@ -138,9 +174,7 @@ export default function SidebarChat() {
                   {t.user.name}
                 </h3>
                 <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                  {formatLastMessageTime(
-                    t.last_message_time || t.updated_at || t.created_at
-                  )}
+                  {formatLastMessageTime(t)}
                 </span>
               </div>
               <div className="flex items-center justify-between">
