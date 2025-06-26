@@ -121,7 +121,13 @@
         },
         "Recommended Courses":  "Recommended Courses",
         "Course description in English": "Course description in English",
-        "Course description in Arabic": "Course description in Arabic"
+        "Course description in Arabic": "Course description in Arabic",
+        "Please select a rating before submitting": "Please select a rating before submitting",
+        "Please write your feedback before submitting": "Please write your feedback before submitting",
+        "Cannot submit review: Course ID is missing": "Cannot submit review: Course ID is missing",
+        "Your review has been submitted successfully!": "Your review has been submitted successfully!",
+        "Lesson marked as completed!":"Lesson marked as completed!",
+        "This is the last lesson":"This is the last lesson"
     },
     "Star & up" : "Star & up",
     "Failed to reset password. Please try again." : "Failed to reset password. Please try again.",

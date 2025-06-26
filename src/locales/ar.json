@@ -119,7 +119,13 @@
         },
         "Recommended Courses" : "الدورات الموصى بها",
         "Course description in English": "وصف الدورة باللغة الانكليزية",
-        "Course description in Arabic": "وصف الدورة باللغة العربية"
+        "Course description in Arabic": "وصف الدورة باللغة العربية",
+        "Please select a rating before submitting": "يرجى اختيار تقييم قبل الإرسال",
+        "Please write your feedback before submitting": "يرجى كتابة تعليقك قبل الإرسال",
+        "Cannot submit review: Course ID is missing": "لا يمكن إرسال التقييم: رقم الدورة غير موجود",
+        "Your review has been submitted successfully!": "تم إرسال تقييمك بنجاح!",
+        "Lesson marked as completed!":"تم تحديد الدرس كمكتمل!",
+        "This is the last lesson":"هذا هو الدرس الأخير"
     },
     "Star & up" : "نجوم & أعلى ",
     "Failed to reset password. Please try again." : "فشل اعادة تعين كلمة المرور. يرجى المحاولة مرة اخرى.",
