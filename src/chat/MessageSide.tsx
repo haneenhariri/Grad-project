@@ -9,11 +9,13 @@ import HeadChat from "./HeadChat";
 import SendMessage from "./SendMessage";
 import MessageList from "../components/Message/MessageList";
 import Spinner from "../components/Spinner/Spinner";
+import { useChatContext } from "./ChatContext";
 
 export default function MessageSide() {
   const { user_id } = useParams<{ user_id: string }>();
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const { updateConversationLastMessage } = useChatContext();
 
   const myUserId = parseInt(getSecureCookie("id") || "0");
   const otherUserId = parseInt(user_id || "0");
@@ -92,14 +94,16 @@ export default function MessageSide() {
       if (data.received && data.received.id === myUserId) {
         console.log("Adding new message from other user to chat");
 
+        const timestamp = new Date().toISOString();
+
         // إنشاء كائن الرسالة الجديدة
         const newMessage: MessageProps = {
           id: Date.now(),
           content: data.message,
           sender_id: otherUserId,
           received_id: myUserId,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+          created_at: timestamp,
+          updated_at: timestamp,
           sender: {
             id: otherUserId,
             name: data.received?.name || "",
@@ -115,6 +119,9 @@ export default function MessageSide() {
           console.log("Updating messages state with new message");
           return [...prevMessages, newMessage];
         });
+
+        // تحديث الشريط الجانبي بآخر رسالة مستلمة
+        updateConversationLastMessage(otherUserId, data.message, timestamp);
       } else {
         console.log("Message not intended for this conversation");
       }
@@ -132,7 +139,7 @@ export default function MessageSide() {
       unsubscribe();
       simplePusherService.unsubscribeFromChannel(myUserId);
     };
-  }, [myUserId, otherUserId]);
+  }, [myUserId, otherUserId, updateConversationLastMessage]);
 
   // إرسال رسالة جديدة
   const handleSendMessage = async (content: string): Promise<void> => {
@@ -140,14 +147,16 @@ export default function MessageSide() {
       // إرسال الرسالة إلى الخادم
       await sendMessageUser(otherUserId, content);
 
+      const timestamp = new Date().toISOString();
+
       // إضافة الرسالة إلى القائمة المحلية
       const newMessage: MessageProps = {
         id: Date.now(),
         content,
         sender_id: myUserId,
         received_id: otherUserId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        created_at: timestamp,
+        updated_at: timestamp,
         sender: {
           id: myUserId,
         },
@@ -159,6 +168,9 @@ export default function MessageSide() {
       };
 
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+      // تحديث الشريط الجانبي بآخر رسالة
+      updateConversationLastMessage(otherUserId, content, timestamp);
     } catch (error) {
       console.error("Error sending message:", error);
       showToast("Failed to send message", "error");

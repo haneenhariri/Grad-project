@@ -4,6 +4,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import imageUser from "../assets-webp/Users (1).webp";
 import { getSecureCookie } from "../utils/cookiesHelper";
+import { useChatContext } from "./ChatContext";
 
 export interface SidebarChatProps {
   id: number;
@@ -30,6 +31,7 @@ export default function SidebarChat() {
   const { user_id } = useParams();
   const selectedId = user_id ? parseInt(user_id) : null;
   const userRole = getSecureCookie("role");
+  const { conversations, setConversations } = useChatContext();
 
   // تحديد المسار المناسب بناءً على دور المستخدم
   const getMessagePath = (userId: number) => {
@@ -46,12 +48,17 @@ export default function SidebarChat() {
         const myTeacher = await gitUserSide();
         console.log("Sidebar chat data:", myTeacher); // للتشخيص
         setTeacher(myTeacher);
+        setConversations(myTeacher); // Update context
       } catch (error) {
         console.error("Error fetching user:", error);
       }
     };
     gitTeacher();
-  }, []);
+  }, [setConversations]);
+
+  // Use conversations from context, fallback to local state
+  const displayConversations =
+    conversations.length > 0 ? conversations : teacher;
 
   // Helper function to get user initials
   const getUserInitials = (name: string) => {
@@ -78,8 +85,8 @@ export default function SidebarChat() {
       timestamp = lastMessage.created_at || lastMessage.updated_at;
     }
 
-    console.log("Chat data for time:", chatData); // للتشخيص
-    console.log("Found timestamp:", timestamp); // للتشخيص
+    // console.log("Chat data for time:", chatData); // للتشخيص
+    // console.log("Found timestamp:", timestamp); // للتشخيص
 
     if (!timestamp) {
       // إذا لم نجد timestamp، اعرض الوقت الحالي كبديل
@@ -140,7 +147,7 @@ export default function SidebarChat() {
 
       {/* Chat List */}
       <div className="flex overflow-x-auto sm:block sm:overflow-visible">
-        {teacher?.map((t, i) => (
+        {displayConversations?.map((t, i) => (
           <NavLink
             to={getMessagePath(t.id)}
             key={i}
@@ -206,7 +213,7 @@ export default function SidebarChat() {
       </div>
 
       {/* Empty State */}
-      {teacher.length === 0 && (
+      {displayConversations.length === 0 && (
         <div className="flex flex-col items-center justify-center py-12 px-6">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
             <svg
