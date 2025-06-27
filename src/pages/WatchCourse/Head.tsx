@@ -6,9 +6,10 @@ import ReviewModel from './ReviewModel';
 interface HeadProps {
     title: string;
     lessonTitle : string;
+    onNextLesson: () => void; // أضف هذا السطر
 }
 
-export default function Head({title , lessonTitle} : HeadProps) {
+export default function Head({title , lessonTitle, onNextLesson} : HeadProps) {
     const [showReviewModal, setShowReviewModal] = useState(false);
     const handleReview = () => {
         // Handle the review action
@@ -30,7 +31,7 @@ export default function Head({title , lessonTitle} : HeadProps) {
         </div>
         <div className='flex lg:mr-0 md:ml-20 lg:gap-5 gap-2 items-center'>
             <Button text='Write a Review' onClick={() => handleReview()} Bg='bg-btn text-white h-full' />
-            <Button text='Next lecture' Bg='bg-gray-400/15 text-btn h-full' />
+            <Button text='Next lecture' Bg='bg-gray-400/15 text-btn h-full'   onClick={onNextLesson} />
         </div>
     </div>
         <ReviewModel 
